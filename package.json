@@ -1,0 +1,69 @@
+{
+  "name": "@veripass/react-sdk",
+  "version": "1.0.102",
+  "description": "UI SDK components for Veripass",
+  "main": "dist/react-sdk.cjs.js",
+  "module": "dist/react-sdk.esm.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0"
+  },
+  "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
+    "@mui/x-data-grid": "^7.17.0",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@tinymce/tinymce-react": "^5.0.0",
+    "@yaireo/tagify": "^4.22.2",
+    "clipboard": "^2.0.11",
+    "react-select": "^5.8.0",
+    "sweetalert2": "^11.10.7",
+    "sweetalert2-react-content": "^5.0.7"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/veripass/veripass-react-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veripass/veripass-react-sdk.git"
+  },
+  "homepage": "https://github.com/veripass/veripass-react-sdk",
+  "keywords": [
+    "veripass",
+    "sdk",
+    "core",
+    "javascript",
+    "react"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-url": "^8.0.2",
+    "postcss": "^8.4.38",
+    "rollup": "^4.13.2",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}
