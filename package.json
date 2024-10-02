@@ -25,13 +25,16 @@
     "axios": "^1.7.7",
     "clipboard": "^2.0.11",
     "dotenv": "^16.4.5",
+    "react-router-dom": "^6.26.2",
     "react-select": "^5.8.0",
     "sweetalert2": "^11.14.1",
     "sweetalert2-react-content": "^5.0.7"
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
   "license": "MIT",
@@ -51,9 +54,10 @@
     "react"
   ],
   "devDependencies": {
-    "@babel/core": "^7.24.3",
+    "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.24.3",
     "@babel/preset-react": "^7.24.7",
+    "@chromatic-com/storybook": "^1.9.0",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -61,11 +65,23 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-url": "^8.0.2",
+    "@storybook/addon-controls": "^8.3.4",
+    "@storybook/addon-essentials": "^8.3.4",
+    "@storybook/addon-interactions": "^8.3.4",
+    "@storybook/addon-links": "^8.3.4",
+    "@storybook/addon-onboarding": "^8.3.4",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/blocks": "^8.3.4",
+    "@storybook/react": "^8.3.4",
+    "@storybook/react-webpack5": "^8.3.4",
+    "@storybook/test": "^8.3.4",
     "postcss": "^8.4.38",
+    "prop-types": "^15.8.1",
     "rollup": "^4.13.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2"
+    "rollup-plugin-postcss": "^4.0.2",
+    "storybook": "^8.3.4"
   }
 }

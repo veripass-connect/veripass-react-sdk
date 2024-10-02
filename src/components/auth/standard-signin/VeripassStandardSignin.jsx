@@ -5,7 +5,7 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { TextField, InputAdornment, IconButton, CircularProgress } from '@mui/material';
+import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button } from '@mui/material';
 
 import { SecurityService } from '@services';
 
@@ -36,7 +36,12 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, debu
   authProvider.login({ user: entityResponse.result || {}, redirectUrl });
 }
 
-export const VeripassStandardSignin = ({ logoSrc = '', subtitle = '', redirectUrl = '', debug = false }) => {
+export const VeripassStandardSignin = ({
+  organizationLogoSrc = '',
+  organizationSlogan = '',
+  redirectUrl = '',
+  debug = false,
+}) => {
   // Hooks
   const authProvider = useAuth();
   const location = useLocation();
@@ -108,7 +113,7 @@ export const VeripassStandardSignin = ({ logoSrc = '', subtitle = '', redirectUr
         return;
       }
 
-      await signInStandard({ payload: { email, password }, authProvider, redirectUrl });
+      await signInStandard({ payload: { email, password }, authProvider, redirectUrl, debug });
     } catch (error) {
       console.error(error);
     } finally {
@@ -125,10 +130,10 @@ export const VeripassStandardSignin = ({ logoSrc = '', subtitle = '', redirectUr
       <section style={{ maxWidth: '600px', margin: '0 auto' }}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
-            <img src={logoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
+            <img src={organizationLogoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
           </a>
           <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px', marginBottom: '24px' }}>
-            {subtitle}
+            {organizationSlogan}
           </Typography>
         </header>
 
@@ -190,7 +195,6 @@ export const VeripassStandardSignin = ({ logoSrc = '', subtitle = '', redirectUr
               <Button
                 variant="outlined"
                 disabled={isLoading}
-                {...props}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',

@@ -12,20 +12,8 @@ Install the library in your project with the following command:
 
 ## Components
 
-- **Alert**: Displays a brief, important message to the user in various styles to signify success, warning, error, or information.
-- **DataGrid**: A versatile grid component capable of displaying large sets of data, supporting sorting, filtering, and pagination.
-- **DocumentViewer**: Renders documents directly within your application, supporting formats like PDF, Word, and more.
-- **OffCanvas**: Provides a hidden side panel that slides in and out from the edge of the viewport, useful for menus, filters, or additional information.
-- **PageLoaded**: A utility component that tracks the loading state of a page or section, providing visual feedback to the user.
-- **Placeholder**: Generates placeholder elements to use during content loading, enhancing the user experience by indicating where content will appear.
-- **PopUp**: Displays modal dialogs or pop-up windows, suitable for alerts, prompts, and custom dialogs.
-- **SearchableSelect**: A select dropdown component with integrated search functionality, allowing users to filter options as they type.
-- **Spinner**: Offers visual cues for loading states, with customizable animations and styles.
-- **LabelTags**: Displays tags or labels, useful for categorization, highlighting key information, or filtering content.
-- **SelectizeTags**: Combines tag display and selection, allowing users to create and select tags within an input field.
-- **SelectorTag**: Provides a tag-based selection interface, enabling users to choose from a predefined set of tags.
-- **TextEditor**: A rich text editor component that provides a wide range of formatting options for text content.
-- **Uploader**: Facilitates file uploads, showing progress, and providing feedback to the user.
+- **VeripassStandardSignin**: A React component designed to handle user authentication via email and password to create an intuitive sign-in experience.
+
 
 For more details on each component, including usage and configuration options, please refer to the full documentation.
 
