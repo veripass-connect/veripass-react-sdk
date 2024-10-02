@@ -1,8 +1,9 @@
 // src/index.js
 
-export { Snackbar as Snackbar, useSnackbar } from './components/snackbar/Snackbar.jsx';
-
-export { default as useDebounce } from './hooks/useDebounce.js';
-export { default as useNavigate } from './hooks/useNavigate.js';
-
-import './styles/icons.css';
+export { VeripassStandardSignin as VeripassStandardSignin } from './components/auth/standard-signin/VeripassStandardSignin.jsx'
+export {
+  AuthContext,
+  AuthProvider,
+  useAuth
+} from './hooks/useAuth.hook.jsx';
+export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';

@@ -9,6 +9,7 @@ const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 const replace = require('@rollup/plugin-replace');
 const url = require('@rollup/plugin-url');
 const copy = require('rollup-plugin-copy');
+const dotenv = require('dotenv');
 
 module.exports = {
   input: 'src/index.js',
@@ -38,6 +39,8 @@ module.exports = {
     alias({
       entries: [
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
+        { find: '@hooks', replacement: path.resolve(__dirname, 'src/hooks') },
+        { find: '@services', replacement: path.resolve(__dirname, 'src/services') },
       ],
     }),
     resolve({
@@ -66,7 +69,8 @@ module.exports = {
     }),
     json(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VERIPASS_SERVICE_URL': JSON.stringify(process.env.VERIPASS_SERVICE_URL),
+      'process.env.VERIPASS_DEV_SERVICE_URL': JSON.stringify(process.env.VERIPASS_DEV_SERVICE_URL),
       preventAssignment: true,
     }),
     copy({
