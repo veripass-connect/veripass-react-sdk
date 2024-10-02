@@ -15,6 +15,13 @@ export default {
     redirectUrl: { control: 'text' },
     debug: { control: 'boolean' },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '100%' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 const Template = (args) => (

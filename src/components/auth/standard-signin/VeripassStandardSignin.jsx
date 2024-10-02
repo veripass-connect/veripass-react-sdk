@@ -4,10 +4,31 @@ import { useAuth } from '@hooks/useAuth.hook';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import styled from 'styled-components';
 
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LockIcon from '@mui/icons-material/Lock';
 
 import { SecurityService } from '@services';
+
+const StandarSigninContainer = styled.section`
+  margin: 0 auto;
+  min-width: 400px;
+
+  @media (min-width: 768px) {
+    max-width: 66.6667%; /* 8/12 */
+  }
+
+  @media (min-width: 992px) {
+    max-width: 50%; /* 6/12 */
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 41.6667%; /* 5/12 */
+  }
+`;
 
 const swal = withReactContent(Swal);
 
@@ -84,10 +105,6 @@ export const VeripassStandardSignin = ({
     }
   };
 
-  const initializeComponent = () => {
-    setErrors();
-  };
-
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -121,25 +138,38 @@ export const VeripassStandardSignin = ({
     }
   };
 
+  const initializeComponent = () => {
+    setErrors();
+  };
+
   useEffect(() => {
     initializeComponent();
   }, []);
 
   return (
     <>
-      <section style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <StandarSigninContainer>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img src={organizationLogoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
           </a>
-          <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px', marginBottom: '24px' }}>
+          <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad' }}>
             {organizationSlogan}
           </Typography>
         </header>
 
-        <section style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px' }}>
+        <section
+          style={{
+            border: '1px solid #f2f2f2',
+            borderRadius: '8px',
+            padding: '16px',
+            boxShadow: '0 .75rem 6rem rgba(56, 65, 74, 0.03)',
+          }}
+        >
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <Typography variant="h6">Log in using email address</Typography>
+            <Typography variant="subtitle2" sx={{ fontSize: '1.125rem' }}>
+              Log in using email address
+            </Typography>
           </div>
 
           <form onSubmit={handleSubmit} autoComplete="off">
@@ -176,7 +206,7 @@ export const VeripassStandardSignin = ({
                         }}
                         edge="end"
                       >
-                        {showPassword ? <i className="fe-eye-off" /> : <i className="fe-eye" />}
+                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -185,25 +215,40 @@ export const VeripassStandardSignin = ({
               />
             </section>
 
-            <section style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-              <Link to="recover-password" style={{ marginLeft: '8px', color: 'gray' }}>
-                <i className="fa fa-lock" style={{ marginRight: '4px' }}></i>Forgot password?
+            <section style={{ marginBottom: '16px', width: '100%' }}>
+              <Link
+                to="recover-password"
+                underline="hover"
+                style={{
+                  marginLeft: '8px',
+                  color: 'gray',
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  textDecoration: 'none',
+                }}
+              >
+                <LockIcon style={{ marginRight: '5px', color: '#98a6ad', fontSize: '18px' }} />
+                <Typography variant="body2" style={{ color: '#98a6ad', fontWeight: '400' }}>
+                  Forgot password?
+                </Typography>
               </Link>
             </section>
 
             <footer style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
               <Button
-                variant="outlined"
+                variant="contained"
                 disabled={isLoading}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
                   border: '2px solid #232931',
-                  backgroundColor: isLoading ? '#323a46' : 'transparent',
-                  color: isLoading ? '#fff' : '#000',
+                  backgroundColor: '#323a46',
+                  color: '#fff',
                   '&:hover': {
-                    backgroundColor: isLoading ? '#2b323b' : 'transparent',
+                    backgroundColor: '#3d4c61',
                   },
+                  width: '100%',
                 }}
               >
                 {isLoading && <CircularProgress size={20} style={{ marginRight: '8px', color: '#fff' }} />}
@@ -212,7 +257,7 @@ export const VeripassStandardSignin = ({
             </footer>
           </form>
         </section>
-      </section>
+      </StandarSigninContainer>
     </>
   );
 };
