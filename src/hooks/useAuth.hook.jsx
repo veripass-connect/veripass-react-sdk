@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from './useLocalStorage.hook';
 
 /**
@@ -18,7 +17,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
-  const navigate = useNavigate();
 
   /**
    * Logs in the user by saving their data to local storage and navigating to the admin page.
@@ -27,7 +25,10 @@ export const AuthProvider = ({ children }) => {
    */
   const login = async ({ user, redirectUrl = '' }) => {
     setUser(user);
-    navigate(redirectUrl, { replace: true });
+    
+    if (redirectUrl) {
+      window.location.replace(redirectUrl);
+    }
   };
 
   /**
