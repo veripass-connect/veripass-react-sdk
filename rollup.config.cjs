@@ -10,6 +10,7 @@ const replace = require('@rollup/plugin-replace');
 const url = require('@rollup/plugin-url');
 const copy = require('rollup-plugin-copy');
 const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = {
   input: 'src/index.js',
