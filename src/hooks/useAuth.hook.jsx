@@ -15,17 +15,19 @@ export const AuthContext = createContext();
  * @returns {JSX.Element} The provider component for AuthContext.
  */
 export const AuthProvider = ({ children }) => {
+  const whitelistUrls = ['/auth/login', '/auth/signup'];
+
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
 
   /**
    * Logs in the user by saving their data to local storage and navigating to the admin page.
-   * 
+   *
    * @param {object} user - The user data to be stored.
    */
   const login = async ({ user, redirectUrl = '' }) => {
     setUser(user);
-    
+
     if (redirectUrl) {
       window.location.replace(redirectUrl);
     }
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
   /**
    * Retrieves the stored user data (token) from local storage.
-   * 
+   *
    * @returns {object|null} The user data stored in local storage, or null if not found.
    */
   const getToken = () => {
@@ -50,7 +52,10 @@ export const AuthProvider = ({ children }) => {
 
   // Effect to redirect if user is null
   useEffect(() => {
-    if (user === null) {
+    const currentPath = window.location.pathname;
+    const isWhitelisted = whitelistUrls.includes(currentPath);
+
+    if (user === null && !isWhitelisted) {
       window.location.replace('/auth/login');
     }
   }, [user]);
@@ -66,19 +71,22 @@ export const AuthProvider = ({ children }) => {
    *
    * @returns {AuthContextValue} The context value with user data and authentication functions.
    */
-  const value = useMemo(() => ({
-    user,
-    login,
-    logout,
-    getToken,
-  }), [user]);
+  const value = useMemo(
+    () => ({
+      user,
+      login,
+      logout,
+      getToken,
+    }),
+    [user],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 /**
  * Custom hook to access the authentication context.
- * 
+ *
  * @returns {AuthContextValue} The authentication context value, including user data, login, logout, and getToken functions.
  */
 export const useAuth = () => {
