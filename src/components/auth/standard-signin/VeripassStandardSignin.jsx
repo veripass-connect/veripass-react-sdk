@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import '@styles/fonts.css';
 import { useAuth } from '@hooks/useAuth.hook';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -30,6 +31,11 @@ const StandarSigninContainer = styled.section`
   }
 `;
 
+const KarlaTypography = styled(Typography)`
+  font-family: 'Karla', 'Roboto', sans-serif !important;
+  font-weight: 600;
+`;
+
 const swal = withReactContent(Swal);
 
 const statusCodeMessages = {
@@ -37,6 +43,7 @@ const statusCodeMessages = {
   462: 'Unauthorized user. After 3 failed attempts, your account will be locked for 24 hours.',
   463: 'The user is not registered in this application, needs to register',
   464: 'Unauthorized. After 3 failed attempts, your account will be locked for 24 hours.',
+  465: 'API key is missing or invalid',
   401: 'Error authenticating',
 };
 
@@ -62,6 +69,7 @@ export const VeripassStandardSignin = ({
   organizationSlogan = '',
   redirectUrl = '',
   debug = false,
+  apiKey = ''
 }) => {
   // Hooks
   const authProvider = useAuth();
@@ -74,7 +82,7 @@ export const VeripassStandardSignin = ({
   const [showPassword, setShowPassword] = React.useState(false);
 
   // Entity states
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const showError = ({ title, message }) => {
@@ -130,7 +138,7 @@ export const VeripassStandardSignin = ({
         return;
       }
 
-      await signInStandard({ payload: { email, password }, authProvider, redirectUrl, debug });
+      await signInStandard({ payload: { email, password }, authProvider, redirectUrl, apiKey, debug });
     } catch (error) {
       console.error(error);
     } finally {
@@ -153,7 +161,7 @@ export const VeripassStandardSignin = ({
           <a href="/">
             <img src={organizationLogoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
           </a>
-          <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad' }}>
+          <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad', fontWeight: 300 }}>
             {organizationSlogan}
           </Typography>
         </header>
@@ -167,9 +175,7 @@ export const VeripassStandardSignin = ({
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <Typography variant="subtitle2" sx={{ fontSize: '1.125rem' }}>
-              Log in using email address
-            </Typography>
+            <KarlaTypography>Log in using email address</KarlaTypography>
           </div>
 
           <form onSubmit={handleSubmit} autoComplete="off">
@@ -237,6 +243,7 @@ export const VeripassStandardSignin = ({
 
             <footer style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
               <Button
+                type="submit"
                 variant="contained"
                 disabled={isLoading}
                 sx={{

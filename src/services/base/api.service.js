@@ -192,14 +192,12 @@ export default class BaseApi {
       if (!payload) {
         return null;
       }
-
-      const result = await this.request().post(
-        `${settings?.debug
-          ? this.serviceEndpoints.baseUrlDev
-          : this.serviceEndpoints.baseUrlProd}${settings?.endpoint || this.serviceEndpoints.post}`,
-        payload,
-      );
-
+      
+      const endpoint = `${settings?.debug
+        ? this.serviceEndpoints.baseUrlDev
+        : this.serviceEndpoints.baseUrlProd}${settings?.endpoint || this.serviceEndpoints.post}`
+      const result = await this.request().post(endpoint, payload);
+      
       return result.data;
     } catch (error) {
       console.error(error);

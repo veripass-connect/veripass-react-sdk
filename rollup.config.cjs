@@ -41,6 +41,7 @@ module.exports = {
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
         { find: '@hooks', replacement: path.resolve(__dirname, 'src/hooks') },
         { find: '@services', replacement: path.resolve(__dirname, 'src/services') },
+        { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
       ],
     }),
     resolve({

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { VeripassStandardSignin } from '../../src/components/auth/standard-signin/VeripassStandardSignin';
+import { AuthProvider } from '../hooks/useAuth.hook';
 
 export default {
   title: 'Components/VeripassStandardSignin',
@@ -14,6 +15,7 @@ export default {
     organizationSlogan: { control: 'text' },
     redirectUrl: { control: 'text' },
     debug: { control: 'boolean' },
+    apiKey: { control: 'text' },
   },
   decorators: [
     (Story) => (
@@ -26,7 +28,9 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassStandardSignin {...args} />
+    <AuthProvider>
+      <VeripassStandardSignin {...args} />
+    </AuthProvider>
   </MemoryRouter>
 );
 
@@ -36,6 +40,7 @@ Default.args = {
   organizationSlogan: 'Unlock your digital world',
   redirectUrl: '/home',
   debug: true,
+  apiKey: '',
 };
 
 export const Loading = Template.bind({});
@@ -44,4 +49,5 @@ Loading.args = {
   organizationSlogan: 'Loading...',
   redirectUrl: '/loading',
   debug: true,
+  apiKey: '',
 };
