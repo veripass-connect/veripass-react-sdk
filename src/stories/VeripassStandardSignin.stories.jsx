@@ -11,8 +11,7 @@ export default {
   },
   tags: ['autodocs'],
   argTypes: {
-    organizationLogoSrc: { control: 'text' },
-    organizationSlogan: { control: 'text' },
+    organization: { control: 'object' },
     redirectUrl: { control: 'text' },
     debug: { control: 'boolean' },
     apiKey: { control: 'text' },
@@ -36,18 +35,11 @@ const Template = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  organizationLogoSrc: 'https://id.etrune.com/assets/img/logo-2x.png',
-  organizationSlogan: 'Unlock your digital world',
+  organization: {
+    logoSrc: 'https://id.etrune.com/assets/img/logo-2x.png',
+    slogan: 'Unlock your digital world',
+  },
   redirectUrl: '/home',
-  debug: true,
-  apiKey: '',
-};
-
-export const Loading = Template.bind({});
-Loading.args = {
-  organizationLogoSrc: 'https://id.etrune.com/assets/img/logo-2x.png',
-  organizationSlogan: 'Loading...',
-  redirectUrl: '/loading',
   debug: true,
   apiKey: '',
 };

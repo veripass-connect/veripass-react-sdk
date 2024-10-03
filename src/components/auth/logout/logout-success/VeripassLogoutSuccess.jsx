@@ -1,32 +1,13 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth.hook';
 
+import { Card } from '@components/shared/Card';
+import { StandardContainer } from '@components/shared/StandardContainer';
+import { KarlaTypography } from '@components/shared/KarlaTypography';
 import { Typography } from '@mui/material';
-import styled from 'styled-components';
+
 import '@styles/fonts.css';
 import '@styles/styles.css';
-
-const StandarSigninContainer = styled.section`
-  margin: 0 auto;
-  min-width: 400px;
-
-  @media (min-width: 768px) {
-    max-width: 66.6667%; /* 8/12 */
-  }
-
-  @media (min-width: 992px) {
-    max-width: 50%; /* 6/12 */
-  }
-
-  @media (min-width: 1200px) {
-    max-width: 41.6667%; /* 5/12 */
-  }
-`;
-
-const KarlaTypography = styled.span`
-  font-family: 'Karla', 'Roboto', sans-serif !important;
-  font-weight: 600;
-`;
 
 export const VeripassLogoutSuccess = ({
   organization = {
@@ -47,17 +28,8 @@ export const VeripassLogoutSuccess = ({
 
   return (
     <>
-      <StandarSigninContainer>
-        <section
-          style={{
-            border: '1px solid #f2f2f2',
-            borderRadius: '8px',
-            padding: '2.25rem',
-            boxShadow: '0 .75rem 6rem rgba(56, 65, 74, 0.03)',
-            background: '#FFFFFF',
-          }}
-          className="veripass"
-        >
+      <StandardContainer>
+        <Card>
           <header style={{ textAlign: 'center' }}>
             {organization?.logoSrc && (
               <a href="/">
@@ -99,7 +71,7 @@ export const VeripassLogoutSuccess = ({
               {texts?.successMessage}
             </Typography>
           </div>
-        </section>
+        </Card>
 
         <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap' }}>
           <div style={{ flex: '0 0 auto', width: '100%', textAlign: 'center' }}>
@@ -111,7 +83,7 @@ export const VeripassLogoutSuccess = ({
             </Typography>
           </div>
         </div>
-      </StandarSigninContainer>
+      </StandardContainer>
     </>
   );
 };

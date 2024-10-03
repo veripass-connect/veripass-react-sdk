@@ -1,39 +1,22 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import '@styles/fonts.css';
 import { useAuth } from '@hooks/useAuth.hook';
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import styled from 'styled-components';
-
+import { Card } from '@components/shared/Card';
+import { StandardContainer } from '@components/shared/StandardContainer';
+import { KarlaTypography } from '@components/shared/KarlaTypography';
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 
+import '@styles/fonts.css';
+import '@styles/styles.css';
+
 import { SecurityService } from '@services';
-
-const StandarSigninContainer = styled.section`
-  margin: 0 auto;
-  min-width: 400px;
-
-  @media (min-width: 768px) {
-    max-width: 66.6667%; /* 8/12 */
-  }
-
-  @media (min-width: 992px) {
-    max-width: 50%; /* 6/12 */
-  }
-
-  @media (min-width: 1200px) {
-    max-width: 41.6667%; /* 5/12 */
-  }
-`;
-
-const KarlaTypography = styled.span`
-  font-family: 'Karla', 'Roboto', sans-serif !important;
-  font-weight: 600;
-`;
 
 const swal = withReactContent(Swal);
 
@@ -64,8 +47,10 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, debu
 }
 
 export const VeripassStandardSignin = ({
-  organizationLogoSrc = '',
-  organizationSlogan = '',
+  organization = {
+    logoSrc: '',
+    slogan: ''
+  },
   redirectUrl = '',
   debug = false,
   apiKey = '',
@@ -151,27 +136,19 @@ export const VeripassStandardSignin = ({
 
   return (
     <>
-      <StandarSigninContainer className="veripass">
+      <StandardContainer>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
-            <img src={organizationLogoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
+            <img src={organization?.logoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
           </a>
           <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad', fontWeight: 300 }}>
-            {organizationSlogan}
+            {organization?.slogan}
           </Typography>
         </header>
 
-        <section
-          style={{
-            border: '1px solid #f2f2f2',
-            borderRadius: '8px',
-            padding: '2.25rem',
-            boxShadow: '0 .75rem 6rem rgba(56, 65, 74, 0.03)',
-            background: '#FFFFFF',
-          }}
-        >
+        <Card>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <KarlaTypography style={{color: '#343a40', }}>Log in using email address</KarlaTypography>
+            <KarlaTypography style={{ color: '#343a40' }}>Log in using email address</KarlaTypography>
           </div>
 
           <form onSubmit={handleSubmit} autoComplete="off">
@@ -259,8 +236,8 @@ export const VeripassStandardSignin = ({
               </Button>
             </footer>
           </form>
-        </section>
-      </StandarSigninContainer>
+        </Card>
+      </StandardContainer>
     </>
   );
 };
