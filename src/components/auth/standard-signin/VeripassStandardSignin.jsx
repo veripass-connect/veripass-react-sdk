@@ -30,7 +30,7 @@ const StandarSigninContainer = styled.section`
   }
 `;
 
-const KarlaTypography = styled(Typography)`
+const KarlaTypography = styled.span`
   font-family: 'Karla', 'Roboto', sans-serif !important;
   font-weight: 600;
 `;
@@ -151,7 +151,7 @@ export const VeripassStandardSignin = ({
 
   return (
     <>
-      <StandarSigninContainer>
+      <StandarSigninContainer className="veripass">
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img src={organizationLogoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
@@ -165,17 +165,17 @@ export const VeripassStandardSignin = ({
           style={{
             border: '1px solid #f2f2f2',
             borderRadius: '8px',
-            padding: '16px',
+            padding: '2.25rem',
             boxShadow: '0 .75rem 6rem rgba(56, 65, 74, 0.03)',
-            background: '#FFFFFF'
+            background: '#FFFFFF',
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <KarlaTypography>Log in using email address</KarlaTypography>
+            <KarlaTypography style={{color: '#343a40', }}>Log in using email address</KarlaTypography>
           </div>
 
           <form onSubmit={handleSubmit} autoComplete="off">
-            <section style={{ marginBottom: '16px' }}>
+            <section style={{ marginBottom: '16px', margin: '10px 0' }}>
               <TextField
                 fullWidth
                 type="email"
