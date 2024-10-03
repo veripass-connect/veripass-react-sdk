@@ -48,6 +48,13 @@ export const AuthProvider = ({ children }) => {
     return JSON.parse(value);
   };
 
+  // Effect to redirect if user is null
+  useEffect(() => {
+    if (user === null) {
+      window.location.replace('/auth/login');
+    }
+  }, [user]);
+
   /**
    * Memoized value containing the user data and authentication functions.
    *
