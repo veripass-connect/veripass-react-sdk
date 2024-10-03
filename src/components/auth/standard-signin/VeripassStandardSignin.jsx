@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import '@styles/fonts.css';
 import { useAuth } from '@hooks/useAuth.hook';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import styled from 'styled-components';
 
-import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button } from '@mui/material';
+import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
@@ -69,13 +68,11 @@ export const VeripassStandardSignin = ({
   organizationSlogan = '',
   redirectUrl = '',
   debug = false,
-  apiKey = ''
+  apiKey = '',
 }) => {
   // Hooks
   const authProvider = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
+  const searchParams = new URLSearchParams(window?.location?.search);
 
   // UI States
   const [isLoading, setIsLoading] = useState(false);
@@ -92,9 +89,7 @@ export const VeripassStandardSignin = ({
       icon: 'error',
     }).then(() => {
       searchParams.delete('error');
-      navigate(`${location.pathname}?${searchParams.toString()}`, {
-        replace: true,
-      });
+      window.location.replace(`${window?.location?.pathname}?${searchParams.toString()}`);
     });
   };
 
@@ -223,7 +218,7 @@ export const VeripassStandardSignin = ({
 
             <section style={{ marginBottom: '16px', width: '100%' }}>
               <Link
-                to="recover-password"
+                href="recover-password"
                 underline="hover"
                 style={{
                   marginLeft: '8px',
