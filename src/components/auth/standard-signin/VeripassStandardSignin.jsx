@@ -167,6 +167,7 @@ export const VeripassStandardSignin = ({
             borderRadius: '8px',
             padding: '16px',
             boxShadow: '0 .75rem 6rem rgba(56, 65, 74, 0.03)',
+            background: '#FFFFFF'
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
