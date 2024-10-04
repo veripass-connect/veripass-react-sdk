@@ -88,7 +88,8 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
       const isWhitelisted = publicUrlsList.includes(currentPath);
 
       if (user === null && !isWhitelisted) {
-        window.location.replace('/auth/login');
+        debugger
+        //window.location.replace('/auth/login');
       }
     }
   }, [user, publicUrlsList, isInitialized]); 
