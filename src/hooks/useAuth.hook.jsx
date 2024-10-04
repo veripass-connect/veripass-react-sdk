@@ -18,6 +18,7 @@ export const AuthContext = createContext();
  */
 export const AuthProvider = ({ children, publicUrls = [] }) => {
   const [publicUrlsList, setPublicUrlsList] = useState(defaultPublicUrlList);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
     React.Children.forEach(children, (child) => extractPublicPaths(child));
 
     setPublicUrlsList(publicPaths);
+    setIsInitialized(true);
   }, [children]);
 
   /**
@@ -81,13 +83,15 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
 
   // Effect to redirect if user is null
   useEffect(() => {
-    const currentPath = window.location.pathname;
-    const isWhitelisted = publicUrlsList.includes(currentPath);
+    if (isInitialized) {
+      const currentPath = window.location.pathname;
+      const isWhitelisted = publicUrlsList.includes(currentPath);
 
-    if (user === null && !isWhitelisted) {
-      window.location.replace('/auth/login');
+      if (user === null && !isWhitelisted) {
+        window.location.replace('/auth/login');
+      }
     }
-  }, [user, publicUrlsList]);
+  }, [user, publicUrlsList, isInitialized]); 
 
   /**
    * Memoized value containing the user data and authentication functions.
