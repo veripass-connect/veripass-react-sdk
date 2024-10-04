@@ -16,8 +16,8 @@ export const AuthContext = createContext();
  * @param {React.ReactNode} props.children - The children components that require access to the authentication context.
  * @returns {JSX.Element} The provider component for AuthContext.
  */
-export const AuthProvider = ({ children, publicUrls = [] }) => {
-  const [publicUrlsList, setPublicUrlsList] = useState(defaultPublicUrlList);
+export const AuthProvider = ({ children }) => {
+  const [publicUrlsList, setPublicUrlsList] = useState();
   const [isInitialized, setIsInitialized] = useState(false);
 
   // State to manage user data, persisted in local storage
@@ -76,11 +76,6 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
     return JSON.parse(value);
   };
 
-  // Effect to update public URLs whenever publicUrls prop changes
-  useEffect(() => {
-    setPublicUrlsList([...defaultPublicUrlList, ...publicUrls]);
-  }, [publicUrls]);
-
   // Effect to redirect if user is null
   useEffect(() => {
     if (isInitialized) {
@@ -88,6 +83,8 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
       const isWhitelisted = publicUrlsList.includes(currentPath);
 
       if (user === null && !isWhitelisted) {
+        console.log(publicUrlsList)
+        console.log(currentPath)
         debugger
         //window.location.replace('/auth/login');
       }
