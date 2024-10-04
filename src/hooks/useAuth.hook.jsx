@@ -22,14 +22,28 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
 
-  useEffect(()=>{console.log(children)}, [children])
+  useEffect(() => {
+    console.log(children)
+    const publicPaths = new Set(defaultPublicUrlList);
 
-  React.Children.forEach(children, (child) => {
-    // Check if child is a valid React element
-    if (React.isValidElement(child) && child.props.isPublic) {debugger
-      publicPaths.add(child.props.path); // Assumes `path` is passed as prop
-    }
-  });
+    const extractPublicPaths = (child) => {
+      
+      if (React.isValidElement(child)) {
+        
+        if (child.props.isPublic && child.props.path) {
+          publicPaths.add(child.props.path);
+        }
+        
+        if (child.props.children) {
+          React.Children.forEach(child.props.children, extractPublicPaths);
+        }
+      }
+    };
+
+    React.Children.forEach(children, extractPublicPaths);
+    debugger
+    setPublicPathSet(publicPaths);
+  }, [children]);
 
   /**
    * Logs in the user by saving their data to local storage and navigating to the admin page.
