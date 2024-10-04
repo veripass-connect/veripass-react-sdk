@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         console.log(publicUrlsList)
         console.log(currentPath)
         debugger
-        //window.location.replace('/auth/login');
+        window.location.replace('/auth/login');
       }
     }
   }, [user, isInitialized]); 
