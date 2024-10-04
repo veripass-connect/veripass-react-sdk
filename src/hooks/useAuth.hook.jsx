@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo, useEffect, useState } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
 
-const defaulPublicUrlList = ['/auth/login', '/auth/signup'];
+const defaultPublicUrlList = ['/auth/login', '/auth/signup'];
 
 /**
  * Authentication context used to provide user authentication data and functions.
@@ -17,7 +17,7 @@ export const AuthContext = createContext();
  * @returns {JSX.Element} The provider component for AuthContext.
  */
 export const AuthProvider = ({ children, publicUrls = [] }) => {
-  const [publicUrlsList, setPublicUrlsList] = useState(defaulPublicUrlList);
+  const [publicUrlsList, setPublicUrlsList] = useState(defaultPublicUrlList);
 
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
