@@ -61,10 +61,10 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
     return JSON.parse(value);
   };
 
-  // Effect to update public URLs whenever additionalPublicUrls prop changes
+  // Effect to update public URLs whenever publicUrls prop changes
   useEffect(() => {
-    setPublicUrlsList([...defaultPublicUrlList, ...additionalPublicUrls]);
-  }, [additionalPublicUrls]);
+    setPublicUrlsList([...defaultPublicUrlList, ...publicUrls]);
+  }, [publicUrls]);
 
 
   // Effect to redirect if user is null
