@@ -79,9 +79,9 @@ export const AuthProvider = ({ children }) => {
       const currentPath = window.location.pathname;
       const isWhitelisted = publicUrlsList.includes(currentPath);
 
-      if (user === null && !isWhitelisted) {
         console.log(publicUrlsList)
         console.log(currentPath)
+      if (user === null && !isWhitelisted) {
         debugger
         window.location.replace('/auth/login');
       }
