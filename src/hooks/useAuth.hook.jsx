@@ -27,7 +27,7 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
 
     const extractPublicPaths = (child, parentPath = '') => {
       if (React.isValidElement(child)) {
-        const currentPath = `${parentPath}${child.props.path || ''}`;
+        const currentPath = `${parentPath}${child.props.path ? `/${child.props.path}` : ''}`.replace(/\/+/g, '/');
 
         if (child.props.isPublic) {
           publicPaths.add(currentPath);
