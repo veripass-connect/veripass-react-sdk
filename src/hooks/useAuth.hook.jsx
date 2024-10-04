@@ -40,8 +40,8 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
     };
 
     React.Children.forEach(children, (child) => extractPublicPaths(child));
-    debugger
-    setPublicPathSet(publicPaths);
+
+    setPublicUrlsList(publicPaths);
   }, [children]);
 
   /**
