@@ -23,24 +23,23 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
 
   useEffect(() => {
-    console.log(children)
     const publicPaths = new Set(defaultPublicUrlList);
 
-    const extractPublicPaths = (child) => {
-      
+    const extractPublicPaths = (child, parentPath = '') => {
       if (React.isValidElement(child)) {
-        
-        if (child.props.isPublic && child.props.path) {
-          publicPaths.add(child.props.path);
+        const currentPath = `${parentPath}${child.props.path || ''}`;
+
+        if (child.props.isPublic) {
+          publicPaths.add(currentPath);
         }
-        
+
         if (child.props.children) {
-          React.Children.forEach(child.props.children, extractPublicPaths);
+          React.Children.forEach(child.props.children, (grandchild) => extractPublicPaths(grandchild, currentPath));
         }
       }
     };
 
-    React.Children.forEach(children, extractPublicPaths);
+    React.Children.forEach(children, (child) => extractPublicPaths(child));
     debugger
     setPublicPathSet(publicPaths);
   }, [children]);
@@ -79,7 +78,6 @@ export const AuthProvider = ({ children, publicUrls = [] }) => {
   useEffect(() => {
     setPublicUrlsList([...defaultPublicUrlList, ...publicUrls]);
   }, [publicUrls]);
-
 
   // Effect to redirect if user is null
   useEffect(() => {
