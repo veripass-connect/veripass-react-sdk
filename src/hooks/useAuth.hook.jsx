@@ -17,21 +17,19 @@ export const AuthContext = createContext();
  * @returns {JSX.Element} The provider component for AuthContext.
  */
 export const AuthProvider = ({ children }) => {
-  const [publicUrlsList, setPublicUrlsList] = useState();
+  const publicUrlsList = defaultPublicUrlList;
   const [isInitialized, setIsInitialized] = useState(false);
 
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
 
   useEffect(() => {
-    const publicPaths = new Set(defaultPublicUrlList);
-
     const extractPublicPaths = (child, parentPath = '') => {
       if (React.isValidElement(child)) {
         const currentPath = `${parentPath}${child.props.path ? `/${child.props.path}` : ''}`.replace(/\/+/g, '/');
 
-        if (child.props.isPublic) {
-          publicPaths.add(currentPath);
+        if (child.props.isPublic && !publicUrlsList.includes(currentPath)) {
+          publicUrlsList.push(currentPath);
         }
 
         if (child.props.children) {
@@ -42,7 +40,6 @@ export const AuthProvider = ({ children }) => {
 
     React.Children.forEach(children, (child) => extractPublicPaths(child));
 
-    setPublicUrlsList(publicPaths);
     setIsInitialized(true);
   }, [children]);
 
@@ -89,7 +86,7 @@ export const AuthProvider = ({ children }) => {
         //window.location.replace('/auth/login');
       }
     }
-  }, [user, publicUrlsList, isInitialized]); 
+  }, [user, isInitialized]); 
 
   /**
    * Memoized value containing the user data and authentication functions.
