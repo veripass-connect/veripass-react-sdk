@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useMemo, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, useEffect, useState } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
+
+const defaulPublicUrlList = ['/auth/login', '/auth/signup'];
 
 /**
  * Authentication context used to provide user authentication data and functions.
@@ -14,11 +16,20 @@ export const AuthContext = createContext();
  * @param {React.ReactNode} props.children - The children components that require access to the authentication context.
  * @returns {JSX.Element} The provider component for AuthContext.
  */
-export const AuthProvider = ({ children }) => {
-  const whitelistUrls = ['/auth/login', '/auth/signup'];
+export const AuthProvider = ({ children, publicUrls = [] }) => {
+  const [publicUrlsList, setPublicUrlsList] = useState(defaulPublicUrlList);
 
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass-user-data', null);
+
+  useEffect(()=>{console.log(children)}, [children])
+
+  React.Children.forEach(children, (child) => {
+    // Check if child is a valid React element
+    if (React.isValidElement(child) && child.props.isPublic) {debugger
+      publicPaths.add(child.props.path); // Assumes `path` is passed as prop
+    }
+  });
 
   /**
    * Logs in the user by saving their data to local storage and navigating to the admin page.
@@ -50,15 +61,21 @@ export const AuthProvider = ({ children }) => {
     return JSON.parse(value);
   };
 
+  // Effect to update public URLs whenever additionalPublicUrls prop changes
+  useEffect(() => {
+    setPublicUrlsList([...defaultPublicUrlList, ...additionalPublicUrls]);
+  }, [additionalPublicUrls]);
+
+
   // Effect to redirect if user is null
   useEffect(() => {
     const currentPath = window.location.pathname;
-    const isWhitelisted = whitelistUrls.includes(currentPath);
+    const isWhitelisted = publicUrlsList.includes(currentPath);
 
     if (user === null && !isWhitelisted) {
       window.location.replace('/auth/login');
     }
-  }, [user]);
+  }, [user, publicUrlsList]);
 
   /**
    * Memoized value containing the user data and authentication functions.
