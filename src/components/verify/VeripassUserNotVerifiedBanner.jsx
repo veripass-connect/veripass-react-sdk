@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { UserVerifyButton } from '@components/verify/UserVerifyButton';
+import { VeripassUserVerifyButton } from '@components/verify/VeripassUserVerifyButton';
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 
-const UserNotVerifiedBanner = ({ entity }) => {
+export const VeripassUserNotVerifiedBanner = ({ entity }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const UserNotVerifiedBanner = ({ entity }) => {
         <article className="d-flex flex-column">
           <header className="d-flex align-items-center justify-content-between my-1">
             <h4>Get verified</h4>
-            <UserVerifyButton
+            <VeripassUserVerifyButton
               className="btn my-auto me-2 text-danger"
               isVerified={entity?.is_verified}
               onVerifyClick={() => {}}
@@ -37,5 +37,3 @@ const UserNotVerifiedBanner = ({ entity }) => {
     </section>
   );
 };
-
-export default UserNotVerifiedBanner;

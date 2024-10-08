@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassNewPassword } from '../components/auth/recover/new-password/VeripassNewPassword'; 
-import { AuthProvider } from '../hooks/useAuth.hook';
+import { VeripassNewPassword } from '../../components/auth/recover/new-password/VeripassNewPassword';
+import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
   title: 'Components/VeripassNewPassword',

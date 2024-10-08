@@ -1,11 +1,11 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassStandardRecoverPassword } from '../components/auth/recover/recover-password/VeripassStandardRecoverPassword';
-import { AuthProvider } from '../hooks/useAuth.hook';
+import { VeripassStandardUnlock } from '../../components/auth/unlock/VeripassStandardUnlock';
+import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
-  title: 'Components/VeripassStandardRecoverPassword',
-  component: VeripassStandardRecoverPassword,
+  title: 'Components/VeripassStandardUnlock',
+  component: VeripassStandardUnlock,
   parameters: {
     layout: 'centered',
   },
@@ -28,7 +28,7 @@ export default {
 const Template = (args) => (
   <MemoryRouter>
     <AuthProvider>
-      <VeripassStandardRecoverPassword {...args} />
+      <VeripassStandardUnlock {...args} />
     </AuthProvider>
   </MemoryRouter>
 );

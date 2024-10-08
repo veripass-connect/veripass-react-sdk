@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '@link-loom/react-sdk';
-import { UserVerifiedBanner } from '@components/verify/UserVerifiedBanner';
-import { UserNotVerifiedBanner } from '@components/verify/UserNotVerifiedBanner';
+import { VeripassUserVerifiedBanner } from '@components/verify/VeripassUserVerifiedBanner';
+import { VeripassUserNotVerifiedBanner } from '@components/verify/VeripassUserNotVerifiedBanner';
 
-const UserVerificationStatus = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassUserVerificationStatus = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,12 +18,10 @@ const UserVerificationStatus = ({ entity, onUpdatedEntity, setIsOpen, isPopupCon
       {isLoading ? (
         <Spinner />
       ) : entity?.is_verified ? (
-        <UserVerifiedBanner entity={entity}/>
+        <VeripassUserVerifiedBanner entity={entity}/>
       ) : (
-        <UserNotVerifiedBanner entity={entity}/>
+        <VeripassUserNotVerifiedBanner entity={entity}/>
       )}
     </section>
   );
 };
-
-export default UserVerificationStatus;

@@ -4,9 +4,9 @@ import { PopUp } from '@link-loom/react-sdk';
 
 import { Chip } from '@mui/material';
 
-import { UserQuickBiometrics } from '@components/pages';
+//import { UserQuickBiometrics } from '@components/pages';
 
-const UserVerifyButton = ({ entity, style, isVerified, verifiedLabel, notVerifiedLabel, className }) => {
+export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLabel, notVerifiedLabel, className }) => {
   const [isOpenUserQuickBiometricsModal, setIsOpenUserQuickBiometricsModal] = useState(false);
 
   const onVerifyClick = () => {
@@ -47,15 +47,13 @@ const UserVerifyButton = ({ entity, style, isVerified, verifiedLabel, notVerifie
           closeButtonColor: 'text-black-50',
         }}
       >
-        <UserQuickBiometrics
+       {/*  <UserQuickBiometrics
           onUpdatedEntity={onUpdatedEntity}
           entity={entity}
           setIsOpen={setIsOpenUserQuickBiometricsModal}
           isPopupContext
-        />
+        /> */}
       </PopUp>
     </>
   );
 };
-
-export default UserVerifyButton;

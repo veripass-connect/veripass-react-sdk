@@ -1,18 +1,16 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassStandardUnlock } from '../components/auth/unlock/VeripassStandardUnlock';
-import { AuthProvider } from '../hooks/useAuth.hook';
+import { VeripassQuickKyc } from '../../components/quick-actions/kyc/VeripassQuickKyc';
 
 export default {
-  title: 'Components/VeripassStandardUnlock',
-  component: VeripassStandardUnlock,
+  title: 'Quick-Actions/VeripassQuickKyc',
+  component: VeripassQuickKyc,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
   argTypes: {
-    organization: { control: 'object' },
-    redirectUrl: { control: 'text' },
+    entity: { control: 'object' },
     debug: { control: 'boolean' },
     apiKey: { control: 'text' },
   },
@@ -27,18 +25,13 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <AuthProvider>
-      <VeripassStandardUnlock {...args} />
-    </AuthProvider>
+    <VeripassQuickKyc {...args} />
   </MemoryRouter>
 );
 
 export const Default = Template.bind({});
 Default.args = {
-  organization: {
-    logoSrc: 'https://id.etrune.com/assets/img/logo-2x.png',
-    slogan: 'Unlock your digital world',
-  },
+  entity: {},
   redirectUrl: '/home',
   debug: true,
   apiKey: '',

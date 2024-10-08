@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassStandardSignin } from '../components/auth/signin/standard-signin/VeripassStandardSignin';
-import { AuthProvider } from '../hooks/useAuth.hook';
+import { VeripassStandardSignin } from '../../components/auth/signin/standard-signin/VeripassStandardSignin';
+import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
   title: 'Components/VeripassStandardSignin',

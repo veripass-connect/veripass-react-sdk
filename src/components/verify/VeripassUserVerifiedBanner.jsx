@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 
-const UserVerifiedBanner = ({ entity }) => {
+export const VeripassUserVerifiedBanner = ({ entity }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -34,5 +34,3 @@ const UserVerifiedBanner = ({ entity }) => {
     </section>
   );
 };
-
-export default UserVerifiedBanner;

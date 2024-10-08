@@ -17,6 +17,7 @@
     "@cyntler/react-doc-viewer": "^1.14.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@link-loom/react-sdk": "^1.0.102",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@mui/x-data-grid": "^7.17.0",

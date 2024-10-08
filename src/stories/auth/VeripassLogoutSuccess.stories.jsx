@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassLogoutSuccess } from '../components/auth/logout/logout-success/VeripassLogoutSuccess';
-import { AuthProvider } from '../hooks/useAuth.hook';
+import { VeripassLogoutSuccess } from '../../components/auth/logout/logout-success/VeripassLogoutSuccess';
+import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
   title: 'Components/VeripassLogoutSuccess',
