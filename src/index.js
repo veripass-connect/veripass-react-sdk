@@ -5,6 +5,8 @@ export { VeripassLogoutSuccess as VeripassLogoutSuccess } from './components/aut
 export { VeripassStandardRecoverPassword as VeripassStandardRecoverPassword } from './components/auth/recover/recover-password/VeripassStandardRecoverPassword.jsx'
 export { VeripassNewPassword as VeripassNewPassword } from './components/auth/recover/new-password/VeripassNewPassword.jsx'
 export { VeripassStandardUnlock as VeripassStandardUnlock } from './components/auth/unlock/VeripassStandardUnlock.jsx'
+export { VeripassUserQuickCreate as VeripassUserQuickCreate } from './components/quick-actions/create/VeripassUserQuickCreate.jsx'
+export { VeripassQuickKyc as VeripassQuickKyc } from './components/quick-actions/kyc/VeripassQuickKyc.jsx';
 
 export {
   AuthContext,
