@@ -98,9 +98,6 @@ const initialState = {
 };
 
 export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
-  // Hooks
-  const navigate = useNavigate();
-
   // Models
   const [userProfileData, setUserProfileData] = useState(initialState);
 
@@ -164,7 +161,7 @@ export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, s
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleCreateUser = async (event) => {
     try {
       if (event) {
         event.preventDefault();
@@ -369,17 +366,12 @@ export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, s
                       </button>
                     ) : isExistingUser ? (
                       userProfileData.id ? (
-                        <button
-                          className="btn btn-success waves-effect waves-light"
-                          onClick={() => {
-                            navigate(`/admin/users/management/${userProfileData?.id}`);
-                          }}
-                        >
+                        <button className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
                           Add to this organization
                         </button>
                       ) : null
                     ) : (
-                      <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleSubmit}>
+                      <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
                         Next
                       </button>
                     )}
