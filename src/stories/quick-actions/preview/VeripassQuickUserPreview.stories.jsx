@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserBiometrics } from '../../../components/quick-actions/biometrics/VeripassQuickUserBiometrics';
+import { VeripassQuickUserPreview } from '../../../components/quick-actions/preview/VeripassQuickUserPreview';
 
 export default {
-  title: 'Quick-Actions/VeripassQuickUserBiometrics',
-  component: VeripassQuickUserBiometrics,
+  title: 'Quick-Actions/VeripassQuickUserPreview',
+  component: VeripassQuickUserPreview,
   parameters: {
     layout: 'centered',
   },
@@ -29,7 +29,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassQuickUserBiometrics {...args} />
+    <VeripassQuickUserPreview {...args} />
   </MemoryRouter>
 );
 
@@ -40,18 +40,5 @@ Default.args = {
   onUpdatedEntity: () => {},
   isPopupContext: false,
   debug: true,
-  apiKey: '',
-};
-
-export const CustomTexts = Template.bind({});
-CustomTexts.args = {
-  entity: {},
-  ui: {
-    title: 'Veripass Biometrics custom text',
-    subtitle: 'This a Biometrics hub to validate user data',
-  },
-  debug: true,
-  onUpdatedEntity: () => {},
-  isPopupContext: false,
   apiKey: '',
 };
