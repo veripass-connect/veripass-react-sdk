@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { TextField, FormHelperText, CircularProgress } from '@mui/material';
@@ -98,14 +98,17 @@ const initialState = {
 };
 
 export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIsOpen, isPopupContext }) => {
-  const { setPageName } = useOutletContext();
+  // Hooks
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
+  // Models
   const [userProfileData, setUserProfileData] = useState(initialState);
+
+  // UI States
+  const [isLoading, setIsLoading] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(true);
-  const debouncedNationalId = useDebounce(userProfileData?.primary_national_id?.identification, 1000);
   const [userNationalIdValidationInProgress, setUserNationalIdValidationInProgress] = useState(false);
+  const debouncedNationalId = useDebounce(userProfileData?.primary_national_id?.identification, 1000);
 
   useEffect(() => {
     const fetchUser = async () => {
