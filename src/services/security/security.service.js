@@ -8,7 +8,7 @@ export default class SecurityService extends BaseApi {
     this.serviceEndpoints = {
       baseUrlProd: process.env.VERIPASS_SERVICE_URL,
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
-      signUpWithPassword: '/security/signup/standard',
+      signUpWithStandard: '/security/signup/standard',
       signInStandard: '/security/signin/standard',
       emailRecoverPassword: '/security/password/reset/standard',
       update: '/security/password/new/standard',
@@ -17,9 +17,9 @@ export default class SecurityService extends BaseApi {
     this.settings = args?.settings || {}
   }
 
-  async signUpWithPassword (payload) {
+  async signUpWithStandard (payload) {
     return super.post(payload, {
-      endpoint: this.serviceEndpoints.signUpWithPassword,
+      endpoint: this.serviceEndpoints.signUpWithStandard,
       ...this.settings
     });
   }
@@ -46,6 +46,9 @@ export default class SecurityService extends BaseApi {
   }
 
   async newPassword (payload) {
-    return super.update(payload);
+    return super.update(payload, {
+      endpoint: this.serviceEndpoints.update,
+      ...this.settings
+    });
   }
 }

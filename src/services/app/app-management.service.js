@@ -15,19 +15,31 @@ export default class AppManagementService extends BaseApi {
     };
   }
 
-  async getByParameters (data) {
-    return super.getByParameters(data);
+  async getByParameters (payload) {
+    return super.getByParameters(payload, {
+      endpoint: this.serviceEndpoints.get,
+      ...this.settings
+    });
   }
 
-  async update (data) {
-    return super.update(data);
+  async update (payload) {
+    return super.update(payload, {
+      endpoint: this.serviceEndpoints.update,
+      ...this.settings
+    });
   }
 
-  async create (data) {
-    return super.create(data);
+  async create (payload) {
+    return super.create(payload, {
+      endpoint: this.serviceEndpoints.create,
+      ...this.settings
+    });
   }
 
-  async delete (data) {
-    return super.delete(data);
+  async delete (payload) {
+    return super.delete(payload, {
+      endpoint: this.serviceEndpoints.delete,
+      ...this.settings
+    });
   }
 }

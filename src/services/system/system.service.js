@@ -12,7 +12,7 @@ export default class SystemService extends BaseApi {
     };
   }
 
-  async getStatus(data) {
-    return super.get(data, this.service_uri.status);
+  async getStatus(payload) {
+    return super.get(payload, this.service_uri.status);
   }
 }

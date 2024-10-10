@@ -19,9 +19,9 @@ async function createEntity(payload, entity) {
   return entityResponse;
 }
 
-async function getEntity({ payload, service }) {
+async function getEntity({ Service, payload, apiKey, debug }) {
   try {
-    const entityService = new service();
+    const entityService = new Service({ apiKey, settings: { debug } });
 
     const entityResponse = entityService.getByParameters(payload);
 

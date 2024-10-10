@@ -12,7 +12,7 @@ export default class UploadService extends BaseApi {
     };
   }
 
-  async post (data) {
-    return super.post(data);
+  async post (payload) {
+    return super.post(payload);
   }
 }
