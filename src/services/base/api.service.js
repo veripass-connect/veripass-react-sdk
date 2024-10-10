@@ -108,7 +108,7 @@ export default class BaseApi {
 
       const parameters = this.objectToQueryString(payload);
       const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.get });
-      const url = `${endpoint}${this.serviceEndpoints.get}${payload.queryselector}${parameters}`;
+      const url = `${endpoint}${payload.queryselector}${parameters}`;
 
       const result = await this.request().get(url);
 
