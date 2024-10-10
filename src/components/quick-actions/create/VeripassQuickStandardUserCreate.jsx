@@ -116,9 +116,10 @@ export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, s
         const { userResponse } = await getUserByNationalId(userProfileData?.primary_national_id?.identification);
 
         if (!userResponse || !userResponse.success) {
+          return;
         }
 
-        if (userResponse.result?.items.length === 0) {
+        if (userResponse?.result?.items?.length === 0) {
           setIsExistingUser(false);
           setUserProfileData({
             ...initialState,
