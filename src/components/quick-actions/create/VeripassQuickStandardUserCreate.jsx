@@ -19,7 +19,7 @@ async function createEntity(payload, entity) {
   return entityResponse;
 }
 
-async function getEntity({ Service, payload, apiKey, debug }) {
+async function getEntity({ Service, payload, apiKey, debug = false }) {
   try {
     const entityService = new Service({ apiKey, settings: { debug } });
 
@@ -27,18 +27,21 @@ async function getEntity({ Service, payload, apiKey, debug }) {
 
     return entityResponse;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
 
-async function getUserByNationalId(nationalId) {
+async function getUserByNationalId({ nationalId, apiKey, debug }) {
   try {
     const userResponsePromiseResponse = getEntity({
       payload: {
         queryselector: 'primary-national-id',
         search: nationalId ?? '',
       },
-      service: UserProfileService,
+      Service: UserProfileService,
+      debug,
+      apiKey,
     });
 
     const [userResponse] = await Promise.all([userResponsePromiseResponse]);
@@ -97,7 +100,15 @@ const initialState = {
   password: '',
 };
 
-export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassQuickStandardUserCreate = ({
+  ui,
+  entity,
+  onUpdatedEntity,
+  setIsOpen,
+  isPopupContext,
+  debug = false,
+  apiKey = '',
+}) => {
   // Models
   const [userProfileData, setUserProfileData] = useState(initialState);
 
@@ -113,7 +124,11 @@ export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, s
       if (debouncedNationalId) {
         setUserNationalIdValidationInProgress(true);
 
-        const { userResponse } = await getUserByNationalId(userProfileData?.primary_national_id?.identification);
+        const { userResponse } = await getUserByNationalId({
+          nationalId: userProfileData?.primary_national_id?.identification,
+          apiKey,
+          debug,
+        });
 
         if (!userResponse || !userResponse.success) {
           return;
