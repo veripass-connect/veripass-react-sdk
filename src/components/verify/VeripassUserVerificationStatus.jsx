@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { Spinner } from '@link-loom/react-sdk';
+import { Spinner, useNavigate } from '@link-loom/react-sdk';
 import { VeripassUserVerifiedBanner } from '@components/verify/VeripassUserVerifiedBanner';
 import { VeripassUserNotVerifiedBanner } from '@components/verify/VeripassUserNotVerifiedBanner';
 
