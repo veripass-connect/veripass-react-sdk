@@ -41,7 +41,16 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, extraFields }) => {
+export const VeripassQuickUserKyc = ({
+  ui,
+  entity,
+  onUpdatedEntity,
+  setIsOpen,
+  isPopupContext,
+  extraFields,
+  debug = false,
+  apiKey = '',
+}) => {
   // Models
   const [userData, setUserData] = useState(initialState);
 
