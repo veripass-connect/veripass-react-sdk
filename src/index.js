@@ -21,9 +21,9 @@ export { VeripassQuickUserBiometricsVoice as VeripassQuickUserBiometricsVoice } 
 export { VeripassQuickUserBiometricsSignature as UserQuickBiometricsSignature } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsSignature.jsx';
 
 /* Verify */
-export { VeripassUserNotVerifiedBanner as VeripassUserVerifyButton } from './components/verify/VeripassUserNotVerifiedBanner';
-export { VeripassUserVerificationStatus as VeripassUserVerifyButton } from './components/verify/VeripassUserVerificationStatus';
-export { VeripassUserVerifiedBanner as VeripassUserVerifyButton } from './components/verify/VeripassUserVerifiedBanner';
+export { VeripassUserNotVerifiedBanner as VeripassUserNotVerifiedBanner } from './components/verify/VeripassUserNotVerifiedBanner';
+export { VeripassUserVerificationStatus as VeripassUserVerificationStatus } from './components/verify/VeripassUserVerificationStatus';
+export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from './components/verify/VeripassUserVerifiedBanner';
 export { VeripassUserVerifyButton as VeripassUserVerifyButton } from './components/verify/VeripassUserVerifyButton';
 
 export {
