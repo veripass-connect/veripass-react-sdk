@@ -40,7 +40,7 @@ export default class BaseApi {
   }
 
   urlBuilder ({ endpoint }) {
-    const endpoint = `${settings?.debug
+    return `${settings?.debug
       ? this.serviceEndpoints.baseUrlDev
       : this.serviceEndpoints.baseUrlProd}${endpoint}`;
   }
