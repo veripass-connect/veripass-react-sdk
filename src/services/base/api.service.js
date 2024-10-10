@@ -14,6 +14,7 @@ export default class BaseApi {
       patch: '',
       put: '',
     };
+    this.settings = {}
   }
 
   /**
@@ -40,7 +41,7 @@ export default class BaseApi {
   }
 
   urlBuilder ({ endpoint }) {
-    return `${settings?.debug
+    return `${this.settings?.debug
       ? this.serviceEndpoints.baseUrlDev
       : this.serviceEndpoints.baseUrlProd}${endpoint}`;
   }
