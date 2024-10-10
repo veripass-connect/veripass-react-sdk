@@ -13,6 +13,7 @@ export default class EventLoggerService extends BaseApi {
       update: '/logger/event',
       delete: '/logger/event',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

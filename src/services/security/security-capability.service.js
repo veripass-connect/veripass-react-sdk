@@ -13,6 +13,7 @@ export default class SecurityCapabilityService extends BaseApi {
       update: '/security/capability/',
       delete: '/security/capability/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

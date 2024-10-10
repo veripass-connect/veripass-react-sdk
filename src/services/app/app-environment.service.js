@@ -13,6 +13,7 @@ export default class AppEnvironmentService extends BaseApi {
       update: '/app/environment/',
       delete: '/app/environment/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

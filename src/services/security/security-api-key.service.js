@@ -13,6 +13,7 @@ export default class SecurityApiKeyService extends BaseApi {
       update: '/security/developer/key',
       delete: '/security/developer/key',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

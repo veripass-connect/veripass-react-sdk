@@ -12,6 +12,7 @@ export default class OrganizationTeamsService extends BaseApi {
       create: '/organization/team',
       update: '/organization/team',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

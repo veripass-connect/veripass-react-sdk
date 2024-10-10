@@ -10,6 +10,7 @@ export default class SystemService extends BaseApi {
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
       status: '/status',
     };
+    this.settings = args?.settings || {}
   }
 
   async getStatus(payload) {

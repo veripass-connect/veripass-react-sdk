@@ -13,6 +13,7 @@ export default class UserAppService extends BaseApi {
       update: '/user/app',
       delete: '/user/app',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

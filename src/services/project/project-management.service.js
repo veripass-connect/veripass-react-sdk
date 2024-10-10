@@ -13,6 +13,7 @@ export default class ProjectManagementService extends BaseApi {
       update: '/project/management/',
       delete: '/project/management/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

@@ -13,6 +13,7 @@ export default class UserOrganizationService extends BaseApi {
       update: '/user/organization',
       delete: '/user/organization',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

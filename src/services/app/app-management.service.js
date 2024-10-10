@@ -13,6 +13,7 @@ export default class AppManagementService extends BaseApi {
       update: '/app/management/',
       delete: '/app/management/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

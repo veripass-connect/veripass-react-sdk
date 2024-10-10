@@ -12,6 +12,7 @@ export default class UserSecurityService extends BaseApi {
       create: '/user/security',
       update: '/user/security',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

@@ -12,6 +12,7 @@ export default class UserProfileService extends BaseApi {
       create: '/user/identity',
       update: '/user/identity',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

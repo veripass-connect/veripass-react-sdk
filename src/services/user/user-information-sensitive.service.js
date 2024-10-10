@@ -12,6 +12,7 @@ export default class UserInformationSensitiveService extends BaseApi {
       create: '/user/information-sensitive/',
       update: '/user/information-sensitive/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

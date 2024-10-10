@@ -13,6 +13,7 @@ export default class SecurityClaimService extends BaseApi {
       update: '/security/claim/',
       delete: '/security/claim/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

@@ -12,6 +12,7 @@ export default class UserSettingsService extends BaseApi {
       create: '/user/settings',
       update: '/user/settings',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

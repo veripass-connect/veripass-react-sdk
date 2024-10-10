@@ -12,6 +12,7 @@ export default class UserInformationService extends BaseApi {
       create: '/user/information',
       update: '/user/information',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

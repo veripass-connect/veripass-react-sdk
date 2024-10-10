@@ -13,6 +13,7 @@ export default class UserAppRoleService extends BaseApi {
       update: '/user/app-role',
       delete: '/user/app-role',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

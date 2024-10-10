@@ -12,6 +12,7 @@ export default class InsightService extends BaseApi {
       create: '/insight/',
       update: '/insight/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

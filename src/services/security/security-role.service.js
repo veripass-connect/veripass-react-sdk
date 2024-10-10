@@ -13,6 +13,7 @@ export default class SecurityRoleService extends BaseApi {
       update: '/security/role/',
       delete: '/security/role/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

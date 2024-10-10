@@ -13,6 +13,7 @@ export default class DeviceManagementService extends BaseApi {
       update: '/device',
       delete: '/device',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

@@ -10,6 +10,7 @@ export default class UploadService extends BaseApi {
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
       post: '/file/upload/single',
     };
+    this.settings = args?.settings || {}
   }
 
   async post (payload) {

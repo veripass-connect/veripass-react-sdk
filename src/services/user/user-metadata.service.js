@@ -12,6 +12,7 @@ export default class UserMetadataService extends BaseApi {
       create: '/user/metadata',
       update: '/user/metadata',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

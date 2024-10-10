@@ -12,6 +12,7 @@ export default class UserLogService extends BaseApi {
       create: '/user/log/',
       update: '/user/log/',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

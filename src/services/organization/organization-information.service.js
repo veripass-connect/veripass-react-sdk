@@ -12,6 +12,7 @@ export default class OrganizationInformationService extends BaseApi {
       create: '/organization/information',
       update: '/organization/information',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

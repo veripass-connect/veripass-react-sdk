@@ -39,6 +39,12 @@ export default class BaseApi {
     return this.client;
   }
 
+  urlBuilder ({ endpoint }) {
+    const endpoint = `${settings?.debug
+      ? this.serviceEndpoints.baseUrlDev
+      : this.serviceEndpoints.baseUrlProd}${endpoint}`;
+  }
+
   /**
    * Serializes a nested object into a query string format.
    *
@@ -83,23 +89,25 @@ export default class BaseApi {
 
   /**
    * Execute a query to filter by parameters
-   * @param {Object} data Provides all information to get an entity by parameters
-   * @param {string} data.queryselector Is the selector of filter
+   * @param {Object} payload Provides all information to get an entity by parameters
+   * @param {string} payload.queryselector Is the selector of filter
+   * @param {*} settings Configuration settings for the request
    * @returns an object to be processed
    */
-  async getByParameters (data) {
+  async getByParameters (payload, settings) {
     try {
-      if (!data) {
+      if (!payload) {
         return null;
       }
 
-      if (!data.queryselector) {
+      if (!payload.queryselector) {
         console.error('Provide a query selector to query');
         return null;
       }
 
-      const parameters = this.objectToQueryString(data);
-      const url = `${this.serviceEndpoints.baseUrl}${this.serviceEndpoints.get}${data.queryselector}${parameters}`;
+      const parameters = this.objectToQueryString(payload);
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.get });
+      const url = `${endpoint}${this.serviceEndpoints.get}${payload.queryselector}${parameters}`;
 
       const result = await this.request().get(url);
 
@@ -113,18 +121,17 @@ export default class BaseApi {
   /**
    * Execute a create query into backend service
    * @param {*} payload
+   * @param {*} settings Configuration settings for the request
    * @returns
    */
-  async create (payload) {
+  async create (payload, settings) {
     try {
       if (!payload) {
         return null;
       }
 
-      const result = await this.request().post(
-        `${this.serviceEndpoints.baseUrl}${this.serviceEndpoints.create}`,
-        payload,
-      );
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.create });
+      const result = await this.request().post(endpoint, payload);
 
       return result.data;
     } catch (error) {
@@ -136,18 +143,17 @@ export default class BaseApi {
   /**
    * Execute an update query into backend service
    * @param {*} payload
+   * @param {*} settings Configuration settings for the request
    * @returns
    */
-  async update (payload) {
+  async update (payload, settings) {
     try {
       if (!payload) {
         return null;
       }
 
-      const result = await this.request().patch(
-        `${this.serviceEndpoints.baseUrl}${this.serviceEndpoints.update}`,
-        payload,
-      );
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.update });
+      const result = await this.request().patch(endpoint, payload);
 
       return result.data;
     } catch (error) {
@@ -159,16 +165,17 @@ export default class BaseApi {
   /**
    * Execute a delete query into backend service
    * @param {*} payload
+   * @param {*} settings Configuration settings for the request
    * @returns
    */
-  async delete (payload) {
+  async delete (payload, settings) {
     try {
       if (!payload) {
         return null;
       }
 
-      const result = await this.request().delete(
-        `${this.serviceEndpoints.baseUrl}${this.serviceEndpoints.delete}`,
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.delete });
+      const result = await this.request().delete(endpoint,
         {
           data: payload,
         },
@@ -192,12 +199,10 @@ export default class BaseApi {
       if (!payload) {
         return null;
       }
-      
-      const endpoint = `${settings?.debug
-        ? this.serviceEndpoints.baseUrlDev
-        : this.serviceEndpoints.baseUrlProd}${settings?.endpoint || this.serviceEndpoints.post}`
+
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.post });
       const result = await this.request().post(endpoint, payload);
-      
+
       return result.data;
     } catch (error) {
       console.error(error);
@@ -218,10 +223,8 @@ export default class BaseApi {
         return null;
       }
 
-      const result = await this.request().put(
-        `${this.serviceEndpoints.baseUrl}${settings?.endpoint || this.serviceEndpoints.put}`,
-        payload,
-      );
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.put });
+      const result = await this.request().put(endpoint, payload);
 
       return result.data;
     } catch (error) {
@@ -242,10 +245,8 @@ export default class BaseApi {
         return null;
       }
 
-      const result = await this.request().patch(
-        `${this.serviceEndpoints.baseUrl}${settings?.endpoint || this.serviceEndpoints.patch}`,
-        payload,
-      );
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.patch });
+      const result = await this.request().patch(endpoint, payload);
 
       return result.data;
     } catch (error) {
@@ -260,17 +261,15 @@ export default class BaseApi {
    * @param {*} endpoint
    * @returns
    */
-  async get (payload, endpoint) {
+  async get (payload, settings) {
     try {
       if (!payload) {
         return null;
       }
 
       const parameters = this.objectToQueryString(payload);
-
-      const result = await this.request().get(
-        `${this.serviceEndpoints.baseUrl}${endpoint}${parameters}`,
-      );
+      const endpoint = this.urlBuilder({ endpoint: settings?.endpoint || this.serviceEndpoints.post });
+      const result = await this.request().get(`${endpoint}${parameters}`);
 
       return result.data;
     } catch (error) {

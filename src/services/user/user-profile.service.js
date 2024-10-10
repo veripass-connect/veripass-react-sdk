@@ -13,6 +13,7 @@ export default class UserProfileService extends BaseApi {
       update: '/user/profile',
       delete: '/user/profile'
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

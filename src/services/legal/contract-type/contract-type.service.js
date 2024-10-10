@@ -13,6 +13,7 @@ export default class LegalContractTypeService extends BaseApi {
       update: '/legal/contract/type',
       delete: '/legal/contract/type',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {

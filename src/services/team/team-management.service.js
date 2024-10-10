@@ -13,6 +13,7 @@ export default class TeamManagementService extends BaseApi {
       update: '/team/management',
       delete: '/team/management',
     };
+    this.settings = args?.settings || {}
   }
 
   async getByParameters (payload) {
