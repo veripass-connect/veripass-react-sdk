@@ -376,17 +376,20 @@ export const VeripassQuickStandardUserCreate = ({
 
                 <article className="row">
                   <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
-                    {isLoading ? (
+                    {isLoading && (
                       <button type="button" disabled className="btn btn-primary">
-                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Saving...
                       </button>
-                    ) : isExistingUser ? (
-                      userProfileData.id ? (
-                        <button className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
-                          Add to this organization
-                        </button>
-                      ) : null
-                    ) : (
+                    )}
+
+                    {!isLoading && isExistingUser && userProfileData.id && (
+                      <button className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
+                        Add to this organization
+                      </button>
+                    )}
+
+                    {!isLoading && !isExistingUser && (
                       <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
                         Next
                       </button>
