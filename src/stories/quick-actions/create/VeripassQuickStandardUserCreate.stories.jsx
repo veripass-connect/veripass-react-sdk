@@ -1,15 +1,16 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickKyc } from '../../components/quick-actions/kyc/VeripassQuickKyc';
+import { VeripassQuickStandardUserCreate } from '../../../components/quick-actions/create/VeripassQuickStandardUserCreate';
 
 export default {
-  title: 'Quick-Actions/VeripassQuickKyc',
-  component: VeripassQuickKyc,
+  title: 'Quick-Actions/VeripassQuickStandardUserCreate',
+  component: VeripassQuickStandardUserCreate,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
   argTypes: {
+    ui: { control: 'object' },
     entity: { control: 'object' },
     debug: { control: 'boolean' },
     apiKey: { control: 'text' },
@@ -25,14 +26,25 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassQuickKyc {...args} />
+    <VeripassQuickStandardUserCreate {...args} />
   </MemoryRouter>
 );
 
 export const Default = Template.bind({});
 Default.args = {
   entity: {},
-  redirectUrl: '/home',
+  ui:{},
+  debug: true,
+  apiKey: '',
+};
+
+export const CustomTexts = Template.bind({});
+CustomTexts.args = {
+  entity: {},
+  ui:{
+    title: 'Welcome!',
+    subtitle: 'This a Quick Standard (with password) user create'
+  },
   debug: true,
   apiKey: '',
 };

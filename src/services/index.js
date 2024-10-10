@@ -28,6 +28,7 @@ import ProjectManagementService from './project/project-management.service';
 import AppManagementService from './app/app-management.service';
 import AppEnvironmentService from './app/app-environment.service';
 
+import SecurityService from './security/security.service';
 import SecurityRoleService from './security/security-role.service';
 import SecurityClaimService from './security/security-claim.service';
 import SecurityCapabilityService from './security/security-capability.service';
@@ -41,6 +42,7 @@ import LegalContractTypeService from './legal/contract-type/contract-type.servic
 import DeviceManagementService from './device/device-management.service';
 
 export {
+  SecurityService,
   SecurityCapabilityService,
   SecurityClaimService,
   SecurityRoleService,

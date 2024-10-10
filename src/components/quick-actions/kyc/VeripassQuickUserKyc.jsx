@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, FormHelperText, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import styled from 'styled-components';
+
+import { TextField, FormHelperText } from '@mui/material';
 import { CountrySelector } from '@link-loom/react-sdk';
-import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 const Container = styled.article`
@@ -40,11 +41,14 @@ const initialState = {
   },
 };
 
-export const VeripassQuickKyc = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext, extraFields }) => {
-  const navigate = useNavigate();
+export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, extraFields }) => {
+  // Models
   const [userData, setUserData] = useState(initialState);
+
+  // UI States
   const [isMinor, setIsMinor] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
 
   // Update form data with the provided entity on load
   useEffect(() => {
@@ -99,14 +103,17 @@ export const VeripassQuickKyc = ({ entity, onUpdatedEntity, setIsOpen, isPopupCo
     <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>
       <div className="card mb-0">
         <div className="card-body py-4">
-          <section className="row">
-            <article className="col-12">
-              <h4 className="header-title">User KYC</h4>
-              <p className="sub-header">
-                Quickly provide the user's nationality, date of birth, and residential address to complete the KYC process.
-              </p>
-            </article>
-          </section>
+          {showHeader && (
+            <header className="row">
+              <article className="col-12">
+                <h4 className="header-title">{ui?.title || 'User quick KYC'}</h4>
+                <p className="sub-header">
+                  {ui?.subtitle ||
+                    "Quickly provide the user's nationality, date of birth, and residential address to complete the KYC process."}
+                </p>
+              </article>
+            </header>
+          )}
 
           <section>
             <form onSubmit={handleSubmit}>
@@ -115,7 +122,7 @@ export const VeripassQuickKyc = ({ entity, onUpdatedEntity, setIsOpen, isPopupCo
                 <section className="mb-3 col-12 col-md-6">
                   <CountrySelector
                     label="Nationality"
-                    value={userData.address.country}
+                    value={userData.nationality}
                     onChange={(event) => handleAddressChange('nationality', event)}
                   />
                 </section>

@@ -97,7 +97,7 @@ const initialState = {
   password: '',
 };
 
-export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassQuickStandardUserCreate = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
   // Hooks
   const navigate = useNavigate();
 
@@ -107,6 +107,7 @@ export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIs
   // UI States
   const [isLoading, setIsLoading] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(true);
+  const [showHeader, setShowHeader] = useState(true);
   const [userNationalIdValidationInProgress, setUserNationalIdValidationInProgress] = useState(false);
   const debouncedNationalId = useDebounce(userProfileData?.primary_national_id?.identification, 1000);
 
@@ -183,33 +184,45 @@ export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIs
 
       // Update parent states
       setIsLoading(false);
-      onUpdatedEntity('create', response);
+      if (onUpdatedEntity) {
+        onUpdatedEntity('create', response);
+      }
 
       if (setIsOpen) {
         setIsOpen(false);
       }
     } catch (error) {
       setIsLoading(false);
-      onUpdatedEntity('error', null);
+      if (onUpdatedEntity) {
+        onUpdatedEntity('error', null);
+      }
       if (setIsOpen) {
         setIsOpen(false);
       }
     }
   };
 
+  useEffect(() => {
+    if (ui?.showHeader !== undefined || ui?.showHeader !== null) {
+      setShowHeader(ui?.showHeader);
+    }
+  }, [ui]);
+
   return (
     <section>
       <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>
         <div className="card mb-0">
           <div className="card-body py-4">
-            <section className="row">
-              <article className="col-12">
-                <h4 className="header-title">Create User</h4>
-                <p className="sub-header">
-                  To get started, fill out some basic information about who you're adding as a user.
-                </p>
-              </article>
-            </section>
+            {showHeader && (
+              <header className="row">
+                <article className="col-12">
+                  <h4 className="header-title">{ui?.title || 'Create User'}</h4>
+                  <p className="sub-header">
+                    {ui?.subtitle || "To get started, fill out some basic information about who you're adding as a user."}
+                  </p>
+                </article>
+              </header>
+            )}
 
             <section>
               <form onSubmit={(event) => event.preventDefault()}>
@@ -366,11 +379,7 @@ export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIs
                         </button>
                       ) : null
                     ) : (
-                      <button
-                        type="button"
-                        className="btn btn-success waves-effect waves-light"
-                        onClick={handleSubmit}
-                      >
+                      <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleSubmit}>
                         Next
                       </button>
                     )}
@@ -383,4 +392,4 @@ export const VeripassUserQuickCreate = ({ entitySelected, onUpdatedEntity, setIs
       </Container>
     </section>
   );
-}
+};
