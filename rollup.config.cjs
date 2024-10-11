@@ -66,10 +66,16 @@ module.exports = {
       sourceMap: true,
     }),
     url({
-      include: ['**/*.woff', '**/*.woff2', '**/*.eot', '**/*.ttf', '**/*.svg'],
+      include: ['**/*.woff', '**/*.woff2', '**/*.eot', '**/*.ttf'],
       limit: 0,
       emitFiles: true,
       fileName: 'fonts/[name][extname]',
+    }),
+    url({
+      include: ['**/*.svg'],
+      limit: 0,
+      emitFiles: true,
+      fileName: 'assets/[name][extname]',
     }),
     json(),
     replace({
