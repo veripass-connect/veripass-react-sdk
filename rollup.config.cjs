@@ -9,6 +9,7 @@ const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 const replace = require('@rollup/plugin-replace');
 const url = require('@rollup/plugin-url');
 const copy = require('rollup-plugin-copy');
+const image = require('@rollup/plugin-image');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -71,13 +72,7 @@ module.exports = {
       emitFiles: true,
       fileName: 'fonts/[name][extname]',
     }),
-    url({
-      include: ['**/*.svg'],
-      limit: 0,
-      emitFiles: true,
-      fileName: 'assets/[name][extname]',
-      publicPath: '/assets/',
-    }),
+    image(),
     json(),
     replace({
       'process.env.VERIPASS_SERVICE_URL': JSON.stringify(process.env.VERIPASS_SERVICE_URL),
