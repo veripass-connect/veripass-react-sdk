@@ -49,7 +49,13 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, debu
 }
 
 export const VeripassStandardSignin = ({
+  ui={
+    logo:{
+      height: '75'
+    }
+  },
   organization = {
+    name: '',
     logoSrc: '',
     slogan: '',
   },
@@ -141,7 +147,7 @@ export const VeripassStandardSignin = ({
       <StandardContainer>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
-            <img src={organization?.logoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
+            <img src={organization?.logoSrc} alt={organization?.name} height={ui?.logo?.height} style={{ display: 'block', margin: '0 auto' }} />
           </a>
           <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad', fontWeight: 300 }}>
             {organization?.slogan}
