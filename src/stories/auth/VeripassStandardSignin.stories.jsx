@@ -27,7 +27,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <AuthProvider>
+    <AuthProvider {...args}>
       <VeripassStandardSignin {...args} />
     </AuthProvider>
   </MemoryRouter>

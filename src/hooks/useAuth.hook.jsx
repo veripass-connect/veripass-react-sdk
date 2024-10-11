@@ -16,7 +16,7 @@ export const AuthContext = createContext();
  * @param {React.ReactNode} props.children - The children components that require access to the authentication context.
  * @returns {JSX.Element} The provider component for AuthContext.
  */
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, debug }) => {
   const publicUrlsList = defaultPublicUrlList;
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -80,7 +80,9 @@ export const AuthProvider = ({ children }) => {
       const isWhitelisted = publicUrlsList.includes(currentPath);
 
       if (user === null && !isWhitelisted) {
-        //window.location.replace('/auth/login');
+        if (!debug) {
+          window.location.replace('/auth/login');
+        }
       }
     }
   }, [user, isInitialized]);
