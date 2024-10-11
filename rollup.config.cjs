@@ -76,6 +76,7 @@ module.exports = {
       limit: 0,
       emitFiles: true,
       fileName: 'assets/[name][extname]',
+      publicPath: '/assets/',
     }),
     json(),
     replace({
