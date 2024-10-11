@@ -44,6 +44,7 @@ module.exports = {
         { find: '@services', replacement: path.resolve(__dirname, 'src/services') },
         { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
         { find: '@constants', replacement: path.resolve(__dirname, 'src/constants') },
+        { find: '@assets', replacement: path.resolve(__dirname, 'src/assets') },
       ],
     }),
     resolve({
@@ -78,7 +79,8 @@ module.exports = {
     }),
     copy({
       targets: [
-        { src: 'src/fonts/*', dest: 'dist/fonts' }
+        { src: 'src/fonts/*', dest: 'dist/fonts' },
+        { src: 'src/assets/*.svg', dest: 'dist/assets' }
       ]
     })
   ],

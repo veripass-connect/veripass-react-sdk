@@ -16,6 +16,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
+import veripassLogo from '@assets/veripass-logo-dark.svg';
+
 import { SecurityService } from '@services';
 
 const swal = withReactContent(Swal);
@@ -49,7 +51,7 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, debu
 export const VeripassStandardSignin = ({
   organization = {
     logoSrc: '',
-    slogan: ''
+    slogan: '',
   },
   redirectUrl = '',
   debug = false,
@@ -146,7 +148,7 @@ export const VeripassStandardSignin = ({
           </Typography>
         </header>
 
-        <Card>
+        <Card style={{padding: '2.25rem 2.25rem 1.23rem 2.25rem'}}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <KarlaTypography style={{ color: '#343a40' }}>Log in using email address</KarlaTypography>
           </div>
@@ -235,6 +237,13 @@ export const VeripassStandardSignin = ({
                 {isLoading ? 'Loading...' : 'Log in'}
               </Button>
             </footer>
+
+            <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop:'2rem' }}>
+              <Typography style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400' }}>
+                Powered by
+              </Typography>
+              <img src={veripassLogo} alt="Veripass logo" height="15" style={{ marginTop: 'auto', marginBottom: 'auto' }} />
+            </section>
           </form>
         </Card>
       </StandardContainer>
