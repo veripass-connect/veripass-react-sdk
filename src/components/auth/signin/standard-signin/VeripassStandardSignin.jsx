@@ -49,10 +49,10 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, debu
 }
 
 export const VeripassStandardSignin = ({
-  ui={
-    logo:{
-      height: '75'
-    }
+  ui = {
+    logo: {
+      height: '75',
+    },
   },
   organization = {
     name: '',
@@ -147,14 +147,19 @@ export const VeripassStandardSignin = ({
       <StandardContainer>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
-            <img src={organization?.logoSrc} alt={organization?.name} height={ui?.logo?.height} style={{ display: 'block', margin: '0 auto' }} />
+            <img
+              src={organization?.logoSrc}
+              alt={organization?.name}
+              height={ui?.logo?.height}
+              style={{ display: 'block', margin: '0 auto' }}
+            />
           </a>
           <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad', fontWeight: 300 }}>
             {organization?.slogan}
           </Typography>
         </header>
 
-        <Card style={{padding: '2.25rem 2.25rem 1.23rem 2.25rem'}}>
+        <Card style={{ padding: '2.25rem 2.25rem 1.23rem 2.25rem' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <KarlaTypography style={{ color: '#343a40' }}>Log in using email address</KarlaTypography>
           </div>
@@ -244,7 +249,7 @@ export const VeripassStandardSignin = ({
               </Button>
             </footer>
 
-            <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop:'2rem' }}>
+            <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
               <Typography style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400' }}>
                 Powered by
               </Typography>
