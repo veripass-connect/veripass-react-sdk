@@ -1,6 +1,6 @@
 {
   "name": "@veripass/react-sdk",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "UI SDK components for Veripass",
   "main": "dist/react-sdk.cjs.js",
   "module": "dist/react-sdk.esm.js",
