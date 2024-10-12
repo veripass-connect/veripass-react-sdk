@@ -39,11 +39,11 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
       <section className="card-body p-0 mt-3">
         {!identificationType && (
           <section className="passport-input">
-            <h3 className="text-center">Choose an option</h3>
+            <h4 className="text-center">Choose an option</h4>
             <article className="mt-2 w-50 mx-auto">
               <section className="my-1 text-center d-flex flex-column">
                 <Button
-                  size="large"
+                  size="small"
                   color="info"
                   variant="contained"
                   className="my-2"
@@ -62,7 +62,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
                   Passport
                 </Button>
                 <Button
-                  size="large"
+                  size="small"
                   color="info"
                   variant="contained"
                   className="my-2"
