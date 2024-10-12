@@ -239,7 +239,7 @@ export const VeripassQuickStandardUserCreate = ({
             <section>
               <form onSubmit={(event) => event.preventDefault()}>
                 <article className="row">
-                  <section className="mb-3">
+                  <section className="mb-2">
                     <NationalIdentificationSelector
                       label="National identification number"
                       defaultDocumentType="Passport"
@@ -262,7 +262,7 @@ export const VeripassQuickStandardUserCreate = ({
                 </article>
 
                 <article className="row">
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <TextField
                       className="w-100"
                       type="text"
@@ -280,7 +280,7 @@ export const VeripassQuickStandardUserCreate = ({
                       autoComplete="off"
                     />
                   </section>
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <TextField
                       className="w-100"
                       type="text"
@@ -301,7 +301,7 @@ export const VeripassQuickStandardUserCreate = ({
                 </article>
 
                 <article className="row">
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <TextField
                       className="w-100"
                       id="fullname-input"
@@ -320,7 +320,7 @@ export const VeripassQuickStandardUserCreate = ({
                     />
                   </section>
 
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <PhoneCountrySelector
                       label="Phone number"
                       onPhoneChange={(event) => {
@@ -334,7 +334,7 @@ export const VeripassQuickStandardUserCreate = ({
                 </article>
 
                 <article className="row">
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <TextField
                       className="w-100"
                       type="email"
@@ -353,7 +353,7 @@ export const VeripassQuickStandardUserCreate = ({
                     />
                   </section>
 
-                  <section className="mb-3 col-12 col-md-6">
+                  <section className="mb-2 col-12 col-md-6">
                     <TextField
                       className="w-100"
                       type="text"

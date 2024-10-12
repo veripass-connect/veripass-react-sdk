@@ -134,15 +134,16 @@ export const VeripassQuickUserKyc = ({
             <form onSubmit={handleSubmit}>
               <article className="row">
                 {/* Nationality */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <CountrySelector
                     label="Nationality"
                     value={userData.nationality}
                     onChange={(event) => handleAddressChange('nationality', event)}
                   />
+                  <FormHelperText>Country associated with the user's nationality.</FormHelperText>
                 </section>
                 {/* Birthdate */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     label="Date of Birth"
                     className="mt-0"
@@ -155,81 +156,87 @@ export const VeripassQuickUserKyc = ({
                       shrink: true,
                     }}
                   />
-                  <FormHelperText>{isMinor ? 'User is a minor' : 'User is an adult'}</FormHelperText>
+                  <FormHelperText>Date used to verify the user's age.</FormHelperText>
                 </section>
               </article>
               <article className="row">
                 {/* Address field principal */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     className="mt-0"
-                    label="Street Address"
+                    label="Residence Address"
                     value={userData.address.street}
                     onChange={(event) => handleAddressChange('address_line_1', event.target.value)}
                     fullWidth
                     required
                     margin="normal"
                   />
+                  <FormHelperText>Primary address where the user lives.</FormHelperText>
                 </section>
                 {/* Address field 2 */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     className="mt-0"
-                    label="Street Address 2"
+                    label="Residence Address 2"
                     value={userData.address.street}
                     onChange={(event) => handleAddressChange('address_line_2', event.target.value)}
                     fullWidth
                     required
                     margin="normal"
                   />
+                  <FormHelperText>Additional address details (e.g., apartment or suite).</FormHelperText>
                 </section>
               </article>
               <article className="row">
                 {/* City */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     className="mt-0"
-                    label="City"
+                    label="Residence city"
                     value={userData.address.city}
                     onChange={(event) => handleAddressChange('city', event.target.value)}
                     fullWidth
                     required
                     margin="normal"
                   />
+                  <FormHelperText>City where the user currently resides.</FormHelperText>
                 </section>
                 {/* State/Province */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     className="mt-0"
-                    label="State/Province"
+                    label="Residence State/Province"
                     value={userData.address.state}
                     onChange={(event) => handleAddressChange('region', event.target.value)}
                     fullWidth
                     required
                     margin="normal"
                   />
+                  <FormHelperText>State or province of the user's residence.</FormHelperText>
                 </section>
               </article>
               <article className="row">
                 {/* Postal Code */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <TextField
                     className="mt-0"
-                    label="Postal Code"
+                    label="Residence postal code"
                     value={userData.address.postal_code}
                     onChange={(event) => handleAddressChange('postal_code', event.target.value)}
                     fullWidth
                     required
                     margin="normal"
                   />
+                  <FormHelperText>Postal code for the residence address.</FormHelperText>
                 </section>
                 {/* Country of Residence */}
-                <section className="mb-3 col-12 col-md-6">
+                <section className="mb-2 col-12 col-md-6">
                   <CountrySelector
                     label="Country of Residence"
                     value={userData.address.country}
                     onChange={(event) => handleAddressChange('country', event)}
                   />
+                  <FormHelperText>Country where the user resides.</FormHelperText>
                 </section>
               </article>
 

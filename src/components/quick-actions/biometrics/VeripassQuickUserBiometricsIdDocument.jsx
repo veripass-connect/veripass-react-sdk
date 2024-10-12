@@ -48,10 +48,18 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
                   variant="contained"
                   className="my-2"
                   onClick={() => {
-                    setIdentificationType('national-id');
+                    setIdentificationType('passport');
+                  }}
+                  sx={{
+                    backgroundColor: '#323a46',
+                    borderColor: '#323a46',
+                    '&:hover': {
+                      backgroundColor: '#404651',
+                      borderColor: '#404651',
+                    },
                   }}
                 >
-                  National Identification
+                  Passport
                 </Button>
                 <Button
                   size="large"
@@ -59,10 +67,18 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
                   variant="contained"
                   className="my-2"
                   onClick={() => {
-                    setIdentificationType('passport');
+                    setIdentificationType('national-id');
+                  }}
+                  sx={{
+                    backgroundColor: '#323a46',
+                    borderColor: '#323a46',
+                    '&:hover': {
+                      backgroundColor: '#404651',
+                      borderColor: '#404651',
+                    },
                   }}
                 >
-                  Passport
+                  National Identification
                 </Button>
               </section>
             </article>
