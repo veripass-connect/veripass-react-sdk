@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 import { Uploader } from '@link-loom/react-sdk';
 import { UploadService } from '@services';
 
-export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, onUpdatedEntity, setIsOpen, isPopupContext }) => {
   const [principalImage, setPrincipalImage] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [identificationType, setIdentificationType] = useState(null);
@@ -28,6 +28,12 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
 
   const onFileDeleted = async (file) => {
     setPrincipalImage([]);
+  };
+
+  const handleSubmit = () => {
+    if (itemOnAction) {
+      itemOnAction('biometric-id-document-done', null);
+    }
   };
 
   useEffect(() => {
@@ -302,6 +308,26 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
             </article>
           </section>
         )}
+
+        {/* Submit button */}
+        <footer className="d-flex justify-content-end">
+          <Button
+            type="button"
+            variant="contained"
+            className="my-2"
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: '#323a46',
+              borderColor: '#323a46',
+              '&:hover': {
+                backgroundColor: '#404651',
+                borderColor: '#404651',
+              },
+            }}
+          >
+            {isLoading ? 'Saving...' : 'Next'}
+          </Button>
+        </footer>
       </section>
     </>
   );
