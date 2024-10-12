@@ -86,16 +86,18 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         )}
         {identificationType === 'national-id' && (
           <section className="national-id-input d-flex flex-column">
-            <header className="d-flex justify-content-between">
-              <h4 className="text-center">National identification0</h4>
+            <header className="d-flex justify-content-center">
+              <h4 className="text-center">National identification</h4>
               <section>
                 <Button
-                  variant="text"
+                  size="small"
+                  variant="outlined"
                   onClick={() => {
                     setIdentificationType(null);
                   }}
+                  sx={{ textTransform: 'none' }}
                 >
-                  Select other
+                  Change
                 </Button>
               </section>
             </header>
@@ -222,16 +224,18 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         )}
         {identificationType === 'passport' && (
           <section className="passport-input d-flex flex-column">
-            <header className="d-flex justify-content-between">
+            <header className="d-flex justify-content-center">
               <h4 className="text-center">Passport</h4>
               <section>
                 <Button
-                  variant="text"
+                  size="small"
+                  variant="outlined"
                   onClick={() => {
                     setIdentificationType(null);
                   }}
+                  sx={{ textTransform: 'none' }}
                 >
-                  Select other
+                  Change
                 </Button>
               </section>
             </header>
