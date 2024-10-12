@@ -87,9 +87,10 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         {identificationType === 'national-id' && (
           <section className="national-id-input d-flex flex-column">
             <header className="d-flex justify-content-center">
-              <h4 className="text-center">National identification</h4>
-              <section>
+              <h4 className="text-center me-2">National identification</h4>
+              <section className="d-flex">
                 <Button
+                  className="my-auto"
                   size="small"
                   variant="outlined"
                   onClick={() => {
@@ -225,9 +226,10 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         {identificationType === 'passport' && (
           <section className="passport-input d-flex flex-column">
             <header className="d-flex justify-content-center">
-              <h4 className="text-center">Passport</h4>
-              <section>
+              <h4 className="text-center me-2">Passport</h4>
+              <section className="d-flex">
                 <Button
+                  className="my-auto"
                   size="small"
                   variant="outlined"
                   onClick={() => {
