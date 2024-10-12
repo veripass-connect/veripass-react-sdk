@@ -131,7 +131,7 @@ export const VeripassQuickUserKyc = ({
           )}
 
           <section>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(event) => event.preventDefault()}>
               <article className="row">
                 {/* Nationality */}
                 <section className="mb-2 col-12 col-md-6">
@@ -241,12 +241,12 @@ export const VeripassQuickUserKyc = ({
               </article>
 
               {/* Submit button */}
-              <div className="d-flex justify-content-end">
+              <footer className="d-flex justify-content-end">
                 <Button
                   type="button"
                   variant="contained"
                   className="my-2"
-                  onClick={handleCreateUser}
+                  onClick={handleSubmit}
                   sx={{
                     backgroundColor: '#323a46',
                     borderColor: '#323a46',
@@ -258,7 +258,7 @@ export const VeripassQuickUserKyc = ({
                 >
                   {isLoading ? 'Saving...' : 'Next'}
                 </Button>
-              </div>
+              </footer>
             </form>
           </section>
         </div>
