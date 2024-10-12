@@ -224,7 +224,7 @@ export const VeripassQuickStandardUserCreate = ({
     <section>
       <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>
         <div className="card mb-0">
-          <div className="card-body py-4">
+          <div className="card-body">
             {showHeader && (
               <header className="row">
                 <article className="col-12">
@@ -382,16 +382,23 @@ export const VeripassQuickStandardUserCreate = ({
                       </button>
                     )}
 
-                    {!isLoading && isExistingUser && userProfileData.id && (
-                      <button className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
-                        Add to this organization
-                      </button>
-                    )}
-
-                    {!isLoading && !isExistingUser && (
-                      <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleCreateUser}>
+                    {!isLoading && (
+                      <Button
+                        type="button"
+                        variant="contained"
+                        className="my-2"
+                        onClick={handleCreateUser}
+                        sx={{
+                          backgroundColor: '#323a46',
+                          borderColor: '#323a46',
+                          '&:hover': {
+                            backgroundColor: '#404651',
+                            borderColor: '#404651',
+                          },
+                        }}
+                      >
                         Next
-                      </button>
+                      </Button>
                     )}
                   </section>
                 </article>

@@ -242,9 +242,22 @@ export const VeripassQuickUserKyc = ({
 
               {/* Submit button */}
               <div className="d-flex justify-content-end">
-                <button type="submit" className="btn btn-success" disabled={isLoading}>
+                <Button
+                  type="button"
+                  variant="contained"
+                  className="my-2"
+                  onClick={handleCreateUser}
+                  sx={{
+                    backgroundColor: '#323a46',
+                    borderColor: '#323a46',
+                    '&:hover': {
+                      backgroundColor: '#404651',
+                      borderColor: '#404651',
+                    },
+                  }}
+                >
                   {isLoading ? 'Saving...' : 'Next'}
-                </button>
+                </Button>
               </div>
             </form>
           </section>

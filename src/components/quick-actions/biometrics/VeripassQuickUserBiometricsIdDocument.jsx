@@ -86,17 +86,19 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         )}
         {identificationType === 'national-id' && (
           <section className="national-id-input d-flex flex-column">
-            <h3 className="text-center">National identification </h3>
-            <section className="mx-auto">
-              <Button
-                variant="text"
-                onClick={() => {
-                  setIdentificationType(null);
-                }}
-              >
-                Select other
-              </Button>
-            </section>
+            <header className="d-flex justify-content-between">
+              <h4 className="text-center">National identification0</h4>
+              <section>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setIdentificationType(null);
+                  }}
+                >
+                  Select other
+                </Button>
+              </section>
+            </header>
 
             <article className="mt-2 w-50 mx-auto">
               <label htmlFor="image" className="form-label">
@@ -220,17 +222,19 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, onUpdatedEntity,
         )}
         {identificationType === 'passport' && (
           <section className="passport-input d-flex flex-column">
-            <h3 className="text-center">Passport</h3>
-            <section className="mx-auto">
-              <Button
-                variant="text"
-                onClick={() => {
-                  setIdentificationType(null);
-                }}
-              >
-                Select other
-              </Button>
-            </section>
+            <header className="d-flex justify-content-between">
+              <h4 className="text-center">Passport</h4>
+              <section>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setIdentificationType(null);
+                  }}
+                >
+                  Select other
+                </Button>
+              </section>
+            </header>
             <article className="mt-2 w-50 mx-auto">
               <label htmlFor="image" className="form-label">
                 Front side
