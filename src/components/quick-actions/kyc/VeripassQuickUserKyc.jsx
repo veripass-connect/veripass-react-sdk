@@ -108,6 +108,12 @@ export const VeripassQuickUserKyc = ({
     }
   };
 
+  useEffect(() => {
+    if (ui?.showHeader !== undefined || ui?.showHeader !== null) {
+      setShowHeader(ui?.showHeader);
+    }
+  }, [ui]);
+
   return (
     <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>
       <div className="card mb-0">
@@ -139,6 +145,7 @@ export const VeripassQuickUserKyc = ({
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
                     label="Date of Birth"
+                    className="mt-0"
                     type="date"
                     value={userData.birthdate}
                     onChange={(event) => handleDataChange('birthdate', event.target.value)}
@@ -152,9 +159,10 @@ export const VeripassQuickUserKyc = ({
                 </section>
               </article>
               <article className="row">
-                {/* Address fields */}
+                {/* Address field principal */}
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
+                    className="mt-0"
                     label="Street Address"
                     value={userData.address.street}
                     onChange={(event) => handleAddressChange('address_line_1', event.target.value)}
@@ -163,11 +171,10 @@ export const VeripassQuickUserKyc = ({
                     margin="normal"
                   />
                 </section>
-              </article>
-              <article className="row">
-                {/* Address fields */}
+                {/* Address field 2 */}
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
+                    className="mt-0"
                     label="Street Address 2"
                     value={userData.address.street}
                     onChange={(event) => handleAddressChange('address_line_2', event.target.value)}
@@ -181,6 +188,7 @@ export const VeripassQuickUserKyc = ({
                 {/* City */}
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
+                    className="mt-0"
                     label="City"
                     value={userData.address.city}
                     onChange={(event) => handleAddressChange('city', event.target.value)}
@@ -192,6 +200,7 @@ export const VeripassQuickUserKyc = ({
                 {/* State/Province */}
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
+                    className="mt-0"
                     label="State/Province"
                     value={userData.address.state}
                     onChange={(event) => handleAddressChange('region', event.target.value)}
@@ -205,6 +214,7 @@ export const VeripassQuickUserKyc = ({
                 {/* Postal Code */}
                 <section className="mb-3 col-12 col-md-6">
                   <TextField
+                    className="mt-0"
                     label="Postal Code"
                     value={userData.address.postal_code}
                     onChange={(event) => handleAddressChange('postal_code', event.target.value)}
