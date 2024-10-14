@@ -63,16 +63,6 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
   const [isLoading, setIsLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
 
-  // Update form data with the provided entity on load
-  useEffect(() => {
-    if (entity) {
-      if (!entity.user_information) {
-        entity.user_information = initialState;
-      }
-
-      setUserData(entity);
-    }
-  }, [entity]);
 
   // Validate if the user is a minor based on birthdate
   useEffect(() => {
@@ -137,6 +127,17 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       setShowHeader(ui?.showHeader);
     }
   }, [ui]);
+  
+  // Update form data with the provided entity on load
+  useEffect(() => {
+    if (entity) {
+      if (!entity.user_information) {
+        entity.user_information = initialState;
+      }
+
+      setUserData(entity);
+    }
+  }, [entity]);
 
   return (
     <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>

@@ -6,16 +6,74 @@ import { Uploader } from '@link-loom/react-sdk';
 import { UploadService } from '@services';
 
 export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, onUpdatedEntity, setIsOpen, isPopupContext }) => {
-  const [principalImage, setPrincipalImage] = useState([]);
+  // UI States
+  const [passportFrontside, setPassportFrontside] = useState([]);
+  const [nationalIdFrontside, setNationalIdFrontside] = useState([]);
+  const [nationalIdBackside, setNationalIdBackside] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [identificationType, setIdentificationType] = useState(null);
 
-  const onFileLoaded = async ({ file, metadata }) => {
-    const today = new Date();
+  const uploaderOnEvent = ({ uploader, event, data }) => {
+    switch (event) {
+      case 'onFileLoaded':
+        onFileLoaded(uploader, data);
+        break;
+      case 'delete':
+        onFileDeleted(uploader);
+        break;
+      default:
+        break;
+    }
   };
 
-  const onFileDeleted = async (file) => {
-    setPrincipalImage([]);
+  const onFileLoaded = async (uploader, data) => {
+    switch (uploader) {
+      case 'national-id-frontside':
+        setNationalIdFrontside(data);
+        break;
+      case 'national-id-backside':
+        setNationalIdBackside(data);
+        break;
+      case 'passport-frontside':
+        setPassportFrontside(data);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const onFileDeleted = async (uploader) => {
+    switch (uploader) {
+      case 'national-id-frontside':
+        setNationalIdFrontside(null);
+        break;
+      case 'national-id-backside':
+        setNationalIdBackside(null);
+        break;
+      case 'passport-frontside':
+        setPassportFrontside(null);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const canSubmit = () => {
+    if (!entity) {
+      return false;
+    }
+
+    if (identificationType === 'national-id') {
+      if (nationalIdFrontside && nationalIdBackside) {
+        return true;
+      }
+    } else if (identificationType === 'passport') {
+      if (passportFrontside) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
   const handleSubmit = () => {
@@ -24,8 +82,13 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     }
   };
 
+  // Update form data with the provided entity on load
   useEffect(() => {
-    setIsLoading(false);
+    if (entity) {
+      setIsLoading(false);
+
+      setUserData(entity);
+    }
   }, [entity]);
 
   return (
@@ -112,18 +175,9 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
                   }}
                   accept="image/x-png, image/gif, image/jpeg, image/webp, image/svg+xml, image/bmp, image/tiff"
                   height="200px"
-                  folder="course"
+                  folder={`${entity.identity}/national-id/frontside`}
                   onEvent={(event, data) => {
-                    switch (event) {
-                      case 'onFileLoaded':
-                        onFileLoaded(data);
-                        break;
-                      case 'delete':
-                        onFileDeleted();
-                        break;
-                      default:
-                        break;
-                    }
+                    uploaderOnEvent({ uploader: 'national-id-frontside', event, data });
                   }}
                   actions={[
                     {
@@ -171,18 +225,9 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
                   }}
                   accept="image/x-png, image/gif, image/jpeg, image/webp, image/svg+xml, image/bmp, image/tiff"
                   height="200px"
-                  folder="course"
+                  folder={`${entity.identity}/national-id/backside`}
                   onEvent={(event, data) => {
-                    switch (event) {
-                      case 'onFileLoaded':
-                        onFileLoaded(data);
-                        break;
-                      case 'delete':
-                        onFileDeleted();
-                        break;
-                      default:
-                        break;
-                    }
+                    uploaderOnEvent({ uploader: 'national-id-backtside', event, data });
                   }}
                   actions={[
                     {
@@ -250,18 +295,9 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
                   }}
                   accept="image/x-png, image/gif, image/jpeg, image/webp, image/svg+xml, image/bmp, image/tiff"
                   height="200px"
-                  folder="course"
+                  folder={`${entity.identity}/passport/frontside`}
                   onEvent={(event, data) => {
-                    switch (event) {
-                      case 'onFileLoaded':
-                        onFileLoaded(data);
-                        break;
-                      case 'delete':
-                        onFileDeleted();
-                        break;
-                      default:
-                        break;
-                    }
+                    uploaderOnEvent({ uploader: 'passport-frontside', event, data });
                   }}
                   actions={[
                     {
@@ -299,22 +335,32 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
 
         {/* Submit button */}
         <footer className="d-flex justify-content-end">
-          <Button
-            type="button"
-            variant="contained"
-            className="my-2"
-            onClick={handleSubmit}
-            sx={{
-              backgroundColor: '#323a46',
-              borderColor: '#323a46',
-              '&:hover': {
-                backgroundColor: '#404651',
-                borderColor: '#404651',
-              },
-            }}
-          >
-            {isLoading ? 'Saving...' : 'Next'}
-          </Button>
+          {isLoading && (
+            <button type="button" disabled className="btn btn-primary">
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Saving...
+            </button>
+          )}
+
+          {!isLoading && (
+            <Button
+              type="button"
+              variant="contained"
+              className="my-2"
+              onClick={handleSubmit}
+              disabled={!canSubmit()}
+              sx={{
+                backgroundColor: !canSubmit() ? '#a0a0a0' : '#323a46',
+                borderColor: !canSubmit() ? '#a0a0a0' : '#323a46',
+                '&:hover': {
+                  backgroundColor: !canSubmit() ? '#a0a0a0' : '#404651',
+                  borderColor: !canSubmit() ? '#a0a0a0' : '#404651',
+                },
+              }}
+            >
+              Next
+            </Button>
+          )}
         </footer>
       </section>
     </>
