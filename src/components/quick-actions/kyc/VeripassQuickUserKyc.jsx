@@ -107,10 +107,12 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       event.preventDefault();
       setIsLoading(true);
 
-      var updatedEntity = userData.user_information || {};
+      var updatedEntity = userData?.user_information || {};
       updatedEntity.id = userData.id;
 
       const entityResponse = await updateEntity({ payload: updatedEntity, Service: UserInformationService, debug, apiKey });
+
+      setIsLoading(false);
 
       if (!entityResponse || !entityResponse.success) {
         onUpdatedEntity('update', null);
@@ -118,7 +120,6 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       }
 
       // Update parent states
-      setIsLoading(false);
       onUpdatedEntity('update', entityResponse);
     } catch (error) {
       console.error(error);
