@@ -5,6 +5,18 @@ import { Button } from '@mui/material';
 import { Uploader } from '@link-loom/react-sdk';
 import { UploadService } from '@services';
 
+async function createEntity({ Service, payload, apiKey, debug = false }) {
+  const entityService = new Service({ apiKey, settings: { debug } });
+  const entityResponse = await entityService.create(payload);
+
+  if (!entityResponse || !entityResponse.result) {
+    console.error(entityResponse);
+    return null;
+  }
+
+  return entityResponse;
+}
+
 const initialState = {
   identity: '',
   metadata: {
@@ -121,6 +133,32 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     }
   };
 
+  const handleUploadFile = async (event) => {
+    try {
+      setIsLoading(true);
+
+      var updatedEntity = userData?.user_information || {};
+      updatedEntity.id = userData.id;
+
+      const fileUploadedResponse = await createEntity({ payload: user, Service: UploadService, debug, apiKey });
+
+      setIsLoading(false);
+
+      if (!fileUploadedResponse || !fileUploadedResponse.success) {
+        console.error(fileUploadedResponse);
+        onUpdatedEntity('error', null);
+        return null;
+      }
+
+      // return data to control
+      return { file: fileUploadedResponse?.result, metadata: event?.metadata }
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      onUpdatedEntity('error', null);
+    }
+  };
+
   useEffect(() => {
     if (identificationType) {
       handleDataChange('metadata.biometrics.identification_documents.identification_type', identificationType);
@@ -212,7 +250,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
 
               <section className="my-1">
                 <Uploader
-                  uploadService={UploadService}
+                  upload={handleUploadFile}
                   file={nationalIdFrontside}
                   behaviors={{
                     isInline: true,
@@ -262,7 +300,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
 
               <section className="my-1">
                 <Uploader
-                  uploadService={UploadService}
+                  upload={handleUploadFile}
                   file={nationalIdBackside}
                   behaviors={{
                     isInline: true,
@@ -332,7 +370,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
 
               <section className="my-1">
                 <Uploader
-                  uploadService={UploadService}
+                  upload={handleUploadFile}
                   file={passportFrontside}
                   behaviors={{
                     isInline: true,
