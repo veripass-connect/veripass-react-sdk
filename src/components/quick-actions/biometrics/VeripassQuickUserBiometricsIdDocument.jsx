@@ -137,7 +137,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     try {
       setIsLoading(true);
 
-      const fileUploadedResponse = await createEntity({ payload: fileData, Service: UploadService, debug, apiKey });
+      const fileUploadedResponse = await createEntity({ payload: fileData.payload, Service: UploadService, debug, apiKey });
 
       setIsLoading(false);
 
