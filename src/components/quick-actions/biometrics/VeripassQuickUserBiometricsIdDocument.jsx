@@ -148,7 +148,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
       }
 
       // return data to control
-      return { file: fileUploadedResponse?.result, metadata: fileData?.metadata }
+      return fileUploadedResponse
     } catch (error) {
       console.error(error);
       setIsLoading(false);
