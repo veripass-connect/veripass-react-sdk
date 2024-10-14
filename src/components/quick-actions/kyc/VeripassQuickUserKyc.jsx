@@ -108,7 +108,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       setIsLoading(true);
 
       var updatedEntity = userData;
-      const entityResponse = await updateEntity(updatedEntity, UserInformationService);
+      const entityResponse = await updateEntity({ payload: updatedEntity, Service: UserInformationService, debug, apiKey });
 
       if (!entityResponse || !entityResponse.success) {
         onUpdatedEntity('update', null);
