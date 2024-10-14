@@ -259,22 +259,32 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
 
               {/* Submit button */}
               <footer className="d-flex justify-content-end">
-                <Button
-                  type="button"
-                  variant="contained"
-                  className="my-2"
-                  onClick={handleSubmit}
-                  sx={{
-                    backgroundColor: '#323a46',
-                    borderColor: '#323a46',
-                    '&:hover': {
-                      backgroundColor: '#404651',
-                      borderColor: '#404651',
-                    },
-                  }}
-                >
-                  {isLoading ? 'Saving...' : 'Next'}
-                </Button>
+                {isLoading && (
+                  <button type="button" disabled className="btn btn-primary">
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Saving...
+                  </button>
+                )}
+
+                {!isLoading && (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    className="my-2"
+                    onClick={handleSubmit}
+                    disabled={!entity}
+                    sx={{
+                      backgroundColor: !entity ? '#a0a0a0' : '#323a46',
+                      borderColor: !entity ? '#a0a0a0' : '#323a46',
+                      '&:hover': {
+                        backgroundColor: !entity ? '#a0a0a0' : '#404651',
+                        borderColor: !entity ? '#a0a0a0' : '#404651',
+                      },
+                    }}
+                  >
+                    Next
+                  </Button>
+                )}
               </footer>
             </form>
           </section>

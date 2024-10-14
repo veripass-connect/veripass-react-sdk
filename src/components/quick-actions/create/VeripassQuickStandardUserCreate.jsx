@@ -388,13 +388,14 @@ export const VeripassQuickStandardUserCreate = ({
                         type="button"
                         variant="contained"
                         className="my-2"
-                        onClick={handleCreateUser}
+                        onClick={handleSubmit}
+                        disabled={!userProfileData?.primary_national_id?.identification}
                         sx={{
-                          backgroundColor: '#323a46',
-                          borderColor: '#323a46',
+                          backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                          borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
                           '&:hover': {
-                            backgroundColor: '#404651',
-                            borderColor: '#404651',
+                            backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                            borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
                           },
                         }}
                       >
