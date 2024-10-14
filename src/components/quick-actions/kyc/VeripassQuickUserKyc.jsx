@@ -88,19 +88,25 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
   const handleDataChange = (field, value) => {
     setUserData((prevData) => ({
       ...prevData,
-      [field]: value,
-    }));
-  };
-
-  const handleAddressChange = (field, value) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      address: {
-        ...prevData.address,
+      user_information: {
+        ...prevData.user_information,
         [field]: value,
       },
     }));
   };
+  
+  const handleAddressChange = (field, value) => {
+    setUserData((prevData) => ({
+      ...prevData,
+      user_information: {
+        ...prevData.user_information,
+        address: {
+          ...prevData.user_information.address,
+          [field]: value,
+        },
+      },
+    }));
+  };  
 
   const handleSubmit = async (event) => {
     try {
