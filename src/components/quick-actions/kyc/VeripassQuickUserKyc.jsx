@@ -56,7 +56,7 @@ const initialState = {
 
 export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, debug = false, apiKey = '' }) => {
   // Models
-  const [userData, setUserData] = useState(entity || initialState);
+  const [userData, setUserData] = useState(entity || { user_information: initialState });
 
   // UI States
   const [isMinor, setIsMinor] = useState(false);
@@ -66,9 +66,13 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
   // Update form data with the provided entity on load
   useEffect(() => {
     if (entity) {
+      if (!entity.user_information) {
+        entity.user_information = initialState;
+      }
+
       setUserData({
         ...initialState,
-        entity
+        entity,
       });
     }
   }, [entity]);
@@ -103,7 +107,9 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       event.preventDefault();
       setIsLoading(true);
 
-      var updatedEntity = userData;
+      var updatedEntity = userData.user_information || {};
+      updatedEntity.id = userData.id;
+
       const entityResponse = await updateEntity({ payload: updatedEntity, Service: UserInformationService, debug, apiKey });
 
       if (!entityResponse || !entityResponse.success) {
@@ -150,7 +156,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                 <section className="mb-2 col-12 col-md-6">
                   <CountrySelector
                     label="Nationality"
-                    value={userData.principal_nationality}
+                    value={userData?.user_information?.principal_nationality}
                     onChange={(event) => handleAddressChange('principal_nationality', event)}
                   />
                   <FormHelperText>Country associated with the user's nationality.</FormHelperText>
@@ -161,7 +167,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     label="Date of Birth"
                     className="mt-0"
                     type="date"
-                    value={userData.birthdate}
+                    value={userData?.user_information?.birthdate}
                     onChange={(event) => handleDataChange('birthdate', event.target.value)}
                     fullWidth
                     required
@@ -178,7 +184,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence Address"
-                    value={userData.address.street}
+                    value={userData?.user_information?.address?.street}
                     onChange={(event) => handleAddressChange('address_line_1', event.target.value)}
                     fullWidth
                     required
@@ -191,7 +197,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence Address 2"
-                    value={userData.address.street}
+                    value={userData?.user_information?.address?.street}
                     onChange={(event) => handleAddressChange('address_line_2', event.target.value)}
                     fullWidth
                     required
@@ -206,7 +212,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence city"
-                    value={userData.address.city}
+                    value={userData?.user_information?.address?.city}
                     onChange={(event) => handleAddressChange('city', event.target.value)}
                     fullWidth
                     required
@@ -219,7 +225,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence State/Province"
-                    value={userData.address.state}
+                    value={userData?.user_information?.address?.state}
                     onChange={(event) => handleAddressChange('region', event.target.value)}
                     fullWidth
                     required
@@ -234,7 +240,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence postal code"
-                    value={userData.address.postal_code}
+                    value={userData?.user_information?.address?.postal_code}
                     onChange={(event) => handleAddressChange('postal_code', event.target.value)}
                     fullWidth
                     required
@@ -246,7 +252,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                 <section className="mb-2 col-12 col-md-6">
                   <CountrySelector
                     label="Country of Residence"
-                    value={userData.address.country}
+                    value={userData?.user_information?.address?.country}
                     onChange={(event) => handleAddressChange('country', event)}
                   />
                   <FormHelperText>Country where the user resides.</FormHelperText>
