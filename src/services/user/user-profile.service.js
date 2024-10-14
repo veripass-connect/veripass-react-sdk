@@ -9,9 +9,7 @@ export default class UserProfileService extends BaseApi {
       baseUrlProd: process.env.VERIPASS_SERVICE_URL,
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
       get: '/user/profile/',
-      create: '/user/profile',
-      update: '/user/profile',
-      delete: '/user/profile'
+      update: '/user/profile'
     };
     this.settings = args?.settings || {}
   }
@@ -26,20 +24,6 @@ export default class UserProfileService extends BaseApi {
   async update (payload) {
     return super.update(payload, {
       endpoint: this.serviceEndpoints.update,
-      ...this.settings
-    });
-  }
-
-  async create (payload) {
-    return super.create(payload, {
-      endpoint: this.serviceEndpoints.create,
-      ...this.settings
-    });
-  }
-
-  async delete (payload) {
-    return super.delete(payload, {
-      endpoint: this.serviceEndpoints.delete,
       ...this.settings
     });
   }

@@ -12,18 +12,6 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
 
   const onFileLoaded = async ({ file, metadata }) => {
     const today = new Date();
-    const dateCreated = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
-
-    /* setPrincipalImage([
-      {
-        uri: file.url || '',
-        filename: file.filename || '',
-        path: file.path || '',
-        attachmentType: metadata?.attachmentType,
-        dateCreated,
-        isPrincipal: true,
-      },
-    ]); */
   };
 
   const onFileDeleted = async (file) => {

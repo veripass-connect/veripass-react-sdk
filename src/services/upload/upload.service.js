@@ -8,7 +8,7 @@ export default class UploadService extends BaseApi {
     this.serviceEndpoints = {
       baseUrlProd: process.env.VERIPASS_SERVICE_URL,
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
-      post: '/file/upload/single',
+      post: '/storage/file/upload/single',
     };
     this.settings = args?.settings || {}
   }

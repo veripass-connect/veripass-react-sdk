@@ -9,7 +9,6 @@ export default class UserMetadataService extends BaseApi {
       baseUrlProd: process.env.VERIPASS_SERVICE_URL,
       baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
       get: '/user/metadata/',
-      create: '/user/metadata',
       update: '/user/metadata',
     };
     this.settings = args?.settings || {}
@@ -25,13 +24,6 @@ export default class UserMetadataService extends BaseApi {
   async update (payload) {
     return super.update(payload, {
       endpoint: this.serviceEndpoints.update,
-      ...this.settings
-    });
-  }
-
-  async create (payload) {
-    return super.create(payload, {
-      endpoint: this.serviceEndpoints.create,
       ...this.settings
     });
   }
