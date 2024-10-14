@@ -7,7 +7,7 @@ import { UploadService } from '@services';
 
 async function createEntity({ Service, payload, apiKey, debug = false }) {
   const entityService = new Service({ apiKey, settings: { debug } });
-  const entityResponse = await entityService.create(payload);
+  const entityResponse = await entityService.post(payload);
 
   if (!entityResponse || !entityResponse.result) {
     console.error(entityResponse);

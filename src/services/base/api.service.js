@@ -115,7 +115,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.body;
+      return error?.body;
     }
   }
 
@@ -159,7 +159,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.body;
+      return error?.body;
     }
   }
 
@@ -185,7 +185,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.body;
+      return error?.body;
     }
   }
 
@@ -207,7 +207,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.response.data;
+      return error?.response?.data;
     }
   }
 
@@ -230,7 +230,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.response.data;
+      return error?.response?.data;
     }
   }
 
@@ -252,7 +252,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.response.data;
+      return error?.response?.data;
     }
   }
 
@@ -275,7 +275,7 @@ export default class BaseApi {
       return result.data;
     } catch (error) {
       console.error(error);
-      return error.body;
+      return error?.body;
     }
   }
 }
