@@ -133,14 +133,11 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     }
   };
 
-  const handleUploadFile = async (event) => {
+  const handleUploadFile = async (fileData) => {
     try {
       setIsLoading(true);
 
-      var updatedEntity = userData?.user_information || {};
-      updatedEntity.id = userData.id;
-
-      const fileUploadedResponse = await createEntity({ payload: user, Service: UploadService, debug, apiKey });
+      const fileUploadedResponse = await createEntity({ payload: fileData, Service: UploadService, debug, apiKey });
 
       setIsLoading(false);
 
@@ -151,7 +148,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
       }
 
       // return data to control
-      return { file: fileUploadedResponse?.result, metadata: event?.metadata }
+      return { file: fileUploadedResponse?.result, metadata: fileData?.metadata }
     } catch (error) {
       console.error(error);
       setIsLoading(false);
