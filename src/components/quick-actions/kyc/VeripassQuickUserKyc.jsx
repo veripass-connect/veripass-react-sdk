@@ -70,10 +70,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
         entity.user_information = initialState;
       }
 
-      setUserData({
-        ...initialState,
-        entity,
-      });
+      setUserData(entity);
     }
   }, [entity]);
 
