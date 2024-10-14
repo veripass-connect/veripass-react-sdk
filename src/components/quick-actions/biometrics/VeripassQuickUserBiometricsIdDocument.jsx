@@ -77,15 +77,15 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
   const onFileLoaded = async (uploader, data) => {
     switch (uploader) {
       case 'national-id-frontside':
-        setNationalIdFrontside(data);
+        setNationalIdFrontside(data?.file);
         handleDataChange('metadata.biometrics.identification_documents.national_identification_frontside', data?.file);
         break;
       case 'national-id-backside':
-        setNationalIdBackside(data);
+        setNationalIdBackside(data?.file);
         handleDataChange('metadata.biometrics.identification_documents.national_identification_frontside', data?.file);
         break;
       case 'passport-frontside':
-        setPassportFrontside(data);
+        setPassportFrontside(data?.file);
         handleDataChange('metadata.biometrics.identification_documents.passport_frontside', data?.file);
         break;
       default:
