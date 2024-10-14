@@ -56,7 +56,7 @@ const initialState = {
 
 export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, debug = false, apiKey = '' }) => {
   // Models
-  const [userData, setUserData] = useState(initialState);
+  const [userData, setUserData] = useState(entity || initialState);
 
   // UI States
   const [isMinor, setIsMinor] = useState(false);
@@ -68,11 +68,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
     if (entity) {
       setUserData({
         ...initialState,
-        principal_nationality: entity?.principal_nationality ?? '',
-        birthdate: entity?.birthdate ?? '',
-        address: {
-          ...entity?.address,
-        },
+        entity
       });
     }
   }, [entity]);
@@ -121,7 +117,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      onUpdatedEntity('update', null);
+      onUpdatedEntity('error', null);
     }
   };
 

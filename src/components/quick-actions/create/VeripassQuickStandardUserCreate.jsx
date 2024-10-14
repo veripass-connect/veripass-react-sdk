@@ -193,7 +193,7 @@ export const VeripassQuickStandardUserCreate = ({
       // Setup random ui settings
       userProfileData.profile_ui_settings = {
         profile_picture_url: PROFILE_PICTURES[Math.floor(Math.random() * 25) + 1].uri,
-        cover_picture_url: COVER_IMAGES[Math.floor(Math.random() * 24) + 1].uri,
+        cover_picture_url: COVER_IMAGES[Math.floor(Math.random() * 23) + 1].uri,
       };
       const user = {
         user_profile: userProfileData,
