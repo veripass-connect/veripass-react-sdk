@@ -5,13 +5,49 @@ import { Button } from '@mui/material';
 import { Uploader } from '@link-loom/react-sdk';
 import { UploadService } from '@services';
 
+const initialState = {
+  identity: '',
+  metadata: {
+    biometrics: {
+      identification_documents: {
+        identification_type: '',
+        passport_frontside: {},
+        national_identification_frontside: {},
+        national_identification_backside: {},
+      },
+    },
+  },
+};
+
 export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+  // Models
+  const [identityData, setIdentityData] = useState(initialState);
+
   // UI States
   const [passportFrontside, setPassportFrontside] = useState([]);
   const [nationalIdFrontside, setNationalIdFrontside] = useState([]);
   const [nationalIdBackside, setNationalIdBackside] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [identificationType, setIdentificationType] = useState(null);
+
+  const handleDataChange = (path, value) => {
+    setIdentityData((prevData) => {
+      const newData = { ...prevData };
+      const keys = path.split('.');
+      let current = newData;
+
+      keys.slice(0, -1).forEach((key) => {
+        if (!current[key]) {
+          current[key] = {};
+        }
+        current = current[key];
+      });
+
+      current[keys[keys.length - 1]] = value;
+
+      return newData;
+    });
+  };
 
   const uploaderOnEvent = ({ uploader, event, data }) => {
     switch (event) {
@@ -30,12 +66,15 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     switch (uploader) {
       case 'national-id-frontside':
         setNationalIdFrontside(data);
+        handleDataChange('metadata.biometrics.identification_documents.national_identification_frontside', data?.file);
         break;
       case 'national-id-backside':
         setNationalIdBackside(data);
+        handleDataChange('metadata.biometrics.identification_documents.national_identification_frontside', data?.file);
         break;
       case 'passport-frontside':
         setPassportFrontside(data);
+        handleDataChange('metadata.biometrics.identification_documents.passport_frontside', data?.file);
         break;
       default:
         break;
@@ -59,7 +98,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
   };
 
   const canSubmit = () => {
-    if (!entity) {
+    if (!entity || !entity?.identity) {
       return false;
     }
 
@@ -82,12 +121,18 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
     }
   };
 
+  useEffect(() => {
+    if (identificationType) {
+      handleDataChange('metadata.biometrics.identification_documents.identification_type', identificationType);
+    }
+  }, [identificationType]);
+
   // Update form data with the provided entity on load
   useEffect(() => {
     if (entity) {
       setIsLoading(false);
 
-      setUserData(entity);
+      handleDataChange('identity', entity?.identity);
     }
   }, [entity]);
 

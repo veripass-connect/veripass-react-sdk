@@ -95,7 +95,6 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
     }));
   };
  
-
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -127,7 +126,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       setShowHeader(ui?.showHeader);
     }
   }, [ui]);
-  
+
   // Update form data with the provided entity on load
   useEffect(() => {
     if (entity) {
