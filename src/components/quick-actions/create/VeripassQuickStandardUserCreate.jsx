@@ -138,14 +138,20 @@ export const VeripassQuickStandardUserCreate = ({
           setIsExistingUser(false);
           setUserProfileData({
             ...initialState,
-            primary_national_id: userProfileData?.primary_national_id?.identification,
+            primary_national_id: {
+              ...userProfileData?.primary_national_id,
+              identification: userProfileData?.primary_national_id?.identification,
+            }
           });
         } else {
           setIsExistingUser(true);
           setUserProfileData(
             userResponse.result?.items[0] ?? {
               ...initialState,
-              primary_national_id: userProfileData?.primary_national_id?.identification,
+              primary_national_id: {
+                ...userProfileData?.primary_national_id,
+                identification: userProfileData?.primary_national_id?.identification,
+              }
             },
           );
         }
