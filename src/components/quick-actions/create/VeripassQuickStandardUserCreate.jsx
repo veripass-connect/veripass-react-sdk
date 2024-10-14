@@ -211,6 +211,7 @@ export const VeripassQuickStandardUserCreate = ({
         setIsOpen(false);
       }
     } catch (error) {
+      console.error(error);
       setIsLoading(false);
       if (onUpdatedEntity) {
         onUpdatedEntity('error', null);
