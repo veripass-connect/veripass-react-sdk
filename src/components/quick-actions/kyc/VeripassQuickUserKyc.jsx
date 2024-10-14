@@ -184,7 +184,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence Address"
-                    value={userData?.user_information?.address?.street}
+                    value={userData?.user_information?.address?.address_line_1}
                     onChange={(event) => handleAddressChange('address_line_1', event.target.value)}
                     fullWidth
                     required
@@ -197,7 +197,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <TextField
                     className="mt-0"
                     label="Residence Address 2"
-                    value={userData?.user_information?.address?.street}
+                    value={userData?.user_information?.address?.address_line_2}
                     onChange={(event) => handleAddressChange('address_line_2', event.target.value)}
                     fullWidth
                     required
