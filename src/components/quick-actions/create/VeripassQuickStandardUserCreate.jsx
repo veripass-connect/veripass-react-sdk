@@ -177,7 +177,7 @@ export const VeripassQuickStandardUserCreate = ({
     }
   };
 
-  const handleCreateUser = async (event) => {
+  const handleSubmit = async (event) => {
     try {
       if (event) {
         event.preventDefault();
