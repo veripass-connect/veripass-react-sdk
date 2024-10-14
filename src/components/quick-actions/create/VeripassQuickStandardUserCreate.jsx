@@ -199,7 +199,7 @@ export const VeripassQuickStandardUserCreate = ({
         user_profile: userProfileData,
         user_security: { password: userProfileData.password, require_password_reset: true },
       };
-      const response = await createEntity({ payload: user, service: UserManagementService, debug, apiKey });
+      const response = await createEntity({ payload: user, Service: UserManagementService, debug, apiKey });
 
       // Update parent states
       setIsLoading(false);
