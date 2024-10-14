@@ -31,7 +31,7 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, onUpdatedEntity, debug = false, apiKey = '' }) => {
   // Models
   const [identityData, setIdentityData] = useState(initialState);
 
