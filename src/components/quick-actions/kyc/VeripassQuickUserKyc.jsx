@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { UserInformationService } from '@services';
 import { TextField, FormHelperText, Button } from '@mui/material';
 import { CountrySelector } from '@link-loom/react-sdk';
 import dayjs from 'dayjs';
@@ -27,8 +28,20 @@ const Container = styled.article`
   }
 `;
 
+async function updateEntity({ payload, Service, apiKey, debug = false }) {
+  const entityService = new Service({ apiKey, settings: { debug } });
+  const entityResponse = await entityService.update(payload);
+
+  if (!entityResponse || !entityResponse.result) {
+    console.error(entityResponse);
+    return null;
+  }
+
+  return entityResponse;
+}
+
 const initialState = {
-  nationality: '',
+  principal_nationality: '',
   birthdate: '',
   address: {
     address_line_1: '',
@@ -41,16 +54,7 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserKyc = ({
-  ui,
-  entity,
-  onUpdatedEntity,
-  setIsOpen,
-  isPopupContext,
-  extraFields,
-  debug = false,
-  apiKey = '',
-}) => {
+export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, debug = false, apiKey = '' }) => {
   // Models
   const [userData, setUserData] = useState(initialState);
 
@@ -64,7 +68,7 @@ export const VeripassQuickUserKyc = ({
     if (entity) {
       setUserData({
         ...initialState,
-        nationality: entity?.nationality ?? '',
+        principal_nationality: entity?.principal_nationality ?? '',
         birthdate: entity?.birthdate ?? '',
         address: {
           ...entity?.address,
@@ -99,12 +103,25 @@ export const VeripassQuickUserKyc = ({
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    onUpdatedEntity('update', userData);
-    setIsLoading(false);
-    if (setIsOpen) {
-      setIsOpen(false);
+    try {
+      event.preventDefault();
+      setIsLoading(true);
+
+      var updatedEntity = userData;
+      const entityResponse = await updateEntity(updatedEntity, UserInformationService);
+
+      if (!entityResponse || !entityResponse.success) {
+        onUpdatedEntity('update', null);
+        return null;
+      }
+
+      // Update parent states
+      setIsLoading(false);
+      onUpdatedEntity('update', entityResponse);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      onUpdatedEntity('update', null);
     }
   };
 
@@ -137,8 +154,8 @@ export const VeripassQuickUserKyc = ({
                 <section className="mb-2 col-12 col-md-6">
                   <CountrySelector
                     label="Nationality"
-                    value={userData.nationality}
-                    onChange={(event) => handleAddressChange('nationality', event)}
+                    value={userData.principal_nationality}
+                    onChange={(event) => handleAddressChange('principal_nationality', event)}
                   />
                   <FormHelperText>Country associated with the user's nationality.</FormHelperText>
                 </section>

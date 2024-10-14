@@ -7,11 +7,12 @@ import { UserProfileService, UserManagementService } from '@services';
 import { COVER_IMAGES } from '@constants/cover-images';
 import { PROFILE_PICTURES } from '@constants/profile-pictures';
 
-async function createEntity(payload, entity) {
-  const entityService = new entity();
+async function createEntity({ Service, payload, apiKey, debug = false }) {
+  const entityService = new Service({ apiKey, settings: { debug } });
   const entityResponse = await entityService.create(payload);
 
   if (!entityResponse || !entityResponse.result) {
+    console.error(entityResponse);
     return null;
   }
 
@@ -192,7 +193,7 @@ export const VeripassQuickStandardUserCreate = ({
         user_profile: userProfileData,
         user_security: { password: userProfileData.password, require_password_reset: true },
       };
-      const response = await createEntity(user, UserManagementService);
+      const response = await createEntity({ payload: user, service: UserManagementService, debug, apiKey });
 
       // Update parent states
       setIsLoading(false);
