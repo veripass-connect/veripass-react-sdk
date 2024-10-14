@@ -24,9 +24,9 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
   const [identityData, setIdentityData] = useState(initialState);
 
   // UI States
-  const [passportFrontside, setPassportFrontside] = useState([]);
   const [nationalIdFrontside, setNationalIdFrontside] = useState([]);
   const [nationalIdBackside, setNationalIdBackside] = useState([]);
+  const [passportFrontside, setPassportFrontside] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [identificationType, setIdentificationType] = useState(null);
 
@@ -213,7 +213,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
               <section className="my-1">
                 <Uploader
                   uploadService={UploadService}
-                  file={principalImage?.[0]}
+                  file={nationalIdFrontside}
                   behaviors={{
                     isInline: true,
                     isMultipleFile: false,
@@ -263,7 +263,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
               <section className="my-1">
                 <Uploader
                   uploadService={UploadService}
-                  file={principalImage?.[0]}
+                  file={nationalIdBackside}
                   behaviors={{
                     isInline: true,
                     isMultipleFile: false,
@@ -333,7 +333,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({ entity, itemOnAction, on
               <section className="my-1">
                 <Uploader
                   uploadService={UploadService}
-                  file={principalImage?.[0]}
+                  file={passportFrontside}
                   behaviors={{
                     isInline: true,
                     isMultipleFile: false,
