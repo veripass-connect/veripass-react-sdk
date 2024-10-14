@@ -162,7 +162,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                   <CountrySelector
                     label="Nationality"
                     value={userData?.user_information?.principal_nationality}
-                    onChange={(event) => handleAddressChange('principal_nationality', event)}
+                    onChange={(event) => handleDataChange('principal_nationality', event)}
                   />
                   <FormHelperText>Country associated with the user's nationality.</FormHelperText>
                 </section>
@@ -194,6 +194,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     fullWidth
                     required
                     margin="normal"
+                    autoComplete="off"
                   />
                   <FormHelperText>Primary address where the user lives.</FormHelperText>
                 </section>
@@ -207,6 +208,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     fullWidth
                     required
                     margin="normal"
+                    autoComplete="off"
                   />
                   <FormHelperText>Additional address details (e.g., apartment or suite).</FormHelperText>
                 </section>
@@ -222,6 +224,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     fullWidth
                     required
                     margin="normal"
+                    autoComplete="off"
                   />
                   <FormHelperText>City where the user currently resides.</FormHelperText>
                 </section>
@@ -235,6 +238,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     fullWidth
                     required
                     margin="normal"
+                    autoComplete="off"
                   />
                   <FormHelperText>State or province of the user's residence.</FormHelperText>
                 </section>
@@ -250,6 +254,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
                     fullWidth
                     required
                     margin="normal"
+                    autoComplete="off"
                   />
                   <FormHelperText>Postal code for the residence address.</FormHelperText>
                 </section>
