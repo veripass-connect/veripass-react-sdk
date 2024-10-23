@@ -41,10 +41,12 @@ export default class BaseApi {
   }
 
   urlBuilder ({ endpoint }) {
-    return `${this.settings?.debug
+    const isDebug = this.settings?.debug === true || this.settings?.debug === 'true';
+  
+    return `${isDebug
       ? this.serviceEndpoints.baseUrlDev
       : this.serviceEndpoints.baseUrlProd}${endpoint}`;
-  }
+  }  
 
   /**
    * Serializes a nested object into a query string format.
