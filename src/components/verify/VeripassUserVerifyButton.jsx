@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VeripassSimpleLayout } from '@components/shared/layouts/VeripassSimpleLayout';
 
 import { PopUp } from '@link-loom/react-sdk';
 
@@ -18,7 +19,7 @@ export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLa
   };
 
   return (
-    <>
+    <VeripassSimpleLayout>
       {style === 'chip' ? (
         <Chip
           label={isVerified ? verifiedLabel ?? 'Verified' : notVerifiedLabel ?? 'Verify'}
@@ -54,6 +55,6 @@ export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLa
           isPopupContext
         />
       </PopUp>
-    </>
+    </VeripassSimpleLayout>
   );
 };

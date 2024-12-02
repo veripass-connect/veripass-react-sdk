@@ -60,11 +60,11 @@ module.exports = {
       extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: 'styles.css',
+      extract: path.resolve('dist', 'styles','main.css'),
       modules: false,
-      use: ['sass'],
       minimize: true,
       sourceMap: true,
+      use: ['sass'],
     }),
     url({
       include: ['**/*.woff', '**/*.woff2', '**/*.eot', '**/*.ttf'],
@@ -82,7 +82,7 @@ module.exports = {
     copy({
       targets: [
         { src: 'src/fonts/*', dest: 'dist/fonts' },
-        { src: 'src/assets/*.svg', dest: 'dist/assets' }
+        { src: 'src/assets/*', dest: 'dist/assets' }
       ]
     })
   ],

@@ -1,17 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
+
 import { FaceMesh } from '@mediapipe/face_mesh';
-import {
-  FACEMESH_TESSELATION,
-  FACEMESH_LIPS,
-  FACEMESH_LEFT_EYE,
-  FACEMESH_RIGHT_EYE,
-} from '@mediapipe/face_mesh';
+import { FACEMESH_TESSELATION, FACEMESH_LIPS, FACEMESH_LEFT_EYE, FACEMESH_RIGHT_EYE } from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
 import { CircularProgress } from '@mui/material';
 
-export const VeripassQuickUserBiometricsSelfie = (props) => {
-  const { currentStepIndex } = props;
-
+export const VeripassQuickUserBiometricsSelfie = ({ currentStepIndex, isPopupContext = false }) => {
   const debug = false;
   const userAlignedTime = 5000;
   const stabilityThreshold = 35;
@@ -34,7 +29,7 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
   const [isFaceAlignedWithinField, setIsFaceAlignedWithinField] = useState(false);
   const [isBiometricsAligned, setIsBiometricsAligned] = useState(false);
   const [userAlignedProgress, setUserAlignedProgress] = useState(0);
-  const [aiModel, setAiModel]=useState(null);
+  const [aiModel, setAiModel] = useState(null);
 
   const [isAligned, setIsAligned] = useState([]);
 
@@ -77,7 +72,7 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
 
   const cleanupResources = () => {
     if (cameraRef && cameraRef.current) {
-      cameraRef.current.stop()
+      cameraRef.current.stop();
     }
 
     if (alignmentTimer.current) {
@@ -106,7 +101,7 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
     videoRef.current.srcObject = stream;
     videoRef.current.onloadedmetadata = () => {
       videoRef.current.play();
-       cameraRef.current = new Camera(videoRef.current, {
+      cameraRef.current = new Camera(videoRef.current, {
         onFrame: async () => {
           await faceMesh.send({ image: videoRef.current });
         },
@@ -173,16 +168,8 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
   };
 
   const drawEyeDebugGuides = () => {
-    drawEyeDebugGuide(
-      canvasCenterX.current - eyeDistanceAdjustment / 2,
-      canvasCenterY.current + eyePositionAdjustment,
-      5,
-    );
-    drawEyeDebugGuide(
-      canvasCenterX.current + eyeDistanceAdjustment / 2,
-      canvasCenterY.current + eyePositionAdjustment,
-      5,
-    );
+    drawEyeDebugGuide(canvasCenterX.current - eyeDistanceAdjustment / 2, canvasCenterY.current + eyePositionAdjustment, 5);
+    drawEyeDebugGuide(canvasCenterX.current + eyeDistanceAdjustment / 2, canvasCenterY.current + eyePositionAdjustment, 5);
   };
 
   const drawEyeDebugGuide = (x, y, pointSize) => {
@@ -210,15 +197,7 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
     // Threshold guide
     canvasContext.current.strokeStyle = debugBiometricGuideColor.current;
     canvasContext.current.beginPath();
-    canvasContext.current.ellipse(
-      noseX,
-      noseY,
-      stabilityThreshold,
-      stabilityThreshold * 1.5,
-      0,
-      0,
-      2 * Math.PI,
-    );
+    canvasContext.current.ellipse(noseX, noseY, stabilityThreshold, stabilityThreshold * 1.5, 0, 0, 2 * Math.PI);
     canvasContext.current.stroke();
   };
 
@@ -236,14 +215,8 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
         const endPoint = landmarks[end];
         if (startPoint && endPoint) {
           canvasContext.current.beginPath();
-          canvasContext.current.moveTo(
-            (1 - startPoint.x) * canvasRef.current.width,
-            startPoint.y * canvasRef.current.height,
-          );
-          canvasContext.current.lineTo(
-            (1 - endPoint.x) * canvasRef.current.width,
-            endPoint.y * canvasRef.current.height,
-          );
+          canvasContext.current.moveTo((1 - startPoint.x) * canvasRef.current.width, startPoint.y * canvasRef.current.height);
+          canvasContext.current.lineTo((1 - endPoint.x) * canvasRef.current.width, endPoint.y * canvasRef.current.height);
           canvasContext.current.stroke();
         }
       });
@@ -258,13 +231,7 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
     canvasContext.current.globalAlpha = 0.5;
     landmarks.forEach((point) => {
       canvasContext.current.beginPath();
-      canvasContext.current.arc(
-        (1 - point.x) * canvasRef.current.width,
-        point.y * canvasRef.current.height,
-        1,
-        0,
-        2 * Math.PI,
-      );
+      canvasContext.current.arc((1 - point.x) * canvasRef.current.width, point.y * canvasRef.current.height, 1, 0, 2 * Math.PI);
       canvasContext.current.fill();
     });
     canvasContext.current.globalAlpha = 1.0;
@@ -293,23 +260,17 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
     const leftEye = landmarks[263];
     const nose = landmarks[1];
 
-    const eyeDistance = Math.sqrt(
-      Math.pow(rightEye.x - leftEye.x, 2) + Math.pow(rightEye.y - leftEye.y, 2),
-    );
+    const eyeDistance = Math.sqrt(Math.pow(rightEye.x - leftEye.x, 2) + Math.pow(rightEye.y - leftEye.y, 2));
 
     const eyeLevelY = canvasCenterY.current + eyePositionAdjustment;
     const noseLevelY = canvasCenterY.current + nosePositionAdjustment;
 
     const isRightEyeAligned =
-      Math.abs(
-        canvasCenterX.current - eyeDistanceAdjustment / 2 - rightEye.x * canvasRef.current.width,
-      ) < stabilityThreshold &&
+      Math.abs(canvasCenterX.current - eyeDistanceAdjustment / 2 - rightEye.x * canvasRef.current.width) < stabilityThreshold &&
       Math.abs(eyeLevelY - rightEye.y * canvasRef.current.height) < stabilityThreshold;
 
     const isLeftEyeAligned =
-      Math.abs(
-        canvasCenterX.current + eyeDistanceAdjustment / 2 - leftEye.x * canvasRef.current.width,
-      ) < stabilityThreshold &&
+      Math.abs(canvasCenterX.current + eyeDistanceAdjustment / 2 - leftEye.x * canvasRef.current.width) < stabilityThreshold &&
       Math.abs(eyeLevelY - leftEye.y * canvasRef.current.height) < stabilityThreshold;
 
     const isNoseAligned =
@@ -325,8 +286,8 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
 
   const checkFaceWithinSquare = (landmarks) => {
     const faceOutlineIndices = [
-      10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152,
-      148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109,
+      10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172,
+      58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109,
     ];
     const halfSquareSize = faceThreshold / 2;
 
@@ -450,77 +411,68 @@ export const VeripassQuickUserBiometricsSelfie = (props) => {
   };
 
   return (
-    <section className="card-body p-0 d-flex flex-column">
-      {!userSnapshot?.current && (
-        <>
-          <section
-            className="position-relative mx-auto mt-2"
-            style={{ width: '100%', maxWidth: '640px' }}
-          >
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              style={{ width: '100%', transform: 'scaleX(-1)' }}
-            />
-            <canvas
-              ref={canvasRef}
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
-            />
+    <VeripassLayout $isPopup={isPopupContext}>
+      <section className="card-body p-0 d-flex flex-column">
+        {!userSnapshot?.current && (
+          <>
+            <section className="position-relative mx-auto mt-2" style={{ width: '100%', maxWidth: '640px' }}>
+              <video ref={videoRef} autoPlay playsInline style={{ width: '100%', transform: 'scaleX(-1)' }} />
+              <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%' }} />
+
+              <section>
+                {!isBiometricsAligned && (
+                  <>
+                    <i
+                      className="mdi mdi-crop-free"
+                      style={{
+                        position: 'absolute',
+                        top: '5px',
+                        left: '170px',
+                        width: '100%',
+                        fontSize: '300px',
+                        color: isFaceAlignedWithinField ? 'green' : 'gray',
+                        opacity: 0.5,
+                      }}
+                    ></i>
+                  </>
+                )}
+
+                {(isBiometricsAligned || userSnapshot?.current) && (
+                  <>
+                    <div className="backdrop"></div>
+                    <CircularProgress
+                      variant="determinate"
+                      value={userAlignedProgress}
+                      style={{
+                        position: 'absolute',
+                        top: '222px',
+                        left: '70px',
+                        width: '270px',
+                        zIndex: 11,
+                        color: 'green',
+                        transition: 'stroke-dashoffset 0.005s ease-out',
+                      }}
+                    />
+                  </>
+                )}
+              </section>
+            </section>
 
             <section>
-              {!isBiometricsAligned && (
-                <>
-                  <i
-                    className="mdi mdi-crop-free"
-                    style={{
-                      position: 'absolute',
-                      top: '5px',
-                      left: '170px',
-                      width: '100%',
-                      fontSize: '300px',
-                      color: isFaceAlignedWithinField ? 'green' : 'gray',
-                      opacity: 0.5,
-                    }}
-                  ></i>
-                </>
-              )}
-
-              {(isBiometricsAligned || userSnapshot?.current) && (
-                <>
-                  <div className="backdrop"></div>
-                  <CircularProgress
-                    variant="determinate"
-                    value={userAlignedProgress}
-                    style={{
-                      position: 'absolute',
-                      top: '222px',
-                      left: '70px',
-                      width: '270px',
-                      zIndex: 11,
-                      color: 'green',
-                      transition: 'stroke-dashoffset 0.005s ease-out',
-                    }}
-                  />
-                </>
-              )}
+              <p>isFaceAlignedWithinField: {isFaceAlignedWithinField ? 'si' : 'no'}</p>
+              <p>isBiometricsAligned: {isBiometricsAligned ? 'si' : 'no'}</p>
             </section>
-          </section>
+          </>
+        )}
 
-          <section>
-            <p>isFaceAlignedWithinField: {isFaceAlignedWithinField ? 'si' : 'no'}</p>
-            <p>isBiometricsAligned: {isBiometricsAligned ? 'si' : 'no'}</p>
+        {userSnapshot?.current && (
+          <section className="d-flex flex-wrap mx-auto my-3">
+            <article className="mx-3">
+              <img src={userSnapshot?.current} alt="Front view" className="w-100 flip-horizontal" />
+            </article>
           </section>
-        </>
-      )}
-
-      {userSnapshot?.current && (
-        <section className="d-flex flex-wrap mx-auto my-3">
-          <article className="mx-3">
-            <img src={userSnapshot?.current} alt="Front view" className="w-100 flip-horizontal" />
-          </article>
-        </section>
-      )}
-    </section>
+        )}
+      </section>
+    </VeripassLayout>
   );
 };

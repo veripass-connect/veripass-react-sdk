@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 
 import { Spinner } from '@link-loom/react-sdk';
 
@@ -84,7 +85,7 @@ const theme = createTheme({
   },
 });
 
-export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [view, setView] = useState('onboarding');
   const [currentStepIndex, setActiveStep] = React.useState(0);
@@ -142,7 +143,7 @@ export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen
   }, [entity]);
 
   return (
-    <section className="card-body p-0 mt-3">
+    <VeripassLayout $isPopup={isPopupContext}>
       {isLoading ? (
         <Spinner />
       ) : (
@@ -257,6 +258,6 @@ export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen
           </article>
         </UserQuickBiometricsContainer>
       )}
-    </section>
+    </VeripassLayout>
   );
 };

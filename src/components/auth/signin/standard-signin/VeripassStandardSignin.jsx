@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
+
 import { useAuth } from '@hooks/useAuth.hook';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Card } from '@components/shared/Card';
-import { StandardContainer } from '@components/shared/StandardContainer';
-import { KarlaTypography } from '@components/shared/KarlaTypography';
+import { Card } from '@components/shared/styling/Card';
+import { StandardContainer } from '@components/shared/styling/StandardContainer';
+import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -16,7 +17,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import veripassLogo from '@assets/veripass-logo-dark.svg';
+import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 
 import { SecurityService } from '@services';
 
@@ -62,6 +63,7 @@ export const VeripassStandardSignin = ({
   redirectUrl = '',
   debug = false,
   apiKey = '',
+  isPopupContext = false,
 }) => {
   // Hooks
   const authProvider = useAuth();
@@ -144,7 +146,7 @@ export const VeripassStandardSignin = ({
 
   return (
     <>
-      <StandardContainer>
+      <VeripassLayout $isPopup={isPopupContext}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img
@@ -257,7 +259,7 @@ export const VeripassStandardSignin = ({
             </section>
           </form>
         </Card>
-      </StandardContainer>
+      </VeripassLayout>
     </>
   );
 };

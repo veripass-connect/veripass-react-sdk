@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { useAuth } from '@hooks/useAuth.hook';
 
-import { Card } from '@components/shared/Card';
-import { StandardContainer } from '@components/shared/StandardContainer';
-import { KarlaTypography } from '@components/shared/KarlaTypography';
+import { Card } from '@components/shared/styling/Card';
+import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { Typography } from '@mui/material';
 
 import '@styles/fonts.css';
@@ -20,6 +20,7 @@ export const VeripassLogoutSuccess = ({
     goBackText: 'Back to',
     signinText: 'Sign in',
   },
+  isPopupContext = false,
 }) => {
   const authProvider = useAuth();
   useEffect(() => {
@@ -28,7 +29,7 @@ export const VeripassLogoutSuccess = ({
 
   return (
     <>
-      <StandardContainer>
+      <VeripassLayout $isPopup={isPopupContext}>
         <Card>
           <header style={{ textAlign: 'center' }}>
             {organization?.logoSrc && (
@@ -83,7 +84,7 @@ export const VeripassLogoutSuccess = ({
             </Typography>
           </div>
         </div>
-      </StandardContainer>
+      </VeripassLayout>
     </>
   );
 };

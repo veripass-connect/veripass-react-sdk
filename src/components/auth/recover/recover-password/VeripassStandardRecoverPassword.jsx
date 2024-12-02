@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
+
 import { useAuth } from '@hooks/useAuth.hook';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Card } from '@components/shared/Card';
-import { StandardContainer } from '@components/shared/StandardContainer';
-import { KarlaTypography } from '@components/shared/KarlaTypography';
+import { Card } from '@components/shared/styling/Card';
+import { StandardContainer } from '@components/shared/styling/StandardContainer';
+import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -54,6 +55,7 @@ export const VeripassStandardRecoverPassword = ({
   redirectUrl = '',
   debug = false,
   apiKey = '',
+  isPopupContext = false,
 }) => {
   // Hooks
   const authProvider = useAuth();
@@ -125,7 +127,7 @@ export const VeripassStandardRecoverPassword = ({
 
   return (
     <>
-      <StandardContainer>
+      <VeripassLayout $isPopup={isPopupContext}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img src={organization?.logoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />
@@ -179,7 +181,7 @@ export const VeripassStandardRecoverPassword = ({
             </footer>
           </form>
         </Card>
-      </StandardContainer>
+      </VeripassLayout>
     </>
   );
 };

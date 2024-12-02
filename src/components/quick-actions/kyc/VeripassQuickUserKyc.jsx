@@ -1,32 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 
 import { UserInformationService } from '@services';
 import { TextField, FormHelperText, Button } from '@mui/material';
 import { CountrySelector } from '@link-loom/react-sdk';
 import dayjs from 'dayjs';
-
-const Container = styled.article`
-  width: ${(props) => (props.$isPopup ? '800px' : '100%')};
-  ${(props) => (props.$isPopup ? '' : 'flex-grow: 1;')};
-
-  @media (max-width: 1199px) {
-    width: ${(props) => (props.$isPopup ? '700px' : '100%')};
-  }
-
-  @media (max-width: 991px) {
-    width: ${(props) => (props.$isPopup ? '600px' : '100%')};
-  }
-
-  @media (max-width: 767px) {
-    width: ${(props) => (props.$isPopup ? '500px' : '100%')};
-  }
-
-  @media (max-width: 575px) {
-    width: ${(props) => (props.$isPopup ? '100%' : '100%')};
-    min-width: ${(props) => (props.$isPopup ? '95vw' : '100%')};
-  }
-`;
 
 async function updateEntity({ payload, Service, apiKey, debug = false }) {
   const entityService = new Service({ apiKey, settings: { debug } });
@@ -54,7 +32,15 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, isPopupContext, debug = false, apiKey = '' }) => {
+export const VeripassQuickUserKyc = ({
+  ui,
+  entity,
+  onUpdatedEntity,
+  setIsOpen,
+  isPopupContext = false,
+  debug = false,
+  apiKey = '',
+}) => {
   // Models
   const [userData, setUserData] = useState(entity || { user_information: initialState });
 
@@ -62,7 +48,6 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
   const [isMinor, setIsMinor] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-
 
   // Validate if the user is a minor based on birthdate
   useEffect(() => {
@@ -81,7 +66,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       },
     }));
   };
-  
+
   const handleAddressChange = (field, value) => {
     setUserData((prevData) => ({
       ...prevData,
@@ -94,7 +79,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
       },
     }));
   };
- 
+
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -139,7 +124,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
   }, [entity]);
 
   return (
-    <Container $isPopup={isPopupContext} className={!isPopupContext ? 'col-12' : ''}>
+    <VeripassLayout $isPopup={isPopupContext}>
       <div className="card mb-0">
         <div className="card-body py-4">
           {showHeader && (
@@ -302,6 +287,6 @@ export const VeripassQuickUserKyc = ({ ui, entity, onUpdatedEntity, setIsOpen, i
           </section>
         </div>
       </div>
-    </Container>
+    </VeripassLayout>
   );
 };
