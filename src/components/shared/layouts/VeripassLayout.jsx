@@ -10,23 +10,20 @@ import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 
 const Container = styled.article`
   margin: 0 auto;
-  min-width: 400px;
+  min-width: 450px;
   width: ${(props) => (props.$isPopup ? '800px' : '100%')};
   ${(props) => (props.$isPopup ? '' : 'flex-grow: 1;')};
 
   @media (max-width: 1199px) {
     width: ${(props) => (props.$isPopup ? '700px' : '100%')};
-    max-width: ${(props) => (props.$isPopup ? 'unset' : '41.6667%')}; /* 5/12 */
   }
 
   @media (max-width: 991px) {
     width: ${(props) => (props.$isPopup ? '600px' : '100%')};
-    max-width: ${(props) => (props.$isPopup ? 'unset' : '50%')}; /* 6/12 */
   }
 
   @media (max-width: 767px) {
     width: ${(props) => (props.$isPopup ? '500px' : '100%')};
-    max-width: ${(props) => (props.$isPopup ? 'unset' : '66.6667%')}; /* 8/12 */
   }
 
   @media (max-width: 575px) {

@@ -1,3 +1,7 @@
+.veripass *, .veripass *::before, .veripass *::after {
+  box-sizing: border-box;
+}
+
 .veripass p, h6, h5, h4, h3, h2, h1, span, strong, button, .btn, a {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
