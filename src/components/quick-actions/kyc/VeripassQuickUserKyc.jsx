@@ -12,8 +12,8 @@ async function emitEvent({ action, payload, error, eventHandler }) {
   }
 }
 
-async function updateEntity({ payload, Service, apiKey, debug = false }) {
-  const entityService = new Service({ apiKey, settings: { debug } });
+async function updateEntity({ payload, Service, apiKey, environment = 'production' }) {
+  const entityService = new Service({ apiKey, settings: { environment } });
   const entityResponse = await entityService.update(payload);
 
   if (!entityResponse || !entityResponse.result) {
@@ -38,7 +38,15 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserKyc = ({ ui, entity, onEvent, setIsOpen, isPopupContext = false, debug = false, apiKey = '' }) => {
+export const VeripassQuickUserKyc = ({
+  ui,
+  entity,
+  onEvent,
+  setIsOpen,
+  isPopupContext = false,
+  environment = 'production',
+  apiKey = '',
+}) => {
   // Models
   const [userData, setUserData] = useState(entity || { user_information: initialState });
 
@@ -86,7 +94,7 @@ export const VeripassQuickUserKyc = ({ ui, entity, onEvent, setIsOpen, isPopupCo
       var updatedEntity = userData?.user_information || {};
       updatedEntity.id = userData.id;
 
-      const entityResponse = await updateEntity({ payload: updatedEntity, Service: UserInformationService, debug, apiKey });
+      const entityResponse = await updateEntity({ payload: updatedEntity, Service: UserInformationService, environment, apiKey });
 
       setIsLoading(false);
 

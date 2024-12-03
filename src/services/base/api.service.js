@@ -5,8 +5,9 @@ export default class BaseApi {
     this.api_key = null;
     this.client = null;
     this.serviceEndpoints = {
-      baseUrlProd: process.env.VERIPASS_SERVICE_URL,
-      baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
+      baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
+      baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
+      baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
       get: '',
       create: '',
       update: '',
@@ -41,12 +42,24 @@ export default class BaseApi {
   }
 
   urlBuilder ({ endpoint }) {
-    const isDebug = this.settings?.debug === true || this.settings?.debug === 'true';
-  
-    return `${isDebug
-      ? this.serviceEndpoints.baseUrlDev
-      : this.serviceEndpoints.baseUrlProd}${endpoint}`;
-  }  
+    const environment = this.settings?.environment || 'production';
+    const baseUrl = '';
+
+    switch (environment) {
+      case 'local':
+        baseUrl = this.serviceEndpoints.baseUrlLocal;
+        break;
+      case 'development':
+        baseUrl = this.serviceEndpoints.baseUrlDevelopment;
+        break;
+      case 'production':
+      default:
+        baseUrl = this.serviceEndpoints.baseUrlProduction
+        break;
+    }
+
+    return `${baseUrl}${endpoint}`;
+  }
 
   /**
    * Serializes a nested object into a query string format.

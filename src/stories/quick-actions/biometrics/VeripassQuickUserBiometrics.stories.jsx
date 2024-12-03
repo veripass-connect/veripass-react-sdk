@@ -15,7 +15,7 @@ export default {
     onEvent: { control: 'function' },
     setIsOpen: { control: 'function' },
     isPopupContext: { control: 'boolean' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -39,7 +39,7 @@ Default.args = {
   ui: {},
   onEvent: () => {},
   isPopupContext: false,
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };
 
@@ -50,7 +50,7 @@ CustomTexts.args = {
     title: 'Veripass Biometrics custom text',
     subtitle: 'This a Biometrics hub to validate user data',
   },
-  debug: true,
+  environment: 'development',
   onEvent: () => {},
   isPopupContext: false,
   apiKey: '',

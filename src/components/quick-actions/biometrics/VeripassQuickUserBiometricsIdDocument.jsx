@@ -6,8 +6,8 @@ import { Button } from '@mui/material';
 import { Uploader } from '@link-loom/react-sdk';
 import { UploadService } from '@services';
 
-async function createEntity({ Service, payload, apiKey, debug = false }) {
-  const entityService = new Service({ apiKey, settings: { debug } });
+async function createEntity({ Service, payload, apiKey, environment = 'production' }) {
+  const entityService = new Service({ apiKey, settings: { environment } });
   const entityResponse = await entityService.post(payload);
 
   if (!entityResponse || !entityResponse.result) {
@@ -41,7 +41,7 @@ const initialState = {
 export const VeripassQuickUserBiometricsIdDocument = ({
   entity,
   onEvent,
-  debug = false,
+  environment = 'production',
   apiKey = '',
   isPopupContext = false,
 }) => {
@@ -148,13 +148,13 @@ export const VeripassQuickUserBiometricsIdDocument = ({
     try {
       setIsLoading(true);
 
-      const fileUploadedResponse = await createEntity({ payload: fileData.payload, Service: UploadService, debug, apiKey });
+      const fileUploadedResponse = await createEntity({ payload: fileData.payload, Service: UploadService, environment, apiKey });
 
       setIsLoading(false);
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
         console.error(fileUploadedResponse);
-        emitEvent({action:'quick-user-biometrics-id-document::error', error: fileUploadedResponse, eventHandler: onEvent});
+        emitEvent({ action: 'quick-user-biometrics-id-document::error', error: fileUploadedResponse, eventHandler: onEvent });
         return null;
       }
 
@@ -163,7 +163,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      emitEvent({action:'quick-user-biometrics-id-document::error', error, eventHandler: onEvent});
+      emitEvent({ action: 'quick-user-biometrics-id-document::error', error, eventHandler: onEvent });
     }
   };
 

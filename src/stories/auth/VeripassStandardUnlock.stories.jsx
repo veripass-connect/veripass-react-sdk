@@ -13,7 +13,7 @@ export default {
   argTypes: {
     organization: { control: 'object' },
     redirectUrl: { control: 'text' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -40,6 +40,6 @@ Default.args = {
     slogan: 'Unlock your digital world',
   },
   redirectUrl: '/home',
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };

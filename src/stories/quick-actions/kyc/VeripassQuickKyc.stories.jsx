@@ -12,7 +12,7 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -34,7 +34,7 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {},
   ui: {},
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };
 
@@ -45,6 +45,6 @@ CustomTexts.args = {
     title: 'Welcome!',
     subtitle: 'This a Quick KYC to validate user data',
   },
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };

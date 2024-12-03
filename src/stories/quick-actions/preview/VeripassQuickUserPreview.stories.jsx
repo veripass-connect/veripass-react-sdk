@@ -15,7 +15,7 @@ export default {
     onEvent: { control: 'function' },
     setIsOpen: { control: 'function' },
     isPopupContext: { control: 'boolean' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -39,6 +39,6 @@ Default.args = {
   ui: {},
   onEvent: () => {},
   isPopupContext: false,
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };

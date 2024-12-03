@@ -12,7 +12,7 @@ async function emitEvent({ action, payload, error, eventHandler }) {
   }
 }
 
-export const VeripassQuickUserBiometricsSelfie = ({ onEvent, currentStepIndex, isPopupContext = false }) => {
+export const VeripassQuickUserBiometricsSelfie = ({ environment, onEvent, currentStepIndex, isPopupContext = false }) => {
   const debug = false;
   const userAlignedTime = 5000;
   const stabilityThreshold = 35;
@@ -46,6 +46,14 @@ export const VeripassQuickUserBiometricsSelfie = ({ onEvent, currentStepIndex, i
       cleanupResources();
     };
   }, []);
+
+  useEffect(() => {
+    if (environment === 'local' || environment === 'development') {
+      debug = true;
+    } else {
+      debug = false;
+    }
+  }, environment);
 
   useEffect(() => {
     if (currentStepIndex !== 1) {

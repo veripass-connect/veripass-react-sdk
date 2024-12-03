@@ -12,7 +12,7 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -33,18 +33,18 @@ const Template = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   entity: {},
-  ui:{},
-  debug: true,
+  ui: {},
+  environment: 'development',
   apiKey: '',
 };
 
 export const CustomTexts = Template.bind({});
 CustomTexts.args = {
   entity: {},
-  ui:{
+  ui: {
     title: 'Welcome!',
-    subtitle: 'This a Quick Standard (with password) user create'
+    subtitle: 'This a Quick Standard (with password) user create',
   },
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };

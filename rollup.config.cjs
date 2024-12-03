@@ -60,7 +60,7 @@ module.exports = {
       extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: path.resolve('dist', 'styles','main.css'),
+      extract: path.resolve('dist', 'styles', 'main.css'),
       modules: false,
       minimize: true,
       sourceMap: true,
@@ -75,8 +75,9 @@ module.exports = {
     image(),
     json(),
     replace({
-      'process.env.VERIPASS_SERVICE_URL': JSON.stringify(process.env.VERIPASS_SERVICE_URL),
-      'process.env.VERIPASS_DEV_SERVICE_URL': JSON.stringify(process.env.VERIPASS_DEV_SERVICE_URL),
+      'process.env.VERIPASS_PRODUCTION_SERVICE_URL': JSON.stringify(process.env.VERIPASS_PRODUCTION_SERVICE_URL),
+      'process.env.VERIPASS_DEVELOPMENT_SERVICE_URL': JSON.stringify(process.env.VERIPASS_DEVELOPMENT_SERVICE_URL),
+      'process.env.VERIPASS_LOCAL_SERVICE_URL': JSON.stringify(process.env.VERIPASS_LOCAL_SERVICE_URL),
       preventAssignment: true,
     }),
     copy({

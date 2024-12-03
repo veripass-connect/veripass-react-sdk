@@ -11,7 +11,7 @@ export default {
   tags: ['autodocs'],
   argTypes: {
     entity: { control: 'object' },
-    debug: { control: 'boolean' },
+    environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
   decorators: [
@@ -32,13 +32,13 @@ const Template = (args) => (
 export const Verified = Template.bind({});
 Verified.args = {
   entity: { is_verified: true },
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };
 
 export const NotVerified = Template.bind({});
 NotVerified.args = {
   entity: { is_verified: false },
-  debug: true,
+  environment: 'development',
   apiKey: '',
 };

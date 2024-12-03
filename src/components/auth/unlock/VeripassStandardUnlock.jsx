@@ -29,8 +29,8 @@ const statusCodeMessages = {
   401: 'Error authenticating',
 };
 
-async function unlockStandard({ payload, authProvider, redirectUrl, apiKey, debug }) {
-  const entityService = new SecurityService({ apiKey, settings: { debug } });
+async function unlockStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
+  const entityService = new SecurityService({ apiKey, settings: { environment } });
   const entityResponse = await entityService.signInStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {
@@ -52,7 +52,7 @@ export const VeripassStandardUnlock = ({
     slogan: '',
   },
   redirectUrl = '',
-  debug = false,
+  environment = 'production',
   apiKey = '',
   isPopupContext = false,
 }) => {
@@ -108,7 +108,7 @@ export const VeripassStandardUnlock = ({
         return;
       }
 
-      await unlockStandard({ payload: { password }, authProvider, redirectUrl, apiKey, debug });
+      await unlockStandard({ payload: { password }, authProvider, redirectUrl, apiKey, environment });
     } catch (error) {
       console.error(error);
     } finally {

@@ -6,8 +6,9 @@ export default class LegalContractTypeService extends BaseApi {
 
     this.api_key = args?.apiKey || '';
     this.serviceEndpoints = {
-      baseUrlProd: process.env.VERIPASS_SERVICE_URL,
-      baseUrlDev: process.env.VERIPASS_DEV_SERVICE_URL,
+      baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
+      baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
+      baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
       get: '/legal/contract/type/',
       create: '/legal/contract/type',
       update: '/legal/contract/type',

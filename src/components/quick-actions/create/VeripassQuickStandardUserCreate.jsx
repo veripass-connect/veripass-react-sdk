@@ -15,8 +15,8 @@ async function emitEvent({ action, payload, error, eventHandler }) {
   }
 }
 
-async function createEntity({ Service, payload, apiKey, debug = false }) {
-  const entityService = new Service({ apiKey, settings: { debug } });
+async function createEntity({ Service, payload, apiKey, environment = 'production' }) {
+  const entityService = new Service({ apiKey, settings: { environment } });
   const entityResponse = await entityService.create(payload);
 
   if (!entityResponse || !entityResponse.result) {
@@ -27,9 +27,9 @@ async function createEntity({ Service, payload, apiKey, debug = false }) {
   return entityResponse;
 }
 
-async function getEntity({ Service, payload, apiKey, debug = false }) {
+async function getEntity({ Service, payload, apiKey, environment = 'production' }) {
   try {
-    const entityService = new Service({ apiKey, settings: { debug } });
+    const entityService = new Service({ apiKey, settings: { environment } });
 
     const entityResponse = entityService.getByParameters(payload);
 
@@ -40,7 +40,7 @@ async function getEntity({ Service, payload, apiKey, debug = false }) {
   }
 }
 
-async function getUserByNationalId({ nationalId, apiKey, debug }) {
+async function getUserByNationalId({ nationalId, apiKey, environment }) {
   try {
     const userResponsePromiseResponse = getEntity({
       payload: {
@@ -48,7 +48,7 @@ async function getUserByNationalId({ nationalId, apiKey, debug }) {
         search: nationalId ?? '',
       },
       Service: UserProfileService,
-      debug,
+      environment,
       apiKey,
     });
 
@@ -92,7 +92,7 @@ export const VeripassQuickStandardUserCreate = ({
   onEvent,
   setIsOpen,
   isPopupContext = false,
-  debug = false,
+  environment = 'production',
   apiKey = '',
 }) => {
   // Models
@@ -113,7 +113,7 @@ export const VeripassQuickStandardUserCreate = ({
         const { userResponse } = await getUserByNationalId({
           nationalId: userProfileData?.primary_national_id?.identification,
           apiKey,
-          debug,
+          environment,
         });
 
         if (!userResponse || !userResponse.success) {
@@ -185,7 +185,7 @@ export const VeripassQuickStandardUserCreate = ({
         user_profile: userProfileData,
         user_security: { password: userProfileData.password, require_password_reset: true },
       };
-      const response = await createEntity({ payload: user, Service: UserManagementService, debug, apiKey });
+      const response = await createEntity({ payload: user, Service: UserManagementService, environment, apiKey });
 
       // Update parent states
       setIsLoading(false);
@@ -197,7 +197,7 @@ export const VeripassQuickStandardUserCreate = ({
       }
     } catch (error) {
       console.error(error);
-      
+
       setIsLoading(false);
       emitEvent({ action: 'quick-standard-user::error', error, eventHandler: onEvent });
 
