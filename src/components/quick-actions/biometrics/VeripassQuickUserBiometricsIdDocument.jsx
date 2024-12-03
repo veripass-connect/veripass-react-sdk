@@ -154,7 +154,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
         console.error(fileUploadedResponse);
-        onEvent({action:'quick-user-biometrics-id-document::error', error: fileUploadedResponse, eventHandler: onEvent});
+        emitEvent({action:'quick-user-biometrics-id-document::error', error: fileUploadedResponse, eventHandler: onEvent});
         return null;
       }
 
@@ -163,7 +163,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      onEvent({action:'quick-user-biometrics-id-document::error', error, eventHandler: onEvent});
+      emitEvent({action:'quick-user-biometrics-id-document::error', error, eventHandler: onEvent});
     }
   };
 
