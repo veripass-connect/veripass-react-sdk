@@ -85,7 +85,13 @@ const theme = createTheme({
   },
 });
 
-export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext = false }) => {
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
+export const VeripassQuickUserBiometrics = ({ entity, onEvent, setIsOpen, isPopupContext = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [view, setView] = useState('onboarding');
   const [currentStepIndex, setActiveStep] = React.useState(0);
@@ -100,19 +106,13 @@ export const VeripassQuickUserBiometrics = ({ entity, onUpdatedEntity, setIsOpen
     }
   };
 
-  const onEditUserProfile = (id) => {
-    if (isPopupContext) {
-      startOnClick();
-    }
-  };
-
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleFinish = () => {
-    if (onUpdatedEntity) {
-      onUpdatedEntity();
+    if (onEvent) {
+      emitEvent({ action: 'quick-user-biometrics::finished', eventHandler: onEvent });
     }
   };
 

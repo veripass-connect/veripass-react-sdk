@@ -6,6 +6,12 @@ import { TextField, FormHelperText, Button } from '@mui/material';
 import { CountrySelector } from '@link-loom/react-sdk';
 import dayjs from 'dayjs';
 
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
 async function updateEntity({ payload, Service, apiKey, debug = false }) {
   const entityService = new Service({ apiKey, settings: { debug } });
   const entityResponse = await entityService.update(payload);
@@ -32,15 +38,7 @@ const initialState = {
   },
 };
 
-export const VeripassQuickUserKyc = ({
-  ui,
-  entity,
-  onUpdatedEntity,
-  setIsOpen,
-  isPopupContext = false,
-  debug = false,
-  apiKey = '',
-}) => {
+export const VeripassQuickUserKyc = ({ ui, entity, onEvent, setIsOpen, isPopupContext = false, debug = false, apiKey = '' }) => {
   // Models
   const [userData, setUserData] = useState(entity || { user_information: initialState });
 
@@ -93,16 +91,17 @@ export const VeripassQuickUserKyc = ({
       setIsLoading(false);
 
       if (!entityResponse || !entityResponse.success) {
-        onUpdatedEntity('update', null);
+        emitEvent({ action: 'quick-user-kyc::error', error: entityResponse, eventHandler: onEvent });
         return null;
       }
 
       // Update parent states
-      onUpdatedEntity('update', entityResponse);
+      emitEvent({ action: 'quick-user-kyc::updated', payload: entityResponse, eventHandler: onEvent });
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      onUpdatedEntity('error', null);
+
+      emitEvent({ action: 'quick-user-kyc::error', error, eventHandler: onEvent });
     }
   };
 

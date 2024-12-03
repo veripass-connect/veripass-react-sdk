@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 
-import { Spinner } from '@link-loom/react-sdk';
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
 
-export const VeripassQuickUserBiometricsFingerprint = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext = false }) => {
+export const VeripassQuickUserBiometricsFingerprint = ({ entity, onEvent, setIsOpen, isPopupContext = false }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

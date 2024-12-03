@@ -5,7 +5,7 @@ import { Spinner, useNavigate } from '@link-loom/react-sdk';
 import { VeripassUserVerifiedBanner } from '@components/verify/VeripassUserVerifiedBanner';
 import { VeripassUserNotVerifiedBanner } from '@components/verify/VeripassUserNotVerifiedBanner';
 
-export const VeripassUserVerificationStatus = ({ entity, onUpdatedEntity, setIsOpen, isPopupContext }) => {
+export const VeripassUserVerificationStatus = ({ entity }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 

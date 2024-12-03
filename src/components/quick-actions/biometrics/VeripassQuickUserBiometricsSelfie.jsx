@@ -6,7 +6,13 @@ import { FACEMESH_TESSELATION, FACEMESH_LIPS, FACEMESH_LEFT_EYE, FACEMESH_RIGHT_
 import { Camera } from '@mediapipe/camera_utils';
 import { CircularProgress } from '@mui/material';
 
-export const VeripassQuickUserBiometricsSelfie = ({ currentStepIndex, isPopupContext = false }) => {
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
+export const VeripassQuickUserBiometricsSelfie = ({ onEvent, currentStepIndex, isPopupContext = false }) => {
   const debug = false;
   const userAlignedTime = 5000;
   const stabilityThreshold = 35;

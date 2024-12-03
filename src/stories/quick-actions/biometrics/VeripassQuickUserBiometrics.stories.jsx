@@ -12,7 +12,7 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
-    onUpdatedEntity: { control: 'function' },
+    onEvent: { control: 'function' },
     setIsOpen: { control: 'function' },
     isPopupContext: { control: 'boolean' },
     debug: { control: 'boolean' },
@@ -37,7 +37,7 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {},
   ui: {},
-  onUpdatedEntity: () => {},
+  onEvent: () => {},
   isPopupContext: false,
   debug: true,
   apiKey: '',
@@ -51,7 +51,7 @@ CustomTexts.args = {
     subtitle: 'This a Biometrics hub to validate user data',
   },
   debug: true,
-  onUpdatedEntity: () => {},
+  onEvent: () => {},
   isPopupContext: false,
   apiKey: '',
 };

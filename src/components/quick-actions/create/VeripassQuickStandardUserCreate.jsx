@@ -9,6 +9,12 @@ import { UserProfileService, UserManagementService } from '@services';
 import { COVER_IMAGES } from '@constants/cover-images';
 import { PROFILE_PICTURES } from '@constants/profile-pictures';
 
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
 async function createEntity({ Service, payload, apiKey, debug = false }) {
   const entityService = new Service({ apiKey, settings: { debug } });
   const entityResponse = await entityService.create(payload);
@@ -83,7 +89,7 @@ const initialState = {
 export const VeripassQuickStandardUserCreate = ({
   ui,
   entity,
-  onUpdatedEntity,
+  onEvent,
   setIsOpen,
   isPopupContext = false,
   debug = false,
@@ -183,19 +189,18 @@ export const VeripassQuickStandardUserCreate = ({
 
       // Update parent states
       setIsLoading(false);
-      if (onUpdatedEntity) {
-        onUpdatedEntity('create', response);
-      }
+
+      emitEvent({ action: 'quick-standard-user::created', payload: response, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
       }
     } catch (error) {
       console.error(error);
+      
       setIsLoading(false);
-      if (onUpdatedEntity) {
-        onUpdatedEntity('error', null);
-      }
+      emitEvent({ action: 'quick-standard-user::error', error, eventHandler: onEvent });
+
       if (setIsOpen) {
         setIsOpen(false);
       }

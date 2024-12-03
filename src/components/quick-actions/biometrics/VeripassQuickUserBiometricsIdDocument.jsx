@@ -18,6 +18,12 @@ async function createEntity({ Service, payload, apiKey, debug = false }) {
   return entityResponse;
 }
 
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
 const initialState = {
   identity: '',
   metadata: {
@@ -34,8 +40,7 @@ const initialState = {
 
 export const VeripassQuickUserBiometricsIdDocument = ({
   entity,
-  itemOnAction,
-  onUpdatedEntity,
+  onEvent,
   debug = false,
   apiKey = '',
   isPopupContext = false,
@@ -136,9 +141,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
   };
 
   const handleSubmit = () => {
-    if (itemOnAction) {
-      itemOnAction('biometric-id-document-done', null);
-    }
+    emitEvent({ action: 'quick-user-biometrics-id-document::done', eventHandler: onEvent });
   };
 
   const handleUploadFile = async (fileData) => {
@@ -151,7 +154,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
         console.error(fileUploadedResponse);
-        onUpdatedEntity('error', null);
+        onEvent({action:'quick-user-biometrics-id-document::error', error: fileUploadedResponse, eventHandler: onEvent});
         return null;
       }
 
@@ -160,7 +163,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      onUpdatedEntity('error', null);
+      onEvent({action:'quick-user-biometrics-id-document::error', error, eventHandler: onEvent});
     }
   };
 

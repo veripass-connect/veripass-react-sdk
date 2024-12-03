@@ -7,6 +7,12 @@ import { Chip } from '@mui/material';
 
 import { VeripassQuickUserBiometrics } from '@components/quick-actions/biometrics/VeripassQuickUserBiometrics';
 
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
+
 export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLabel, notVerifiedLabel, className }) => {
   const [isOpenUserQuickBiometricsModal, setIsOpenUserQuickBiometricsModal] = useState(false);
 
@@ -14,8 +20,12 @@ export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLa
     setIsOpenUserQuickBiometricsModal(true);
   };
 
-  const onUpdatedEntity = () => {
-    setIsOpenUserQuickBiometricsModal(false);
+  const onEvent = ({ action, payload, error, eventHandler }) => {
+    emitEvent({ action, payload, error, eventHandler });
+
+    if (action === 'quick-user-biometrics::finished') {
+      setIsOpenUserQuickBiometricsModal(false);
+    }
   };
 
   return (
@@ -49,7 +59,7 @@ export const VeripassUserVerifyButton = ({ entity, style, isVerified, verifiedLa
         }}
       >
         <VeripassQuickUserBiometrics
-          onUpdatedEntity={onUpdatedEntity}
+          onEvent={onEvent}
           entity={entity}
           setIsOpen={setIsOpenUserQuickBiometricsModal}
           isPopupContext
