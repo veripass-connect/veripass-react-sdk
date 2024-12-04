@@ -45,9 +45,9 @@ export const VeripassLayout = ({
     >
       {ui?.showLogo && ui?.vertical === 'top' && (
         <section
-          className={`d-flex ${vertical === 'top' ? 'mb-1' : 'mt-3'} ${alignment === 'start' ? 'justify-content-start' : ''} ${
-            alignment === 'center' ? 'justify-content-center' : ''
-          } ${alignment === 'end' ? 'justify-content-end' : ''}`}
+          className={`d-flex ${ui?.vertical === 'top' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
+            ui?.alignment === 'center' ? 'justify-content-center' : ''
+          } ${ui?.alignment === 'end' ? 'justify-content-end' : ''}`}
         >
           <Typography className="mb-0 me-2 text-muted" style={{ fontSize: '0.775rem', fontWeight: 400 }}>
             Powered by
