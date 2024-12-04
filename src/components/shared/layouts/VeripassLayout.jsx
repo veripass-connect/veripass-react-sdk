@@ -58,7 +58,7 @@ export const VeripassLayout = ({
 
       <main {...props}>{children}</main>
 
-      {showLogo && ui?.vertical === 'bottom' && (
+      {ui?.showLogo && ui?.vertical === 'bottom' && (
         <section
           className={`d-flex ${ui?.vertical === 'bottom' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
             ui?.alignment === 'center' ? 'justify-content-center' : ''
