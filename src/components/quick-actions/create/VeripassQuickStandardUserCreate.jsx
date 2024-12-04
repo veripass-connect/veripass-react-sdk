@@ -190,7 +190,7 @@ export const VeripassQuickStandardUserCreate = ({
       // Update parent states
       setIsLoading(false);
 
-      emitEvent({ action: 'quick-standard-user::created', payload: response, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-quick-standard-user::created', payload: response, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
@@ -199,7 +199,7 @@ export const VeripassQuickStandardUserCreate = ({
       console.error(error);
 
       setIsLoading(false);
-      emitEvent({ action: 'quick-standard-user::error', error, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-quick-standard-user::error', error, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
@@ -215,190 +215,188 @@ export const VeripassQuickStandardUserCreate = ({
 
   return (
     <VeripassLayout isPopupContext={isPopupContext}>
-      <div className="card mb-0">
-        <div className="card-body">
-          {showHeader && (
-            <header className="row">
-              <article className="col-12">
-                <h4 className="header-title">{ui?.title || 'Create User'}</h4>
-                <p className="sub-header">
-                  {ui?.subtitle || "To get started, fill out some basic information about who you're adding as a user."}
-                </p>
-              </article>
-            </header>
-          )}
+      <section className="container-fluid mb-0">
+        {showHeader && (
+          <header className="row">
+            <article className="col-12">
+              <h4 className="header-title">{ui?.title || 'Create User'}</h4>
+              <p className="sub-header">
+                {ui?.subtitle || "To get started, fill out some basic information about who you're adding as a user."}
+              </p>
+            </article>
+          </header>
+        )}
 
-          <section>
-            <form onSubmit={(event) => event.preventDefault()}>
-              <article className="row">
-                <section className="mb-2">
-                  <NationalIdentificationSelector
-                    label="National identification number"
-                    defaultDocumentType="Passport"
-                    onChange={(event) => {
-                      handleDataChange('primary_national_id', event);
+        <section>
+          <form onSubmit={(event) => event.preventDefault()}>
+            <article className="row">
+              <section className="mb-2">
+                <NationalIdentificationSelector
+                  label="National identification number"
+                  defaultDocumentType="Passport"
+                  onChange={(event) => {
+                    handleDataChange('primary_national_id', event);
+                  }}
+                />
+                <FormHelperText>Please write the primary legal national id.</FormHelperText>
+                {userNationalIdValidationInProgress && (
+                  <FormHelperText className="d-flex text-primary">
+                    <CircularProgress size={20} className="me-2" /> Validating user existence...
+                  </FormHelperText>
+                )}
+                {isExistingUser && userProfileData?.primary_national_id?.identification && (
+                  <FormHelperText className="d-flex text-danger">
+                    User already exists. You only can view it and add it to this organization.
+                  </FormHelperText>
+                )}
+              </section>
+            </article>
+
+            <article className="row">
+              <section className="mb-2 col-12 col-md-6">
+                <TextField
+                  className="w-100"
+                  type="text"
+                  id="first-name-input"
+                  label="First name"
+                  value={userProfileData.first_name}
+                  placeholder="Jhon"
+                  helperText="This is the legal first name"
+                  required
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                  onChange={(event) => {
+                    handleDataChange('first_name', event.target.value);
+                  }}
+                  autoComplete="off"
+                />
+              </section>
+              <section className="mb-2 col-12 col-md-6">
+                <TextField
+                  className="w-100"
+                  type="text"
+                  id="last-name-input"
+                  label="Last name"
+                  value={userProfileData.last_name}
+                  placeholder="Doe"
+                  helperText="This is the legal last name"
+                  required
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                  onChange={(event) => {
+                    handleDataChange('last_name', event.target.value);
+                  }}
+                  autoComplete="off"
+                />
+              </section>
+            </article>
+
+            <article className="row">
+              <section className="mb-2 col-12 col-md-6">
+                <TextField
+                  className="w-100"
+                  id="fullname-input"
+                  label="Display name"
+                  value={userProfileData.display_name}
+                  placeholder="Jhon Doe"
+                  helperText="Enter a name that will be displayed on the user's profile."
+                  required
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                  onFocus={handleNameFocus}
+                  onChange={(event) => {
+                    handleDataChange('display_name', event.target.value);
+                  }}
+                  autoComplete="off"
+                />
+              </section>
+
+              <section className="mb-2 col-12 col-md-6">
+                <PhoneCountrySelector
+                  label="Phone number"
+                  onPhoneChange={(event) => {
+                    handleDataChange('primary_phone_number', event);
+                  }}
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                />
+                <FormHelperText>Principal phone number and or used with WhatsApp</FormHelperText>
+              </section>
+            </article>
+
+            <article className="row">
+              <section className="mb-2 col-12 col-md-6">
+                <TextField
+                  className="w-100"
+                  type="email"
+                  id="email-input"
+                  label="Primary email address"
+                  value={userProfileData.primary_email_address}
+                  placeholder="jhondoe@domain.com"
+                  helperText="This is the email most used by user"
+                  required
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                  onChange={(event) => {
+                    handleDataChange('primary_email_address', event.target.value);
+                  }}
+                  autoComplete="veripass-email"
+                />
+              </section>
+
+              <section className="mb-2 col-12 col-md-6">
+                <TextField
+                  className="w-100"
+                  type="text"
+                  id="password-input"
+                  label="Password"
+                  value={userProfileData.password}
+                  placeholder=""
+                  helperText="This is temporal password assigned to user"
+                  required
+                  disabled={isExistingUser}
+                  variant={isExistingUser ? 'filled' : 'outlined'}
+                  onChange={(event) => {
+                    handleDataChange('password', event.target.value);
+                  }}
+                  autoComplete="veripass-password"
+                />
+              </section>
+            </article>
+
+            <article className="row">
+              <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
+                {isLoading && (
+                  <button type="button" disabled className="btn btn-primary">
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Saving...
+                  </button>
+                )}
+
+                {!isLoading && (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    className="my-2"
+                    onClick={handleSubmit}
+                    disabled={!userProfileData?.primary_national_id?.identification}
+                    sx={{
+                      backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                      borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                      '&:hover': {
+                        backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                        borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                      },
                     }}
-                  />
-                  <FormHelperText>Please write the primary legal national id.</FormHelperText>
-                  {userNationalIdValidationInProgress && (
-                    <FormHelperText className="d-flex text-primary">
-                      <CircularProgress size={20} className="me-2" /> Validating user existence...
-                    </FormHelperText>
-                  )}
-                  {isExistingUser && userProfileData?.primary_national_id?.identification && (
-                    <FormHelperText className="d-flex text-danger">
-                      User already exists. You only can view it and add it to this organization.
-                    </FormHelperText>
-                  )}
-                </section>
-              </article>
-
-              <article className="row">
-                <section className="mb-2 col-12 col-md-6">
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    id="first-name-input"
-                    label="First name"
-                    value={userProfileData.first_name}
-                    placeholder="Jhon"
-                    helperText="This is the legal first name"
-                    required
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                    onChange={(event) => {
-                      handleDataChange('first_name', event.target.value);
-                    }}
-                    autoComplete="off"
-                  />
-                </section>
-                <section className="mb-2 col-12 col-md-6">
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    id="last-name-input"
-                    label="Last name"
-                    value={userProfileData.last_name}
-                    placeholder="Doe"
-                    helperText="This is the legal last name"
-                    required
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                    onChange={(event) => {
-                      handleDataChange('last_name', event.target.value);
-                    }}
-                    autoComplete="off"
-                  />
-                </section>
-              </article>
-
-              <article className="row">
-                <section className="mb-2 col-12 col-md-6">
-                  <TextField
-                    className="w-100"
-                    id="fullname-input"
-                    label="Display name"
-                    value={userProfileData.display_name}
-                    placeholder="Jhon Doe"
-                    helperText="Enter a name that will be displayed on the user's profile."
-                    required
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                    onFocus={handleNameFocus}
-                    onChange={(event) => {
-                      handleDataChange('display_name', event.target.value);
-                    }}
-                    autoComplete="off"
-                  />
-                </section>
-
-                <section className="mb-2 col-12 col-md-6">
-                  <PhoneCountrySelector
-                    label="Phone number"
-                    onPhoneChange={(event) => {
-                      handleDataChange('primary_phone_number', event);
-                    }}
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                  />
-                  <FormHelperText>Principal phone number and or used with WhatsApp</FormHelperText>
-                </section>
-              </article>
-
-              <article className="row">
-                <section className="mb-2 col-12 col-md-6">
-                  <TextField
-                    className="w-100"
-                    type="email"
-                    id="email-input"
-                    label="Primary email address"
-                    value={userProfileData.primary_email_address}
-                    placeholder="jhondoe@domain.com"
-                    helperText="This is the email most used by user"
-                    required
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                    onChange={(event) => {
-                      handleDataChange('primary_email_address', event.target.value);
-                    }}
-                    autoComplete="veripass-email"
-                  />
-                </section>
-
-                <section className="mb-2 col-12 col-md-6">
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    id="password-input"
-                    label="Password"
-                    value={userProfileData.password}
-                    placeholder=""
-                    helperText="This is temporal password assigned to user"
-                    required
-                    disabled={isExistingUser}
-                    variant={isExistingUser ? 'filled' : 'outlined'}
-                    onChange={(event) => {
-                      handleDataChange('password', event.target.value);
-                    }}
-                    autoComplete="veripass-password"
-                  />
-                </section>
-              </article>
-
-              <article className="row">
-                <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
-                  {isLoading && (
-                    <button type="button" disabled className="btn btn-primary">
-                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Saving...
-                    </button>
-                  )}
-
-                  {!isLoading && (
-                    <Button
-                      type="button"
-                      variant="contained"
-                      className="my-2"
-                      onClick={handleSubmit}
-                      disabled={!userProfileData?.primary_national_id?.identification}
-                      sx={{
-                        backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
-                        borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
-                        '&:hover': {
-                          backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
-                          borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
-                        },
-                      }}
-                    >
-                      Next
-                    </Button>
-                  )}
-                </section>
-              </article>
-            </form>
-          </section>
-        </div>
-      </div>
+                  >
+                    Next
+                  </Button>
+                )}
+              </section>
+            </article>
+          </form>
+        </section>
+      </section>
     </VeripassLayout>
   );
 };

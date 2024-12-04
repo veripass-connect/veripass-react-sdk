@@ -141,7 +141,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
   };
 
   const handleSubmit = () => {
-    emitEvent({ action: 'quick-user-biometrics-id-document::done', eventHandler: onEvent });
+    emitEvent({ action: 'veripass-quick-user-biometrics-id-document::done', eventHandler: onEvent });
   };
 
   const handleUploadFile = async (fileData) => {
@@ -185,7 +185,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
   return (
     <>
       <VeripassLayout isPopupContext={isPopupContext}>
-        <section className="card-body p-0 mt-3">
+        <section className="container-fluid mb-0">
           {!identificationType && (
             <section className="passport-input">
               <h4 className="text-center">Choose an option</h4>
