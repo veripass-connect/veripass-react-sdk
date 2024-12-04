@@ -43,7 +43,7 @@ export default class BaseApi {
 
   urlBuilder ({ endpoint }) {
     const environment = this.settings?.environment || 'production';
-    const baseUrl = '';
+    let baseUrl = '';
 
     switch (environment) {
       case 'local':
