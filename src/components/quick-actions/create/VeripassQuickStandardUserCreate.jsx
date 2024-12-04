@@ -214,7 +214,7 @@ export const VeripassQuickStandardUserCreate = ({
   }, [ui]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <div className="card mb-0">
         <div className="card-body">
           {showHeader && (

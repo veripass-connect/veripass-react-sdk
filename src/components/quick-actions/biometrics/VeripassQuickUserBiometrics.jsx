@@ -143,7 +143,7 @@ export const VeripassQuickUserBiometrics = ({ entity, onEvent, setIsOpen, isPopu
   }, [entity]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       {isLoading ? (
         <Spinner />
       ) : (

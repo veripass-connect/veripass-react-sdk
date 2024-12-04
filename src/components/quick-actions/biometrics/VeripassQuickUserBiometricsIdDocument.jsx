@@ -184,7 +184,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
 
   return (
     <>
-      <VeripassLayout $isPopup={isPopupContext}>
+      <VeripassLayout isPopupContext={isPopupContext}>
         <section className="card-body p-0 mt-3">
           {!identificationType && (
             <section className="passport-input">

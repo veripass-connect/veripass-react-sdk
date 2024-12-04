@@ -126,7 +126,7 @@ export const VeripassNewPassword = ({
 
   return (
     <>
-      <VeripassLayout $isPopup={isPopupContext}>
+      <VeripassLayout isPopupContext={isPopupContext}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img src={organization?.logoSrc} alt="" height="75" style={{ display: 'block', margin: '0 auto' }} />

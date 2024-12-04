@@ -131,7 +131,7 @@ export const VeripassQuickUserKyc = ({
   }, [entity]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <div className="card mb-0">
         <div className="card-body py-4">
           {showHeader && (

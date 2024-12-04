@@ -29,7 +29,7 @@ export const VeripassLogoutSuccess = ({
 
   return (
     <>
-      <VeripassLayout $isPopup={isPopupContext}>
+      <VeripassLayout isPopupContext={isPopupContext}>
         <Card>
           <header style={{ textAlign: 'center' }}>
             {organization?.logoSrc && (

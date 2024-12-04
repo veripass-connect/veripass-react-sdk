@@ -425,7 +425,7 @@ export const VeripassQuickUserBiometricsSelfie = ({ environment, onEvent, curren
   };
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <section className="card-body p-0 d-flex flex-column">
         {!userSnapshot?.current && (
           <>

@@ -11,19 +11,19 @@ import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 const Container = styled.article`
   margin: 0 auto;
   min-width: 450px;
-  width: ${(props) => (props.$isPopup ? '800px' : '100%')};
-  ${(props) => (props.$isPopup ? '' : 'flex-grow: 1;')};
+  width: ${(props) => (props.$ispopup ? '800px' : '100%')};
+  ${(props) => (props.$ispopup ? '' : 'flex-grow: 1;')};
 
   @media (max-width: 1199px) {
-    width: ${(props) => (props.$isPopup ? '700px' : '100%')};
+    width: ${(props) => (props.$ispopup ? '700px' : '100%')};
   }
 
   @media (max-width: 991px) {
-    width: ${(props) => (props.$isPopup ? '600px' : '100%')};
+    width: ${(props) => (props.$ispopup ? '600px' : '100%')};
   }
 
   @media (max-width: 767px) {
-    width: ${(props) => (props.$isPopup ? '500px' : '100%')};
+    width: ${(props) => (props.$ispopup ? '500px' : '100%')};
   }
 
   @media (max-width: 575px) {
@@ -34,7 +34,7 @@ const Container = styled.article`
 export const VeripassLayout = ({ children, isPopupContext = false, showLogo = true, logoPosition = 'top', ...props }) => {
   return (
     <Container
-      $isPopup={isPopupContext}
+      $ispopup={isPopupContext}
       className={`veripass ${!isPopupContext ? 'col-12' : ''}`}
       style={{ boxSizing: 'border-box' }}
     >

@@ -15,7 +15,7 @@ export const VeripassQuickUserBiometricsFingerprint = ({ entity, onEvent, setIsO
   }, [entity]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <section className="card-body p-0"></section>
     </VeripassLayout>
   );

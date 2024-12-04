@@ -15,7 +15,7 @@ export const VeripassQuickUserBiometricsVoice = ({ entity, onEvent, setIsOpen, i
   }, [entity]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <section className="card-body p-0"></section>
     </VeripassLayout>
   );

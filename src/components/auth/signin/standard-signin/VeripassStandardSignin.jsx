@@ -146,7 +146,7 @@ export const VeripassStandardSignin = ({
 
   return (
     <>
-      <VeripassLayout $isPopup={isPopupContext}>
+      <VeripassLayout isPopupContext={isPopupContext}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img

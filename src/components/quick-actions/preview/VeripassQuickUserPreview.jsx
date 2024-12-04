@@ -87,7 +87,7 @@ export const VeripassQuickUserPreview = ({ entity, setIsOpen, isPopupContext = f
   }, [entity]);
 
   return (
-    <VeripassLayout $isPopup={isPopupContext}>
+    <VeripassLayout isPopupContext={isPopupContext}>
       <section className="card-body p-0">
         {isLoading ? (
           <Spinner />
