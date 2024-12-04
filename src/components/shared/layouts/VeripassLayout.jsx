@@ -40,7 +40,7 @@ export const VeripassLayout = ({
   return (
     <Container
       $ispopup={isPopupContext}
-      className={`veripass ${!isPopupContext ? 'col-12' : ''}`}
+      className={`veripass container-fluid ${!isPopupContext ? 'col-12' : ''}`}
       style={{ boxSizing: 'border-box' }}
     >
       {ui?.showLogo && ui?.vertical === 'top' && (

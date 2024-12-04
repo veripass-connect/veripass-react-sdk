@@ -132,7 +132,7 @@ export const VeripassQuickUserKyc = ({
 
   return (
     <VeripassLayout isPopupContext={isPopupContext}>
-      <section className="container-fluid mb-0">
+      <section className="mb-0">
         {showHeader && (
           <header className="row">
             <article className="col-12">
