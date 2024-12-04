@@ -31,15 +31,24 @@ const Container = styled.article`
   }
 `;
 
-export const VeripassLayout = ({ children, isPopupContext = false, showLogo = true, logoPosition = 'top', ...props }) => {
+export const VeripassLayout = ({
+  children,
+  isPopupContext = false,
+  ui = { showLogo: true, vertical: 'top', alignment: 'end' },
+  ...props
+}) => {
   return (
     <Container
       $ispopup={isPopupContext}
       className={`veripass ${!isPopupContext ? 'col-12' : ''}`}
       style={{ boxSizing: 'border-box' }}
     >
-      {showLogo && logoPosition === 'top' && (
-        <section className="d-flex justify-content-end mb-3">
+      {ui?.showLogo && ui?.vertical === 'top' && (
+        <section
+          className={`d-flex ${vertical === 'top' ? 'mb-1' : 'mt-3'} ${alignment === 'start' ? 'justify-content-start' : ''} ${
+            alignment === 'center' ? 'justify-content-center' : ''
+          } ${alignment === 'end' ? 'justify-content-end' : ''}`}
+        >
           <Typography className="mb-0 me-2 text-muted" style={{ fontSize: '0.775rem', fontWeight: 400 }}>
             Powered by
           </Typography>
@@ -49,8 +58,12 @@ export const VeripassLayout = ({ children, isPopupContext = false, showLogo = tr
 
       <main {...props}>{children}</main>
 
-      {showLogo && logoPosition === 'bottom' && (
-        <section className="d-flex justify-content-end mb-3">
+      {showLogo && ui?.vertical === 'bottom' && (
+        <section
+          className={`d-flex ${vertical === 'bottom' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
+            ui?.alignment === 'center' ? 'justify-content-center' : ''
+          } ${ui?.alignment === 'end' ? 'justify-content-end' : ''}`}
+        >
           <Typography className="mb-0 me-2 text-muted" style={{ fontSize: '0.775rem', fontWeight: 400 }}>
             Powered by
           </Typography>
