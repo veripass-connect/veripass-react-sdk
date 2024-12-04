@@ -60,7 +60,7 @@ export const VeripassLayout = ({
 
       {showLogo && ui?.vertical === 'bottom' && (
         <section
-          className={`d-flex ${vertical === 'bottom' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
+          className={`d-flex ${ui?.vertical === 'bottom' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
             ui?.alignment === 'center' ? 'justify-content-center' : ''
           } ${ui?.alignment === 'end' ? 'justify-content-end' : ''}`}
         >
