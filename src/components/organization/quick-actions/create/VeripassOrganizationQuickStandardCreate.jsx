@@ -136,7 +136,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
                   type="text"
                   id="name-input"
                   label="Display name"
-                  value={organizationData.display_name}
+                  value={organizationProfileData.display_name}
                   placeholder=""
                   helperText="This is the app name"
                   required
@@ -152,7 +152,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
                   type="text"
                   id="slug-input"
                   label="Slug"
-                  value={organizationData.slug}
+                  value={organizationProfileData.slug}
                   placeholder=""
                   helperText="This is a unique app slug"
                   required
@@ -190,7 +190,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
                   type="email"
                   id="email-input"
                   label="Primary email address"
-                  value={organizationData.primary_email_address}
+                  value={organizationProfileData.primary_email_address}
                   placeholder="jhondoe@domain.com"
                   helperText="This is the email most used by user"
                   required
