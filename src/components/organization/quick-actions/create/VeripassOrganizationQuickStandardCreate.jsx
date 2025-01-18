@@ -220,7 +220,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
                   variant="contained"
                   className="my-2"
                   onClick={handleSubmit}
-                  disabled={!userProfileData?.primary_national_id?.identification}
+                  disabled={!organizationProfileData?.primary_national_id?.identification}
                   sx={{
                     backgroundColor: '#323a46',
                     borderColor: '#323a46',
