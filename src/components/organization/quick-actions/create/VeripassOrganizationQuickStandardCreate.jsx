@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 
-import { TextField, FormHelperText, Button } from '@mui/material';
+import { TextField, FormHelperText, Button, InputAdornment } from '@mui/material';
 import { NationalIdentificationSelector, PhoneCountrySelector } from '@link-loom/react-sdk';
 import { OrganizationManagementService } from '@services';
 

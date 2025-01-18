@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassUserVerificationStatus } from '../../components/user/verify/VeripassUserVerificationStatus';
+import { VeripassUserVerificationStatus } from '../../components/verify/VeripassUserVerificationStatus';
 
 export default {
   title: 'Verify/VeripassUserVerificationStatus',

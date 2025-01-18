@@ -13,7 +13,7 @@ async function emitEvent({ action, payload, error, eventHandler }) {
 }
 
 export const VeripassQuickUserBiometricsSelfie = ({ environment, onEvent, currentStepIndex, isPopupContext = false }) => {
-  const debug = false;
+  let debug = false;
   const userAlignedTime = 5000;
   const stabilityThreshold = 35;
   const faceThreshold = 250;
