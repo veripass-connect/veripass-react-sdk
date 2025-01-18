@@ -95,7 +95,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
       // Update parent states
       setIsLoading(false);
 
-      emitEvent({ action: 'veripass-quick-standard-organization::created', payload: response, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-organization-quick-standard::created', payload: response, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
@@ -104,7 +104,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
       console.error(error);
 
       setIsLoading(false);
-      emitEvent({ action: 'veripass-quick-standard-organization::error', error, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-organization-quick-standard::error', error, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);

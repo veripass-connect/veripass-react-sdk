@@ -190,7 +190,7 @@ export const VeripassUserQuickStandardCreate = ({
       // Update parent states
       setIsLoading(false);
 
-      emitEvent({ action: 'veripass-quick-standard-user::created', payload: response, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-user-quick-standard::created', payload: response, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
@@ -199,7 +199,7 @@ export const VeripassUserQuickStandardCreate = ({
       console.error(error);
 
       setIsLoading(false);
-      emitEvent({ action: 'veripass-quick-standard-user::error', error, eventHandler: onEvent });
+      emitEvent({ action: 'veripass-user-quick-standard::error', error, eventHandler: onEvent });
 
       if (setIsOpen) {
         setIsOpen(false);
