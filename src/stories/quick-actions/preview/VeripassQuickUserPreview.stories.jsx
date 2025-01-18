@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserPreview } from '../../../components/quick-actions/preview/VeripassQuickUserPreview';
+import { VeripassQuickUserPreview } from '../../../components/user/quick-actions/preview/VeripassQuickUserPreview';
 
 export default {
   title: 'Quick-Actions/VeripassQuickUserPreview',

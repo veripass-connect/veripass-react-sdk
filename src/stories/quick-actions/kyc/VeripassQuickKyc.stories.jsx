@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserKyc } from '../../../components/quick-actions/kyc/VeripassQuickUserKyc';
+import { VeripassQuickUserKyc } from '../../../components/user/quick-actions/kyc/VeripassQuickUserKyc';
 
 export default {
   title: 'Quick-Actions/VeripassQuickUserKyc',

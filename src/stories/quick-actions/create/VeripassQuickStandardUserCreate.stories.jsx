@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassUserQuickStandardCreate } from '../../../components/quick-actions/create/VeripassUserQuickStandardCreate';
+import { VeripassUserQuickStandardCreate } from '../../../components/user/quick-actions/create/VeripassUserQuickStandardCreate';
 
 export default {
   title: 'Quick-Actions/VeripassUserQuickStandardCreate',

@@ -5,7 +5,7 @@ import { PopUp } from '@link-loom/react-sdk';
 
 import { Chip } from '@mui/material';
 
-import { VeripassQuickUserBiometrics } from '@components/quick-actions/biometrics/VeripassQuickUserBiometrics';
+import { VeripassQuickUserBiometrics } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometrics';
 
 async function emitEvent({ action, payload, error, eventHandler }) {
   if (eventHandler) {

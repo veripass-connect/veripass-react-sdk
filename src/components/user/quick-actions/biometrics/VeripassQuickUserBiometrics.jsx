@@ -7,11 +7,11 @@ import styled from 'styled-components';
 import { Stepper, Step, StepLabel, Button, Chip, ThemeProvider, createTheme } from '@mui/material';
 import { AccountCircle, PhotoCamera, Fingerprint, RecordVoiceOver, Create, GppGoodOutlined, Check } from '@mui/icons-material';
 
-import { VeripassQuickUserBiometricsSignature } from '@components/quick-actions/biometrics/VeripassQuickUserBiometricsSignature';
-import { VeripassQuickUserBiometricsIdDocument } from '@components/quick-actions/biometrics/VeripassQuickUserBiometricsIdDocument';
-import { VeripassQuickUserBiometricsSelfie } from '@components/quick-actions/biometrics/VeripassQuickUserBiometricsSelfie';
-import { VeripassQuickUserBiometricsFingerprint } from '@components/quick-actions/biometrics/VeripassQuickUserBiometricsFingerprint';
-import { VeripassQuickUserBiometricsVoice } from '@components/quick-actions/biometrics/VeripassQuickUserBiometricsVoice';
+import { VeripassQuickUserBiometricsSignature } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometricsSignature';
+import { VeripassQuickUserBiometricsIdDocument } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometricsIdDocument';
+import { VeripassQuickUserBiometricsSelfie } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometricsSelfie';
+import { VeripassQuickUserBiometricsFingerprint } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometricsFingerprint';
+import { VeripassQuickUserBiometricsVoice } from '@components/user/quick-actions/biometrics/VeripassQuickUserBiometricsVoice';
 
 const UserQuickBiometricsContainer = styled.section`
   width: 950px;

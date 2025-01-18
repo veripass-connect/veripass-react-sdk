@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserBiometrics } from '../../../components/quick-actions/biometrics/VeripassQuickUserBiometrics';
+import { VeripassQuickUserBiometrics } from '../../../components/user/quick-actions/biometrics/VeripassQuickUserBiometrics';
 
 export default {
   title: 'Quick-Actions/VeripassQuickUserBiometrics',
