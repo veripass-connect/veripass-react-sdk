@@ -86,7 +86,7 @@ const initialState = {
   password: '',
 };
 
-export const VeripassQuickStandardUserCreate = ({
+export const VeripassUserQuickStandardCreate = ({
   ui,
   entity,
   onEvent,
@@ -364,36 +364,27 @@ export const VeripassQuickStandardUserCreate = ({
               </section>
             </article>
 
-            <article className="row">
+            <footer className="row">
               <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
-                {isLoading && (
-                  <button type="button" disabled className="btn btn-primary">
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Saving...
-                  </button>
-                )}
-
-                {!isLoading && (
-                  <Button
-                    type="button"
-                    variant="contained"
-                    className="my-2"
-                    onClick={handleSubmit}
-                    disabled={!userProfileData?.primary_national_id?.identification}
-                    sx={{
-                      backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
-                      borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
-                      '&:hover': {
-                        backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
-                        borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
-                      },
-                    }}
-                  >
-                    Next
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  variant="contained"
+                  className="my-2"
+                  onClick={handleSubmit}
+                  disabled={!userProfileData?.primary_national_id?.identification}
+                  sx={{
+                    backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                    borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                    '&:hover': {
+                      backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                      borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                    },
+                  }}
+                >
+                  {isLoading ? 'Saving...' : 'Next'}
+                </Button>
               </section>
-            </article>
+            </footer>
           </form>
         </section>
       </section>

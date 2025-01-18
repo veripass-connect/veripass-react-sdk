@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickStandardUserCreate } from '../../../components/quick-actions/create/VeripassQuickStandardUserCreate';
+import { VeripassUserQuickStandardCreate } from '../../../components/quick-actions/create/VeripassUserQuickStandardCreate';
 
 export default {
-  title: 'Quick-Actions/VeripassQuickStandardUserCreate',
-  component: VeripassQuickStandardUserCreate,
+  title: 'Quick-Actions/VeripassUserQuickStandardCreate',
+  component: VeripassUserQuickStandardCreate,
   parameters: {
     layout: 'centered',
   },
@@ -26,7 +26,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassQuickStandardUserCreate {...args} />
+    <VeripassUserQuickStandardCreate {...args} />
   </MemoryRouter>
 );
 

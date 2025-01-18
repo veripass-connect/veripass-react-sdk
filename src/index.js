@@ -7,24 +7,27 @@ export { VeripassStandardRecoverPassword as VeripassStandardRecoverPassword } fr
 export { VeripassNewPassword as VeripassNewPassword } from './components/auth/recover/new-password/VeripassNewPassword.jsx'
 export { VeripassStandardUnlock as VeripassStandardUnlock } from './components/auth/unlock/VeripassStandardUnlock.jsx'
 
-/* Quick Actions */
-export { VeripassQuickStandardUserCreate as VeripassQuickStandardUserCreate } from './components/quick-actions/create/VeripassQuickStandardUserCreate.jsx'
-export { VeripassQuickUserKyc as VeripassQuickUserKyc } from './components/quick-actions/kyc/VeripassQuickUserKyc.jsx';
-export { VeripassQuickUserPreview as VeripassQuickUserPreview } from './components/quick-actions/preview/VeripassQuickUserPreview.jsx';
+/* User Quick Actions */
+export { VeripassUserQuickStandardCreate as VeripassUserQuickStandardCreate } from './components/user/quick-actions/create/VeripassUserQuickStandardCreate.jsx'
+export { VeripassQuickUserKyc as VeripassQuickUserKyc } from './components/user/quick-actions/kyc/VeripassQuickUserKyc.jsx';
+export { VeripassQuickUserPreview as VeripassQuickUserPreview } from './components/user/quick-actions/preview/VeripassQuickUserPreview.jsx';
 
-/* Quick Biometrics */
-export { VeripassQuickUserBiometrics as VeripassQuickUserBiometrics } from './components/quick-actions/biometrics/VeripassQuickUserBiometrics.jsx';
-export { VeripassQuickUserBiometricsIdDocument as VeripassQuickUserBiometricsIdDocument } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsIdDocument.jsx';
-export { VeripassQuickUserBiometricsSelfie as VeripassQuickUserBiometricsSelfie } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsSelfie.jsx';
-export { VeripassQuickUserBiometricsFingerprint as VeripassQuickUserBiometricsFingerprint } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsFingerprint.jsx';
-export { VeripassQuickUserBiometricsVoice as VeripassQuickUserBiometricsVoice } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsVoice.jsx';
-export { VeripassQuickUserBiometricsSignature as UserQuickBiometricsSignature } from './components/quick-actions/biometrics/VeripassQuickUserBiometricsSignature.jsx';
+/* User Quick Biometrics */
+export { VeripassQuickUserBiometrics as VeripassQuickUserBiometrics } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometrics.jsx';
+export { VeripassQuickUserBiometricsIdDocument as VeripassQuickUserBiometricsIdDocument } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsIdDocument.jsx';
+export { VeripassQuickUserBiometricsSelfie as VeripassQuickUserBiometricsSelfie } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsSelfie.jsx';
+export { VeripassQuickUserBiometricsFingerprint as VeripassQuickUserBiometricsFingerprint } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsFingerprint.jsx';
+export { VeripassQuickUserBiometricsVoice as VeripassQuickUserBiometricsVoice } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsVoice.jsx';
+export { VeripassQuickUserBiometricsSignature as UserQuickBiometricsSignature } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsSignature.jsx';
 
-/* Verify */
+/* User Verify */
 export { VeripassUserNotVerifiedBanner as VeripassUserNotVerifiedBanner } from './components/verify/VeripassUserNotVerifiedBanner';
 export { VeripassUserVerificationStatus as VeripassUserVerificationStatus } from './components/verify/VeripassUserVerificationStatus';
 export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from './components/verify/VeripassUserVerifiedBanner';
 export { VeripassUserVerifyButton as VeripassUserVerifyButton } from './components/verify/VeripassUserVerifyButton';
+
+/* Organization Quick Actions */
+export { VeripassOrganizationQuickStandardCreate as VeripassOrganizationQuickStandardCreate } from './components/organization/quick-actions/create/VeripassOrganizationQuickStandardCreate.jsx';
 
 export {
   AuthContext,
