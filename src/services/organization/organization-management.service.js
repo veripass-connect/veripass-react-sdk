@@ -9,10 +9,10 @@ export default class OrganizationManagementService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/organization/',
-      create: '/organization',
-      update: '/organization',
-      delete: '/organization',
+      get: '/organization/management/',
+      create: '/organization/management',
+      update: '/organization/management',
+      delete: '/organization/management',
     };
     this.settings = args?.settings || {}
   }
