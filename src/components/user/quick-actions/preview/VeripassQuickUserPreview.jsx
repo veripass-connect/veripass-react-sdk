@@ -171,7 +171,7 @@ export const VeripassQuickUserPreview = ({ entity, setIsOpen, isPopupContext = f
                       <section>
                         <SnapData
                           id="primary_national_id"
-                          data={entity?.primary_national_id}
+                          data={entity?.primary_national_id?.identification}
                           alignment="right"
                           onEdit={onEditUserProfile}
                         />
