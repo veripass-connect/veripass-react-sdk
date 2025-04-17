@@ -73,6 +73,22 @@ export const AuthProvider = ({ children, debug }) => {
     return JSON.parse(value);
   };
 
+  const getContextAsHeaders = () => {
+    const user = context?.user;
+
+    if (!user) return {};
+
+    const profile = user.payload?.profile || {};
+
+    return {
+      'x-veripass-organization-identity': user.payload?.organization_id || '',
+      'x-veripass-app-id': user.payload?.app_id || '',
+      'x-veripass-user-identity': user.identity,
+      'x-veripass-user-display-name': profile.display_name || profile.primary_email_address || user.identity,
+      'x-veripass-username': profile.username || '',
+    };
+  };
+
   // Effect to redirect if user is null
   useEffect(() => {
     if (isInitialized) {
@@ -95,6 +111,7 @@ export const AuthProvider = ({ children, debug }) => {
    * @property {function(object): Promise<void>} login - Function to log in the user.
    * @property {function(): void} logout - Function to log out the user.
    * @property {function(): object|null} getToken - Function to get the current user's token.
+   * @property {function(): object} getContextAsHeaders - Function to get the context as headers.
    *
    * @returns {AuthContextValue} The context value with user data and authentication functions.
    */
@@ -104,6 +121,7 @@ export const AuthProvider = ({ children, debug }) => {
       login,
       logout,
       getToken,
+      getContextAsHeaders
     }),
     [user],
   );
