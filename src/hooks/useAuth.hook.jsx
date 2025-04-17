@@ -74,8 +74,6 @@ export const AuthProvider = ({ children, debug }) => {
   };
 
   const getContextAsHeaders = () => {
-    const user = context?.user;
-
     if (!user) return {};
 
     const profile = user.payload?.profile || {};
