@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
-import { AsyncAutocomplete } from '@link-loom/react-sdk/AsyncAutocomplete';
+import { AsyncAutocomplete } from '@link-loom/react-sdk';
 import { SecurityAccessProfileService, UserManagementService } from '@services';
 import { Button } from '@mui/material';
 
