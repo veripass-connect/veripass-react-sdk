@@ -11,6 +11,7 @@ export { VeripassStandardUnlock as VeripassStandardUnlock } from './components/a
 export { VeripassUserQuickStandardCreate as VeripassUserQuickStandardCreate } from './components/user/quick-actions/create/VeripassUserQuickStandardCreate.jsx'
 export { VeripassQuickUserKyc as VeripassQuickUserKyc } from './components/user/quick-actions/kyc/VeripassQuickUserKyc.jsx';
 export { VeripassQuickUserPreview as VeripassQuickUserPreview } from './components/user/quick-actions/preview/VeripassQuickUserPreview.jsx';
+export { VeripassAssignAccessProfile as VeripassAssignAccessProfile } from './components/user/quick-actions/assign-access-profile/VeripassAssignAccessProfile.jsx';
 
 /* User Quick Biometrics */
 export { VeripassQuickUserBiometrics as VeripassQuickUserBiometrics } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometrics.jsx';

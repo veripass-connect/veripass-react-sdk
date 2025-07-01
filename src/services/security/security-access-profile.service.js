@@ -1,6 +1,6 @@
 import BaseApi from '../base/api.service';
 
-export default class UserManagementService extends BaseApi {
+export default class SecurityAccessProfileService extends BaseApi {
   constructor (args) {
     super(args);
 
@@ -9,11 +9,10 @@ export default class UserManagementService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/user/',
-      create: '/user',
-      update: '/user',
-      delete: '/user',
-      assignAccessProfile: '/user/assign-access-profile'
+      get: '/security/access-profile/',
+      create: '/security/access-profile/',
+      update: '/security/access-profile/',
+      delete: '/security/access-profile/',
     };
     this.settings = args?.settings || {}
   }
@@ -42,13 +41,6 @@ export default class UserManagementService extends BaseApi {
   async delete (payload) {
     return super.delete(payload, {
       endpoint: this.serviceEndpoints.delete,
-      ...this.settings
-    });
-  }
-
-  async assignAccessProfile (payload) {
-    return super.post(payload, {
-      endpoint: this.serviceEndpoints.assignAccessProfile,
       ...this.settings
     });
   }

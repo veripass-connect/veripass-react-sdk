@@ -33,6 +33,7 @@ import SecurityRoleService from './security/security-role.service';
 import SecurityClaimService from './security/security-claim.service';
 import SecurityCapabilityService from './security/security-capability.service';
 import SecurityApiKeyService from './security/security-api-key.service';
+import SecurityAccessProfileService from './security/security-access-profile.service';
 
 import EventLoggerService from './logger/event-logger/event-logger.service';
 
@@ -42,22 +43,29 @@ import LegalContractTypeService from './legal/contract-type/contract-type.servic
 import DeviceManagementService from './device/device-management.service';
 
 export {
+  InsightService,
+  SystemService,
+
   SecurityService,
   SecurityCapabilityService,
   SecurityClaimService,
   SecurityRoleService,
   SecurityApiKeyService,
+  SecurityAccessProfileService,
+
   ProjectManagementService,
+
   AppManagementService,
   AppEnvironmentService,
-  InsightService,
-  SystemService,
-  UserManagementService,
+
   OrganizationManagementService,
   OrganizationInformationService,
   OrganizationSettingsService,
   OrganizationTeamsService,
+
   TeamManagementService,
+
+  UserManagementService,
   UserProfileService,
   UserIdentityService,
   UserInformationService,
@@ -70,8 +78,11 @@ export {
   UserAppService,
   UserAppRoleService,
   UploadService,
+
   EventLoggerService,
+
   LegalContractManagementService,
   LegalContractTypeService,
+
   DeviceManagementService
 };
