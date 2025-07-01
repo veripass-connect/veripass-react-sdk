@@ -24,7 +24,7 @@ async function assignAccessProfile({ identity, accessProfileSlug, apiKey, enviro
 
 export const VeripassAssignAccessProfile = ({
   ui,
-  entity = {},
+  entitySelected = {},
   onEvent,
   setIsOpen,
   environment = 'production',
@@ -36,14 +36,14 @@ export const VeripassAssignAccessProfile = ({
 
   const handleSubmit = async () => {
     try {
-      if (!selectedAccessProfile?.slug || !entity?.identity) {
+      if (!selectedAccessProfile?.slug || !entitySelected?.identity) {
         return;
       }
 
       setIsLoading(true);
 
       const response = await assignAccessProfile({
-        identity: entity.identity,
+        identity: entitySelected.identity,
         accessProfileSlug: selectedAccessProfile.slug,
         apiKey,
         environment,
@@ -75,9 +75,9 @@ export const VeripassAssignAccessProfile = ({
         {ui?.showHeader && (
           <header className="row">
             <article className="col-12">
-              <h4 className="header-title">{ui?.title || 'Assign Access Profile'}</h4>
+              <h4 className="header-title">{ui?.labels?.headers?.title || 'Assign Access Profile'}</h4>
               <p className="sub-header">
-                {ui?.subtitle || 'Select an access profile to link the user to specific projects, apps, and roles.'}
+                {ui?.labels?.headers?.subtitle || 'Select an access profile to link the user to specific projects, apps, and roles.'}
               </p>
             </article>
           </header>
@@ -109,7 +109,7 @@ export const VeripassAssignAccessProfile = ({
                 variant="contained"
                 className="my-2"
                 onClick={handleSubmit}
-                disabled={!selectedAccessProfile?.slug || !entity?.identity}
+                disabled={!selectedAccessProfile?.slug || !entitySelected?.identity}
               >
                 {isLoading
                   ? ui?.labels?.buttons?.assignProfile?.loading || 'Assigning...'

@@ -88,7 +88,7 @@ const initialState = {
 
 export const VeripassUserQuickStandardCreate = ({
   ui,
-  entity,
+  entitySelected,
   onEvent,
   setIsOpen,
   isPopupContext = false,
