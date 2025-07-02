@@ -14,7 +14,7 @@ async function emitEvent({ action, payload, error, eventHandler }) {
 async function assignAccessProfile({ identity, accessProfileSlug, apiKey, environment = 'production' }) {
   const service = new UserManagementService({ apiKey, settings: { environment } });
 
-  const response = await service.assign({
+  const response = await service.assignAccessProfile({
     identity: identity,
     access_profile_slug: accessProfileSlug,
   });
@@ -34,8 +34,12 @@ export const VeripassAssignAccessProfile = ({
   const [selectedAccessProfile, setSelectedAccessProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
     try {
+      if (event) {
+        event.preventDefault();
+      }
+
       if (!selectedAccessProfile?.slug || !entitySelected?.identity) {
         return;
       }
@@ -77,7 +81,8 @@ export const VeripassAssignAccessProfile = ({
             <article className="col-12">
               <h4 className="header-title">{ui?.labels?.headers?.title || 'Assign Access Profile'}</h4>
               <p className="sub-header">
-                {ui?.labels?.headers?.subtitle || 'Select an access profile to link the user to specific projects, apps, and roles.'}
+                {ui?.labels?.headers?.subtitle ||
+                  'Select an access profile to link the user to specific projects, apps, and roles.'}
               </p>
             </article>
           </header>
