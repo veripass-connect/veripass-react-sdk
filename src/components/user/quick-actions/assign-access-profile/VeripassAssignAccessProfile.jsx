@@ -11,12 +11,12 @@ async function emitEvent({ action, payload, error, eventHandler }) {
   }
 }
 
-async function assignAccessProfile({ identity, accessProfileSlug, apiKey, environment = 'production' }) {
+async function assignAccessProfile({ identity, accessProfileId, apiKey, environment = 'production' }) {
   const service = new UserManagementService({ apiKey, settings: { environment } });
 
   const response = await service.assignAccessProfile({
     identity: identity,
-    access_profile_slug: accessProfileSlug,
+    access_profile_id: accessProfileId,
   });
 
   return response;
@@ -40,7 +40,7 @@ export const VeripassAssignAccessProfile = ({
         event.preventDefault();
       }
 
-      if (!selectedAccessProfile?.slug || !entitySelected?.identity) {
+      if (!selectedAccessProfile?.id || !entitySelected?.identity) {
         return;
       }
 
@@ -48,7 +48,7 @@ export const VeripassAssignAccessProfile = ({
 
       const response = await assignAccessProfile({
         identity: entitySelected.identity,
-        accessProfileSlug: selectedAccessProfile.slug,
+        accessProfileId: selectedAccessProfile.id,
         apiKey,
         environment,
       });
