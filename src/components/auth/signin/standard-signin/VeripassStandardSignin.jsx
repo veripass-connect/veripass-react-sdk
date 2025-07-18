@@ -146,7 +146,7 @@ export const VeripassStandardSignin = ({
 
   return (
     <>
-      <VeripassLayout isPopupContext={isPopupContext}>
+      <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: false, vertical: 'bottom', alignment: 'end' }}>
         <header style={{ textAlign: 'center' }}>
           <a href="/">
             <img
@@ -252,7 +252,7 @@ export const VeripassStandardSignin = ({
             </footer>
 
             <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-              <Typography style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400' }}>
+              <Typography style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400', marginBottom:'0' }}>
                 Powered by
               </Typography>
               <img src={veripassLogo} alt="Veripass logo" height="15" style={{ marginTop: 'auto', marginBottom: 'auto' }} />

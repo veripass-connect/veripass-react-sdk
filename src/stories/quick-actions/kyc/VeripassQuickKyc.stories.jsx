@@ -47,4 +47,5 @@ CustomTexts.args = {
   },
   environment: 'development',
   apiKey: '',
+  debug: true
 };

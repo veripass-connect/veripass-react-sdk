@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassUserQuickStandardCreate } from '../../../components/user/quick-actions/create/VeripassUserQuickStandardCreate';
+import { VeripassAssignAccessProfile } from '../../../components/user/quick-actions/assign-access-profile/VeripassAssignAccessProfile';
 
 export default {
-  title: 'Quick-Actions/VeripassUserQuickStandardCreate',
-  component: VeripassUserQuickStandardCreate,
+  title: 'Quick-Actions/VeripassAssignAccessProfile',
+  component: VeripassAssignAccessProfile,
   parameters: {
     layout: 'centered',
   },
@@ -26,7 +26,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassUserQuickStandardCreate {...args} />
+    <VeripassAssignAccessProfile {...args} />
   </MemoryRouter>
 );
 
@@ -47,4 +47,5 @@ CustomTexts.args = {
   },
   environment: 'development',
   apiKey: '',
+  debug: true
 };

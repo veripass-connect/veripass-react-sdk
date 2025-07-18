@@ -37,7 +37,7 @@ Default.args = {
   organization: {
     logoSrc: 'http://localhost:4571/assets/images/logo-dark-2.svg',
   },
-  signinUrl: '/auth/login',
+  signinUrl: 'https://portal.veripass.com.co/auth/login',
   texts: {
     farewellMessage: 'Goodbye!',
     successMessage: 'You have successfully logged out.',
@@ -65,11 +65,12 @@ WithoutLogo.args = {
   organization: {
     logoSrc: '',
   },
-  signinUrl: '/auth/login',
+  signinUrl: 'https://portal.veripass.com.co/auth/login',
   texts: {
     farewellMessage: 'Goodbye!',
     successMessage: 'You have successfully logged out.',
     goBackText: 'Back to',
     signinText: 'Sign in',
   },
+  debug: true
 };

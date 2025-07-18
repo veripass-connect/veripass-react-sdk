@@ -42,4 +42,5 @@ Default.args = {
   redirectUrl: '/home',
   environment: 'development',
   apiKey: '',
+  debug: true
 };

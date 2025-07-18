@@ -34,7 +34,7 @@ const Container = styled.article`
 export const VeripassLayout = ({
   children,
   isPopupContext = false,
-  ui = { showLogo: true, vertical: 'top', alignment: 'end' },
+  ui = { showLogo: true, vertical: 'bottom', alignment: 'end' },
   ...props
 }) => {
   return (

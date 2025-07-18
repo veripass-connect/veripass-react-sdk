@@ -41,4 +41,5 @@ NotVerified.args = {
   entity: { is_verified: false },
   environment: 'development',
   apiKey: '',
+  debug: true
 };

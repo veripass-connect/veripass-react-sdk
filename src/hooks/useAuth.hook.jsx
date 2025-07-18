@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo, useEffect, useState } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
 
-const defaultPublicUrlList = ['/auth/login', '/auth/signup'];
+const defaultPublicUrlList = ['https://portal.veripass.com.co/auth/login', '/auth/login', '/auth/signup'];
 
 /**
  * Authentication context used to provide user authentication data and functions.
@@ -119,7 +119,7 @@ export const AuthProvider = ({ children, debug }) => {
       login,
       logout,
       getToken,
-      getContextAsHeaders
+      getContextAsHeaders,
     }),
     [user],
   );

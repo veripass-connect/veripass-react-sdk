@@ -41,4 +41,5 @@ Default.args = {
   isPopupContext: false,
   environment: 'development',
   apiKey: '',
+  debug: true
 };

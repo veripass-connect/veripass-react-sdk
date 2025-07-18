@@ -54,4 +54,5 @@ CustomTexts.args = {
   onEvent: () => {},
   isPopupContext: false,
   apiKey: '',
+  debug: true
 };

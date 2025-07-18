@@ -13,7 +13,7 @@ export const VeripassLogoutSuccess = ({
   organization = {
     logoSrc: '',
   },
-  signinUrl = '/auth/login',
+  signinUrl = 'https://portal.veripass.com.co/auth/login',
   texts = {
     farewellMessage: 'Goodbye!',
     successMessage: 'You have successfully logged out.',
