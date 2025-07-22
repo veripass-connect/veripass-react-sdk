@@ -4,7 +4,7 @@ import { VeripassStandardUnlock } from '../../components/auth/unlock/VeripassSta
 import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
-  title: 'Components/VeripassStandardUnlock',
+  title: 'Auth/VeripassStandardUnlock',
   component: VeripassStandardUnlock,
   parameters: {
     layout: 'centered',

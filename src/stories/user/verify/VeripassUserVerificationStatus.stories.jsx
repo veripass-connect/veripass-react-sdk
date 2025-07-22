@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { VeripassUserVerificationStatus } from '../../../components/user/verify/VeripassUserVerificationStatus';
 
 export default {
-  title: 'Verify/VeripassUserVerificationStatus',
+  title: 'User/Verify/VeripassUserVerificationStatus',
   component: VeripassUserVerificationStatus,
   parameters: {
     layout: 'centered',

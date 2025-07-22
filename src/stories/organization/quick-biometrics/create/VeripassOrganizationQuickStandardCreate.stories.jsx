@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { VeripassOrganizationQuickStandardCreate } from '../../../../components/organization/quick-actions/create/VeripassOrganizationQuickStandardCreate';
 
 export default {
-  title: 'Quick-Actions/VeripassOrganizationQuickStandardCreate',
+  title: 'Organization/Quick-Actions/VeripassOrganizationQuickStandardCreate',
   component: VeripassOrganizationQuickStandardCreate,
   parameters: {
     layout: 'centered',

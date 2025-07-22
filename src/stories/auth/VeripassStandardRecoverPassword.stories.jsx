@@ -4,7 +4,7 @@ import { VeripassStandardRecoverPassword } from '../../components/auth/recover/r
 import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
-  title: 'Components/VeripassStandardRecoverPassword',
+  title: 'Auth/VeripassStandardRecoverPassword',
   component: VeripassStandardRecoverPassword,
   parameters: {
     layout: 'centered',

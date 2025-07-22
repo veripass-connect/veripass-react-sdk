@@ -4,7 +4,7 @@ import { VeripassLogoutSuccess } from '../../components/auth/logout/logout-succe
 import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
-  title: 'Components/VeripassLogoutSuccess',
+  title: 'Auth/VeripassLogoutSuccess',
   component: VeripassLogoutSuccess,
   parameters: {
     layout: 'centered',

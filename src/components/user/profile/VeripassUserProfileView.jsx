@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
@@ -189,13 +189,13 @@ export const VeripassUserProfileView = ({
               <Box component="dl" sx={{ m: 0 }}>
                 <Grid container spacing={3} component="div">
                   <Grid item xs={12} md={6}>
-                    <Typography variant="h5">
+                    <Typography variant="body1">
                       <strong>Universal Veripass ID</strong>
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <div>
-                      <Typography variant="h5" style={{ marginBottom: 0 }}>
+                      <Typography variant="body1" style={{ marginBottom: 0 }}>
                         <strong>{veripassIdentityInternal?.identity}</strong>
                       </Typography>
                       <Typography style={{ marginBottom: 0, color: "#646b71 !important" }} sx={{color: "#646b71 !important"}}>
@@ -214,7 +214,7 @@ export const VeripassUserProfileView = ({
                     <Grid item xs={12} md={6} key={label}>
                       <Box component="dt" sx={{ display: 'flex', alignItems: 'between', mb: 0 }}>
                         <Typography
-                          variant="body1"
+                          variant="body2"
                           color="textSecondary"
                           sx={{
                             color: 'text.secondary',
@@ -231,7 +231,7 @@ export const VeripassUserProfileView = ({
                         {/* <SnapData dataKey={label} dataValue={value} /> */}
                       </Box>
                       <Box component="dd" sx={{ m: 0 }}>
-                        <Typography variant="h5" style={{ color: '#363636' }}>
+                        <Typography variant="body1" style={{ color: '#363636' }}>
                           <strong>{value}</strong>
                         </Typography>
                       </Box>
