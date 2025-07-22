@@ -145,13 +145,13 @@ export const VeripassUserProfileView = ({
   };
 
   useEffect(() => {
-    if (!veripassProfile || veripassProfile.id === veripassIdentityInternal?.id) {
+    if (!veripassProfile || veripassProfile?.id === veripassIdentityInternal?.id) {
       return;
     }
 
     setVeripassItentityInternal(veripassProfile);
     setProfileUiSettings();
-  }, [veripassProfile, veripassIdentityInternal]);
+  }, [veripassProfile]);
 
   useEffect(() => {
     initializeComponent();
