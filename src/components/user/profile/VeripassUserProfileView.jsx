@@ -95,16 +95,16 @@ export const VeripassUserProfileView = ({
   const [isEditable, setIsEditable] = useState(false);
   const phone = veripassProfile?.profile?.primary_phone_number;
   const formattedPhone =
-    phone?.country?.dial_code && phone?.phone_number ? `+${phone.country.dial_code} ${phone.phone_number}` : '-';
+    phone?.country?.dial_code && phone?.phone_number ? `+${phone.country.dial_code} ${phone.phone_number}` : '';
+  const formattedFullname = veripassProfile?.profile?.first_name
+    ? `${veripassProfile?.profile?.first_name || ''} ${veripassProfile?.profile?.last_name || ''}`
+    : '';
   const fields = [
     { label: 'Username', value: veripassProfile?.profile?.username || '-' },
-    {
-      label: 'Name',
-      value: `${veripassProfile?.profile?.first_name || ''} ${veripassProfile?.profile?.last_name || ''}`,
-    },
+    { label: 'Name', value: formattedFullname || '-' },
     { label: 'Primary Email', value: veripassProfile?.profile?.primary_email_address || '-' },
-    { label: 'Primary Phone', value: formattedPhone },
-    { label: 'Primary Document Id', value: veripassProfile?.profile?.primary_national_id.identification || '' },
+    { label: 'Primary Phone', value: formattedPhone || '-' },
+    { label: 'Primary Document Id', value: veripassProfile?.profile?.primary_national_id.identification || '-' },
   ].filter(Boolean);
 
   // Entity states
