@@ -90,22 +90,21 @@ export const VeripassUserProfileView = ({
 
   // UI States
   const [isLoading, setIsLoading] = useState(false);
-  const [veripassIdentityInternal, setVeripassItentityInternal] = useState(null);
   const [coverUrl, setCoverUrl] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const fields = [
-    { label: 'Username', value: veripassIdentityInternal?.profile?.username || '-' },
+    { label: 'Username', value: veripassProfile?.profile?.username || '-' },
     {
       label: 'Name',
-      value: `${veripassIdentityInternal?.profile?.first_name || ''} ${veripassIdentityInternal?.profile?.last_name || ''}`,
+      value: `${veripassProfile?.profile?.first_name || ''} ${veripassProfile?.profile?.last_name || ''}`,
     },
-    { label: 'Primary Email', value: veripassIdentityInternal?.profile?.primary_email_address || '-' },
+    { label: 'Primary Email', value: veripassProfile?.profile?.primary_email_address || '-' },
     {
       label: 'Primary Phone',
-      value: `+${veripassIdentityInternal?.profile?.primary_phone_number.country.dial_code} ${veripassIdentityInternal?.profile?.primary_phone_number.phone_number}`,
+      value: `+${veripassProfile?.profile?.primary_phone_number.country.dial_code} ${veripassProfile?.profile?.primary_phone_number.phone_number}`,
     },
-    { label: 'Primary Document Id', value: veripassIdentityInternal?.profile?.primary_national_id.identification || '' },
+    { label: 'Primary Document Id', value: veripassProfile?.profile?.primary_national_id.identification || '' },
   ].filter(Boolean);
 
   // Entity states
@@ -145,10 +144,7 @@ export const VeripassUserProfileView = ({
   };
 
   useEffect(() => {
-    if (veripassProfile && Object.keys(veripassProfile).length > 0) {
-      setVeripassItentityInternal(veripassProfile);
-      setProfileUiSettings();
-    }
+    setProfileUiSettings();
   }, [veripassProfile]);
 
   useEffect(() => {
@@ -170,20 +166,20 @@ export const VeripassUserProfileView = ({
             </AvatarWrapper>
             <HeaderInfo>
               <Name as="h2" style={{ marginBottom: 0 }}>
-                <strong>{veripassIdentityInternal?.profile?.display_name}</strong>
+                <strong>{veripassProfile?.profile?.display_name}</strong>
               </Name>
-              {veripassIdentityInternal?.profile?.bio && (
+              {veripassProfile?.profile?.bio && (
                 <Bio as="h6" style={{ fontWeight: '300' }}>
-                  {veripassIdentityInternal?.profile?.bio}
+                  {veripassProfile?.profile?.bio}
                 </Bio>
               )}
             </HeaderInfo>
           </Header>
 
           <Content>
-            <Typography variant="h6">{veripassIdentityInternal?.display_name}</Typography>
+            <Typography variant="h6">{veripassProfile?.display_name}</Typography>
             <Typography variant="caption" color="textSecondary" gutterBottom>
-              {veripassIdentityInternal?.bio}
+              {veripassProfile?.bio}
             </Typography>
 
             <section>
@@ -197,10 +193,10 @@ export const VeripassUserProfileView = ({
                   <Grid item xs={6}>
                     <div>
                       <Typography variant="body1" style={{ marginBottom: 0 }}>
-                        <strong>{veripassIdentityInternal?.identity}</strong>
+                        <strong>{veripassProfile?.identity}</strong>
                       </Typography>
                       <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
-                        https://me.veripass.com.co/{veripassIdentityInternal?.identity}
+                        https://me.veripass.com.co/{veripassProfile?.identity}
                       </Typography>
                     </div>
                   </Grid>
@@ -243,7 +239,7 @@ export const VeripassUserProfileView = ({
             </section>
 
             <section style={{ marginTop: '5rem' }}>
-              <VeripassUserVerificationStatus entity={veripassIdentityInternal} sx={{ mt: 2 }} />
+              <VeripassUserVerificationStatus entity={veripassProfile} sx={{ mt: 2 }} />
             </section>
           </Content>
 
