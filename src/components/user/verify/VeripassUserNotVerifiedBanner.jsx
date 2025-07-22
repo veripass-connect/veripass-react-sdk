@@ -5,11 +5,13 @@ import { VeripassUserVerifyButton } from '@components/user/verify/VeripassUserVe
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 
 export const VeripassUserNotVerifiedBanner = ({ entity }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [entity]);
+    if (entity != null && isLoading) {
+      setIsLoading(false);
+    }
+  }, [entity, isLoading]);
 
   return (
     <VeripassSimpleLayout>
