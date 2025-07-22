@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { VeripassSimpleLayout } from '@components/shared/layouts/VeripassSimpleLayout';
 
-import { VeripassUserVerifyButton } from '@components/verify/VeripassUserVerifyButton';
+import { VeripassUserVerifyButton } from '@components/user/verify/VeripassUserVerifyButton';
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 
 export const VeripassUserNotVerifiedBanner = ({ entity }) => {

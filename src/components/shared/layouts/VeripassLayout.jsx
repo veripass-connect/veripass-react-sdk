@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import '@styles/bootstrap-namespaced.css';
 import '@styles/styles.css';
@@ -31,6 +31,36 @@ const Container = styled.article`
   }
 `;
 
+export const PoweredBy = ({ align = 'end', position = 'bottom' }) => (
+  <Box
+    component="section"
+    sx={{
+      display: 'flex',
+      justifyContent: align,
+      mb: position === 'top' ? 2 : 0,
+      mt: position === 'bottom' ? 2 : 0,
+      
+    }}
+  >
+    <Typography
+      sx={{
+        mr: 0.5,
+        color: 'text.secondary',
+        fontSize: '0.775rem',
+        fontWeight: 400,
+      }}
+    >
+      Powered by
+    </Typography>
+    <Box
+      component="img"
+      src={veripassLogo}
+      alt="Veripass logo"
+      sx={{ height: 15 }}
+    />
+  </Box>
+);
+
 export const VeripassLayout = ({
   children,
   isPopupContext = false,
@@ -40,35 +70,17 @@ export const VeripassLayout = ({
   return (
     <Container
       $ispopup={isPopupContext}
-      className={`veripass container-fluid ${!isPopupContext ? 'col-12' : ''}`}
+      className="veripass"
       style={{ boxSizing: 'border-box' }}
     >
       {ui?.showLogo && ui?.vertical === 'top' && (
-        <section
-          className={`d-flex ${ui?.vertical === 'top' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
-            ui?.alignment === 'center' ? 'justify-content-center' : ''
-          } ${ui?.alignment === 'end' ? 'justify-content-end' : ''}`}
-        >
-          <Typography className="mb-0 me-2 text-muted" style={{ fontSize: '0.775rem', fontWeight: 400 }}>
-            Powered by
-          </Typography>
-          <img src={veripassLogo} alt="Veripass logo" height="15" />
-        </section>
+        <PoweredBy align={ui?.alignment} position={ui?.vertical} />
       )}
 
       <main {...props}>{children}</main>
 
       {ui?.showLogo && ui?.vertical === 'bottom' && (
-        <section
-          className={`d-flex ${ui?.vertical === 'bottom' ? 'mb-1' : 'mt-3'} ${ui?.alignment === 'start' ? 'justify-content-start' : ''} ${
-            ui?.alignment === 'center' ? 'justify-content-center' : ''
-          } ${ui?.alignment === 'end' ? 'justify-content-end' : ''}`}
-        >
-          <Typography className="mb-0 me-2 text-muted" style={{ fontSize: '0.775rem', fontWeight: 400 }}>
-            Powered by
-          </Typography>
-          <img src={veripassLogo} alt="Veripass logo" height="15" />
-        </section>
+        <PoweredBy align={ui?.alignment} position={ui?.vertical} />
       )}
     </Container>
   );

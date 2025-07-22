@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassUserVerificationStatus } from '../../components/verify/VeripassUserVerificationStatus';
+import { VeripassUserVerificationStatus } from '../../../components/user/verify/VeripassUserVerificationStatus';
 
 export default {
   title: 'Verify/VeripassUserVerificationStatus',
@@ -41,5 +41,5 @@ NotVerified.args = {
   entity: { is_verified: false },
   environment: 'development',
   apiKey: '',
-  debug: true
+  debug: true,
 };

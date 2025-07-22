@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserKyc } from '../../../components/user/quick-actions/kyc/VeripassQuickUserKyc';
+import { VeripassQuickUserPreview } from '../../../../components/user/quick-actions/preview/VeripassQuickUserPreview';
 
 export default {
-  title: 'Quick-Actions/VeripassQuickUserKyc',
-  component: VeripassQuickUserKyc,
+  title: 'User/Quick-Actions/VeripassQuickUserPreview',
+  component: VeripassQuickUserPreview,
   parameters: {
     layout: 'centered',
   },
@@ -12,6 +12,9 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
+    onEvent: { control: 'function' },
+    setIsOpen: { control: 'function' },
+    isPopupContext: { control: 'boolean' },
     environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
@@ -26,7 +29,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassQuickUserKyc {...args} />
+    <VeripassQuickUserPreview {...args} />
   </MemoryRouter>
 );
 
@@ -34,17 +37,8 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {},
   ui: {},
-  environment: 'development',
-  apiKey: '',
-};
-
-export const CustomTexts = Template.bind({});
-CustomTexts.args = {
-  entity: {},
-  ui: {
-    title: 'Welcome!',
-    subtitle: 'This a Quick KYC to validate user data',
-  },
+  onEvent: () => {},
+  isPopupContext: false,
   environment: 'development',
   apiKey: '',
   debug: true

@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassAssignAccessProfile } from '../../../components/user/quick-actions/assign-access-profile/VeripassAssignAccessProfile';
+import { VeripassQuickUserBiometrics } from '../../../../components/user/quick-actions/biometrics/VeripassQuickUserBiometrics';
 
 export default {
-  title: 'Quick-Actions/VeripassAssignAccessProfile',
-  component: VeripassAssignAccessProfile,
+  title: 'User/Quick-Actions/VeripassQuickUserBiometrics',
+  component: VeripassQuickUserBiometrics,
   parameters: {
     layout: 'centered',
   },
@@ -12,6 +12,9 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
+    onEvent: { control: 'function' },
+    setIsOpen: { control: 'function' },
+    isPopupContext: { control: 'boolean' },
     environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
@@ -26,7 +29,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassAssignAccessProfile {...args} />
+    <VeripassQuickUserBiometrics {...args} />
   </MemoryRouter>
 );
 
@@ -34,6 +37,8 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {},
   ui: {},
+  onEvent: () => {},
+  isPopupContext: false,
   environment: 'development',
   apiKey: '',
 };
@@ -42,10 +47,12 @@ export const CustomTexts = Template.bind({});
 CustomTexts.args = {
   entity: {},
   ui: {
-    title: 'Welcome!',
-    subtitle: 'This a Quick Standard (with password) user create',
+    title: 'Veripass Biometrics custom text',
+    subtitle: 'This a Biometrics hub to validate user data',
   },
   environment: 'development',
+  onEvent: () => {},
+  isPopupContext: false,
   apiKey: '',
   debug: true
 };

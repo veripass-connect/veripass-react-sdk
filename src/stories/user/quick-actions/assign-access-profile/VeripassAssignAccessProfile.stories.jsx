@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassQuickUserPreview } from '../../../components/user/quick-actions/preview/VeripassQuickUserPreview';
+import { VeripassAssignAccessProfile } from '../../../../components/user/quick-actions/assign-access-profile/VeripassAssignAccessProfile';
 
 export default {
-  title: 'Quick-Actions/VeripassQuickUserPreview',
-  component: VeripassQuickUserPreview,
+  title: 'User/Quick-Actions/VeripassAssignAccessProfile',
+  component: VeripassAssignAccessProfile,
   parameters: {
     layout: 'centered',
   },
@@ -12,9 +12,6 @@ export default {
   argTypes: {
     ui: { control: 'object' },
     entity: { control: 'object' },
-    onEvent: { control: 'function' },
-    setIsOpen: { control: 'function' },
-    isPopupContext: { control: 'boolean' },
     environment: { control: 'string' },
     apiKey: { control: 'text' },
   },
@@ -29,7 +26,7 @@ export default {
 
 const Template = (args) => (
   <MemoryRouter>
-    <VeripassQuickUserPreview {...args} />
+    <VeripassAssignAccessProfile {...args} />
   </MemoryRouter>
 );
 
@@ -37,8 +34,17 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {},
   ui: {},
-  onEvent: () => {},
-  isPopupContext: false,
+  environment: 'development',
+  apiKey: '',
+};
+
+export const CustomTexts = Template.bind({});
+CustomTexts.args = {
+  entity: {},
+  ui: {
+    title: 'Welcome!',
+    subtitle: 'This a Quick Standard (with password) user create',
+  },
   environment: 'development',
   apiKey: '',
   debug: true

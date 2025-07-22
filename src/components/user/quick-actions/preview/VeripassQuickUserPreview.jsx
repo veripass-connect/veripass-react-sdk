@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { Spinner, SnapData, useNavigate } from '@link-loom/react-sdk';
-import { VeripassUserVerificationStatus } from '@components/verify/VeripassUserVerificationStatus';
+import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 import styled from 'styled-components';
 
 import defaultCover from '@assets/cover/cover-11.jpg';

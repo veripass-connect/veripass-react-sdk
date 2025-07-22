@@ -252,7 +252,9 @@ export const VeripassStandardSignin = ({
             </footer>
 
             <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-              <Typography style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400', marginBottom:'0' }}>
+              <Typography
+                style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400', marginBottom: '0' }}
+              >
                 Powered by
               </Typography>
               <img src={veripassLogo} alt="Veripass logo" height="15" style={{ marginTop: 'auto', marginBottom: 'auto' }} />
