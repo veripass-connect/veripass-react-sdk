@@ -22,10 +22,13 @@ export { VeripassQuickUserBiometricsVoice as VeripassQuickUserBiometricsVoice } 
 export { VeripassQuickUserBiometricsSignature as UserQuickBiometricsSignature } from './components/user/quick-actions/biometrics/VeripassQuickUserBiometricsSignature.jsx';
 
 /* User Verify */
-export { VeripassUserNotVerifiedBanner as VeripassUserNotVerifiedBanner } from '.components/user/verify/VeripassUserNotVerifiedBanner';
-export { VeripassUserVerificationStatus as VeripassUserVerificationStatus } from '.components/user/verify/VeripassUserVerificationStatus';
-export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from '.components/user/verify/VeripassUserVerifiedBanner';
-export { VeripassUserVerifyButton as VeripassUserVerifyButton } from '.components/user/verify/VeripassUserVerifyButton';
+export { VeripassUserNotVerifiedBanner as VeripassUserNotVerifiedBanner } from './components/user/verify/VeripassUserNotVerifiedBanner';
+export { VeripassUserVerificationStatus as VeripassUserVerificationStatus } from './components/user/verify/VeripassUserVerificationStatus';
+export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from './components/user/verify/VeripassUserVerifiedBanner';
+export { VeripassUserVerifyButton as VeripassUserVerifyButton } from './components/user/verify/VeripassUserVerifyButton';
+
+/* User Profile */
+export { VeripassUserProfileView as VeripassUserProfileView} from './components/user/profile/VeripassUserProfileView.jsx';
 
 /* Organization Quick Actions */
 export { VeripassOrganizationQuickStandardCreate as VeripassOrganizationQuickStandardCreate } from './components/organization/quick-actions/create/VeripassOrganizationQuickStandardCreate.jsx';
