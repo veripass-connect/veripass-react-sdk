@@ -17,7 +17,6 @@ import '@styles/styles.css';
 import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 
-
 const swal = withReactContent(Swal);
 
 const statusCodeMessages = {
@@ -146,9 +145,13 @@ export const VeripassUserProfileView = ({
   };
 
   useEffect(() => {
+    if (!veripassProfile || veripassProfile.id === veripassIdentityInternal?.id) {
+      return;
+    }
+
     setVeripassItentityInternal(veripassProfile);
     setProfileUiSettings();
-  }, [veripassProfile]);
+  }, [veripassProfile, veripassIdentityInternal]);
 
   useEffect(() => {
     initializeComponent();
@@ -198,7 +201,7 @@ export const VeripassUserProfileView = ({
                       <Typography variant="body1" style={{ marginBottom: 0 }}>
                         <strong>{veripassIdentityInternal?.identity}</strong>
                       </Typography>
-                      <Typography style={{ marginBottom: 0, color: "#646b71 !important" }} sx={{color: "#646b71 !important"}}>
+                      <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
                         https://me.veripass.com.co/{veripassIdentityInternal?.identity}
                       </Typography>
                     </div>
