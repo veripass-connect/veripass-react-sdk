@@ -93,6 +93,9 @@ export const VeripassUserProfileView = ({
   const [coverUrl, setCoverUrl] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
+  const phone = veripassProfile?.profile?.primary_phone_number;
+  const formattedPhone =
+    phone?.country?.dial_code && phone?.phone_number ? `+${phone.country.dial_code} ${phone.phone_number}` : '-';
   const fields = [
     { label: 'Username', value: veripassProfile?.profile?.username || '-' },
     {
@@ -100,10 +103,7 @@ export const VeripassUserProfileView = ({
       value: `${veripassProfile?.profile?.first_name || ''} ${veripassProfile?.profile?.last_name || ''}`,
     },
     { label: 'Primary Email', value: veripassProfile?.profile?.primary_email_address || '-' },
-    {
-      label: 'Primary Phone',
-      value: `+${veripassProfile?.profile?.primary_phone_number.country.dial_code} ${veripassProfile?.profile?.primary_phone_number.phone_number}`,
-    },
+    { label: 'Primary Phone', value: formattedPhone },
     { label: 'Primary Document Id', value: veripassProfile?.profile?.primary_national_id.identification || '' },
   ].filter(Boolean);
 
