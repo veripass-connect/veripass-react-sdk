@@ -168,8 +168,8 @@ export const VeripassUserProfileView = ({
               />
             </AvatarWrapper>
             <HeaderInfo>
-              <Name as="h1" style={{ marginBottom: 0 }}>
-                {veripassIdentityInternal?.profile?.display_name}
+              <Name as="h2" style={{ marginBottom: 0 }}>
+                <strong>{veripassIdentityInternal?.profile?.display_name}</strong>
               </Name>
               {veripassIdentityInternal?.profile?.bio && (
                 <Bio as="h6" style={{ fontWeight: '300' }}>
