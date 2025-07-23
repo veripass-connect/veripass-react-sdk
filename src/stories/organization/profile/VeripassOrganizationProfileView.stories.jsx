@@ -1,11 +1,11 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassUserProfileView } from '../../../components/user/profile/VeripassUserProfileView';
+import { VeripassOrganizationProfileView } from '../../../components/organization/profile/VeripassOrganizationProfileView';
 import { AuthProvider } from '../../../hooks/useAuth.hook';
 
 export default {
-  title: 'User/Profile/VeripassUserProfileView',
-  component: VeripassUserProfileView,
+  title: 'Organization/Profile/VeripassOrganizationProfileView',
+  component: VeripassOrganizationProfileView,
   parameters: {
     layout: 'centered',
   },
@@ -28,7 +28,7 @@ export default {
 const Template = (args) => (
   <MemoryRouter>
     <AuthProvider {...args}>
-      <VeripassUserProfileView {...args} />
+      <VeripassOrganizationProfileView {...args} />
     </AuthProvider>
   </MemoryRouter>
 );
@@ -38,10 +38,10 @@ Default.args = {
   veripassIdentity: {
     identity: 'veripass-xyz789',
     profile: {
-      display_name: 'Sophia Turner',
-      first_name: 'Sophia',
-      last_name: 'Turner',
-      primary_email_address: 'sophia.turner@veripass.com',
+      display_name: 'Blackwood Stone Holdings, inc.',
+      slug: 'blackwood-stone-holdings',
+      primary_address: { formatted_address: '169 Madison Ave, New York, NY 10016' },
+      primary_email_address: 'contact@blackwoodstoneholdings.com',
       primary_phone_number: {
         country: {
           dial_code: '1',

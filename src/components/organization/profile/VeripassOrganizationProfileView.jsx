@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { Box, Avatar, Grid, Typography } from '@mui/material';
+import { Box, Avatar, Grid, Typography, Button } from '@mui/material';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
@@ -65,13 +65,7 @@ const Content = styled.div`
   padding: 120px 24px 24px;
 `;
 
-const Field = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 0;
-`;
-
-export const VeripassUserProfileView = ({
+export const VeripassOrganizationProfileView = ({
   ui = {
     profilePhoto: {
       height: '75',
@@ -94,19 +88,15 @@ export const VeripassUserProfileView = ({
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
-  // Fixed variables
+  // Fixed Variables
   const phone = veripassIdentity?.profile?.primary_phone_number;
   const formattedPhone =
     phone?.country?.dial_code && phone?.phone_number ? `+${phone.country.dial_code} ${phone.phone_number}` : '';
-  const formattedFullname = veripassIdentity?.profile?.first_name
-    ? `${veripassIdentity?.profile?.first_name || ''} ${veripassIdentity?.profile?.last_name || ''}`
-    : '';
   const fields = [
-    { label: 'Username', value: veripassIdentity?.profile?.username || '-' },
-    { label: 'Name', value: formattedFullname || '-' },
-    { label: 'Primary Email', value: veripassIdentity?.profile?.primary_email_address || '-' },
-    { label: 'Primary Phone', value: formattedPhone || '-' },
-    { label: 'Primary Document Id', value: veripassIdentity?.profile?.primary_national_id.identification || '-' },
+    { label: 'Primary Document Id', value: veripassIdentity?.profile?.primary_national_id?.identification },
+    { label: 'Primary Email', value: veripassIdentity?.profile?.primary_email_address },
+    { label: 'Primary Phone', value: formattedPhone },
+    { label: 'Primary Address', value: veripassIdentity?.profile?.primary_address?.formatted_address },
   ].filter(Boolean);
 
   // Entity states
@@ -176,6 +166,9 @@ export const VeripassUserProfileView = ({
                 </Bio>
               )}
             </HeaderInfo>
+            <Button variant="outlined" style={{ position: 'absolute', right: 0, bottom: '-65px' }}>
+              Edit
+            </Button>
           </Header>
 
           <Content>
@@ -198,7 +191,7 @@ export const VeripassUserProfileView = ({
                         <strong>{veripassIdentity?.identity}</strong>
                       </Typography>
                       <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
-                        https://me.veripass.com.co/{veripassIdentity?.identity}
+                        https://me.veripass.com.co/{veripassIdentity?.profile?.slug}
                       </Typography>
                     </div>
                   </Grid>

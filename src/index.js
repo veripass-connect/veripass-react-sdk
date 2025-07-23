@@ -28,10 +28,13 @@ export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from './comp
 export { VeripassUserVerifyButton as VeripassUserVerifyButton } from './components/user/verify/VeripassUserVerifyButton';
 
 /* User Profile */
-export { VeripassUserProfileView as VeripassUserProfileView} from './components/user/profile/VeripassUserProfileView.jsx';
+export { VeripassUserProfileView as VeripassUserProfileView } from './components/user/profile/VeripassUserProfileView.jsx';
 
 /* Organization Quick Actions */
 export { VeripassOrganizationQuickStandardCreate as VeripassOrganizationQuickStandardCreate } from './components/organization/quick-actions/create/VeripassOrganizationQuickStandardCreate.jsx';
+
+/* Organization Profile */
+export { VeripassOrganizationProfileView as VeripassOrganizationProfileView } from './components/organization/profile/VeripassOrganizationProfileView.jsx'
 
 export {
   AuthContext,

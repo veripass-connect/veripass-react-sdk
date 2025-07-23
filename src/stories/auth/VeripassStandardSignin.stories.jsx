@@ -4,7 +4,7 @@ import { VeripassStandardSignin } from '../../components/auth/signin/standard-si
 import { AuthProvider } from '../../hooks/useAuth.hook';
 
 export default {
-  title: 'Auth/VeripassStandardSignin',
+  title: 'Authentication/standard/VeripassStandardSignin',
   component: VeripassStandardSignin,
   parameters: {
     layout: 'centered',
