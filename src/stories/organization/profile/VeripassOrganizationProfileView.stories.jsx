@@ -61,6 +61,7 @@ Default.args = {
       },
     },
   },
+  veripassId: 'org-2cea26336c9488a',
   environment: 'development',
   apiKey: '',
   debug: true,

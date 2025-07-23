@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
+import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import styled from 'styled-components';
@@ -18,6 +19,8 @@ import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 
 const swal = withReactContent(Swal);
+
+import { OrganizationManagementService } from '@services';
 
 const statusCodeMessages = {
   461: 'The data provided does not match any registered application',
@@ -84,19 +87,22 @@ export const VeripassOrganizationProfileView = ({
 
   // UI States
   const [isLoading, setIsLoading] = useState(false);
+  const [internalVeripassIdentity, setInternalVeripassIdentity] = useState(null);
   const [coverUrl, setCoverUrl] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
+  const hasExternal = veripassIdentity && Object.keys(veripassIdentity).length > 0;
+  const identity = hasExternal ? veripassIdentity : internalVeripassIdentity;
 
   // Fixed Variables
-  const phone = veripassIdentity?.profile?.primary_phone_number;
+  const phone = identity?.organization_profile?.primary_phone_number;
   const formattedPhone =
     phone?.country?.dial_code && phone?.phone_number ? `+${phone.country.dial_code} ${phone.phone_number}` : '';
   const fields = [
-    { label: 'Primary Document Id', value: veripassIdentity?.profile?.primary_national_id?.identification },
-    { label: 'Primary Email', value: veripassIdentity?.profile?.primary_email_address },
+    { label: 'Primary Document Id', value: identity?.organization_profile?.primary_national_id?.identification },
+    { label: 'Primary Email', value: identity?.organization_profile?.primary_email_address },
     { label: 'Primary Phone', value: formattedPhone },
-    { label: 'Primary Address', value: veripassIdentity?.profile?.primary_address?.formatted_address },
+    { label: 'Primary Address', value: identity?.organization_profile?.primary_address?.formatted_address },
   ].filter(Boolean);
 
   // Entity states
@@ -126,18 +132,55 @@ export const VeripassOrganizationProfileView = ({
     }
   };
 
-  const initializeComponent = () => {
+  const initializeComponent = async () => {
     setErrors();
   };
 
-  const setProfileUiSettings = () => {
-    setCoverUrl(veripassIdentity?.profile?.profile_ui_settings?.cover_picture_url || defaultCover);
-    setAvatarUrl(veripassIdentity?.profile?.profile_ui_settings?.profile_picture_url || defaultAvatar);
+  const getOrganization = async () => {
+    const entityResponse = await fetchEntityCollection({
+      service: OrganizationManagementService,
+      payload: {
+        queryselector: 'id',
+        query: {
+          search: veripassId,
+        },
+      },
+      apiKey,
+      settings: { environment },
+    });
+
+    setIsLoading(false);
+
+    if (!entityResponse?.success) {
+      return;
+    }
+
+    setInternalVeripassIdentity(entityResponse?.result?.items?.[0] || {});
   };
 
   useEffect(() => {
-    setProfileUiSettings();
+    if (
+      veripassIdentity &&
+      Object.keys(veripassIdentity).length > 0 &&
+      veripassIdentity?.identity !== internalVeripassIdentity?.identity
+    ) {
+      setInternalVeripassIdentity(veripassIdentity);
+    }
   }, [veripassIdentity]);
+
+  useEffect(() => {
+    if (!hasExternal && veripassId) {
+      setIsLoading(true);
+      getOrganization();
+    }
+  }, [veripassId]);
+
+  useEffect(() => {
+    if (identity && Object.keys(identity).length > 0) {
+      setCoverUrl(identity.organization_profile?.profile_ui_settings?.cover_picture_url || defaultCover);
+      setAvatarUrl(identity.organization_profile?.profile_ui_settings?.profile_picture_url || defaultAvatar);
+    }
+  }, [identity]);
 
   useEffect(() => {
     initializeComponent();
@@ -158,11 +201,11 @@ export const VeripassOrganizationProfileView = ({
             </AvatarWrapper>
             <HeaderInfo>
               <Name as="h2" style={{ marginBottom: 0 }}>
-                <strong>{veripassIdentity?.profile?.display_name}</strong>
+                <strong>{identity?.organization_profile?.display_name}</strong>
               </Name>
-              {veripassIdentity?.profile?.bio && (
+              {identity?.organization_profile?.bio && (
                 <Bio as="h6" style={{ fontWeight: '300' }}>
-                  {veripassIdentity?.profile?.bio}
+                  {identity?.organization_profile?.bio}
                 </Bio>
               )}
             </HeaderInfo>
@@ -172,9 +215,9 @@ export const VeripassOrganizationProfileView = ({
           </Header>
 
           <Content>
-            <Typography variant="h6">{veripassIdentity?.display_name}</Typography>
+            <Typography variant="h6">{identity?.display_name}</Typography>
             <Typography variant="caption" color="textSecondary" gutterBottom>
-              {veripassIdentity?.bio}
+              {identity?.bio}
             </Typography>
 
             <section>
@@ -188,10 +231,10 @@ export const VeripassOrganizationProfileView = ({
                   <Grid item xs={6}>
                     <div>
                       <Typography variant="body1" style={{ marginBottom: 0 }}>
-                        <strong>{veripassIdentity?.identity}</strong>
+                        <strong>{identity?.identity}</strong>
                       </Typography>
                       <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
-                        https://me.veripass.com.co/{veripassIdentity?.profile?.slug}
+                        https://me.veripass.com.co/{identity?.organization_profile?.slug}
                       </Typography>
                     </div>
                   </Grid>
@@ -234,7 +277,7 @@ export const VeripassOrganizationProfileView = ({
             </section>
 
             <section style={{ marginTop: '5rem' }}>
-              <VeripassUserVerificationStatus entity={veripassIdentity} sx={{ mt: 2 }} />
+              <VeripassUserVerificationStatus entity={identity} sx={{ mt: 2 }} />
             </section>
           </Content>
 

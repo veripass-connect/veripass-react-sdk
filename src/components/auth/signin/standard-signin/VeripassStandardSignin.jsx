@@ -6,7 +6,6 @@ import { useAuth } from '@hooks/useAuth.hook';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
-import { StandardContainer } from '@components/shared/styling/StandardContainer';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
 
