@@ -62,6 +62,7 @@ module.exports = {
     }),
     postcss({
       extract: path.resolve('dist', 'styles', 'main.css'),
+      inject: true,
       modules: false,
       minimize: true,
       sourceMap: true,
