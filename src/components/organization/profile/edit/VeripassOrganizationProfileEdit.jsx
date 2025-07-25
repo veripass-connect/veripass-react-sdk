@@ -11,17 +11,31 @@ import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { Box, Avatar, Grid, Typography, Button, InputAdornment, TextField, FormHelperText } from '@mui/material';
+import {
+  Business as BusinessIcon,
+  Email as EmailIcon,
+  LocationOn as LocationOnIcon,
+  Language as LanguageIcon,
+} from '@mui/icons-material';
 import { NationalIdentificationSelector, PhoneCountrySelector, useDebounce } from '@link-loom/react-sdk';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
+import { COVER_IMAGES } from '@constants/cover-images';
+import { PROFILE_PICTURES } from '@constants/profile-pictures';
 import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 
 const swal = withReactContent(Swal);
 
 import { OrganizationManagementService } from '@services';
+
+async function emitEvent({ action, payload, error, eventHandler }) {
+  if (eventHandler) {
+    eventHandler({ action, namespace: 'veripass', payload, error });
+  }
+}
 
 const statusCodeMessages = {
   461: 'The data provided does not match any registered application',
@@ -68,7 +82,7 @@ const initialState = {
     latitude: 0,
     longitude: 0,
     score: 0,
-    isManual_entry: false,
+    is_manual_entry: false,
     formatted_address: '',
     raw_address: '',
   },
@@ -110,6 +124,7 @@ export const VeripassOrganizationProfileEdit = ({
   const [entity, setEntity] = useState(initialState);
 
   // UI States
+  const [isLoading, setIsLoading] = useState(false);
   const [internalVeripassIdentity, setInternalVeripassIdentity] = useState(null);
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [coverUrl, setCoverUrl] = useState(null);
@@ -146,7 +161,7 @@ export const VeripassOrganizationProfileEdit = ({
     }
   };
 
-  const handleDataChange = (path, value) =>
+  const handleDataChange = (path, value) => {
     setEntity((prev) => {
       const next = { ...prev };
       path.split('.').reduce((obj, key, idx, arr) => {
@@ -156,6 +171,50 @@ export const VeripassOrganizationProfileEdit = ({
       }, next);
       return next;
     });
+  };
+
+  const handleSubmit = async (event) => {
+    try {
+      if (event) {
+        event.preventDefault();
+      }
+      setIsLoading(true);
+
+      // Setup random ui settings
+      userProfileData.profile_ui_settings = {
+        profile_picture_url: PROFILE_PICTURES[Math.floor(Math.random() * 25) + 1].uri,
+        cover_picture_url: COVER_IMAGES[Math.floor(Math.random() * 23) + 1].uri,
+      };
+      const payload = {
+        user_profile: userProfileData,
+        user_security: { password: userProfileData.password, require_password_reset: true },
+      };
+      const response = await updateEntityRecord({
+        payload,
+        service: OrganizationManagementService,
+        settings: { environment },
+        apiKey,
+      });
+
+      // Update parent states
+      setIsLoading(false);
+
+      emitEvent({ action: 'veripass-organization-profile::updated', payload: response, eventHandler: onEvent });
+
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+
+      setIsLoading(false);
+      emitEvent({ action: 'veripass-organization-profile::error', error, eventHandler: onEvent });
+
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+    }
+  };
 
   const initializeComponent = async () => {
     setErrors();
@@ -192,8 +251,8 @@ export const VeripassOrganizationProfileEdit = ({
           >
             <section className="profile-info-container row justify-content-between">
               <article className="col-10 d-flex">
-                <article className="avatar-wrapper">
-                  <Avatar src={avatarUrl} sx={{ width: 168, height: 168, bgcolor: '#fff' }} alt="User avatar" />
+                <article className="avatar-wrapper mx-4">
+                  <Avatar src={avatarUrl} sx={{ width: 138, height: 138, bgcolor: '#fff' }} alt="User avatar" />
                 </article>
                 <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
                   <div className="d-flex flex-column  w-100">
@@ -207,18 +266,6 @@ export const VeripassOrganizationProfileEdit = ({
                     )}
                   </div>
                 </article>
-              </article>
-
-              <article className="profile-actions col-2 justify-content-end">
-                <Button
-                  variant="outlined"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    itemOnAction('edit', null);
-                  }}
-                >
-                  Edit
-                </Button>
               </article>
             </section>
           </header>
@@ -235,12 +282,14 @@ export const VeripassOrganizationProfileEdit = ({
                     helperText="Please write a public name you want to show"
                     value={entity.display_name}
                     onChange={(e, newValue) => handleDataChange('display_name', newValue)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <i className="fe-user text-muted"></i>
-                        </InputAdornment>
-                      ),
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <BusinessIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      },
                     }}
                   />
                 </section>
@@ -261,11 +310,13 @@ export const VeripassOrganizationProfileEdit = ({
                     }}
                     autoComplete="veripass-email"
                     slotProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <i className="fe-user text-muted"></i>
-                        </InputAdornment>
-                      ),
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <EmailIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      },
                     }}
                   />
                 </section>
@@ -283,7 +334,12 @@ export const VeripassOrganizationProfileEdit = ({
                     onChange={(_, newValue) => handleDataChange('display_name', newValue)}
                     slotProps={{
                       input: {
-                        startAdornment: <InputAdornment position="start">https://me.veripass.com.co/</InputAdornment>,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LanguageIcon color="action" sx={{ mr: 1 }} />
+                            https://corporate.veripass.com.co/
+                          </InputAdornment>
+                        ),
                       },
                     }}
                   />
@@ -338,15 +394,39 @@ export const VeripassOrganizationProfileEdit = ({
                     value={entity?.primary_address?.raw_address}
                     onChange={(_, newValue) => handleDataChange('primary_address.raw_address', newValue)}
                     slotProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <i className="fe-user text-muted"></i>
-                        </InputAdornment>
-                      ),
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LocationOnIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      },
                     }}
                   />
                 </section>
               </article>
+
+              <footer className="row">
+                <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
+                  <Button
+                    type="button"
+                    variant="contained"
+                    className="my-2"
+                    onClick={handleSubmit}
+                    disabled={!entity?.primary_national_id?.identification}
+                    sx={{
+                      backgroundColor: !entity?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                      borderColor: !entity?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                      '&:hover': {
+                        backgroundColor: !entity?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                        borderColor: !entity?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                      },
+                    }}
+                  >
+                    {isLoading ? 'Saving...' : 'Next'}
+                  </Button>
+                </section>
+              </footer>
             </section>
           </main>
         </Card>

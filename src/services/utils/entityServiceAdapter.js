@@ -43,17 +43,35 @@ export async function fetchEntityCollection ({
  */
 export async function fetchMultipleEntities (list = []) {
   return Promise.all(
-    list.map(({ service, payload }) => fetchEntityCollection({ service, payload }))
+    list.map(({
+      service,
+      payload,
+      apiKey = '',
+      settings = {},
+    }) => fetchEntityCollection({
+      service,
+      payload,
+      apiKey,
+      settings,
+    }))
   );
 }
 
 /**
  * Adapter to update an existing entity using a given service.
  */
-export async function updateEntityRecord ({ service, payload }) {
+export async function updateEntityRecord ({
+  service,
+  payload,
+  apiKey = '',
+  settings = {}
+}) {
   try {
-    if (payload._id) delete payload._id;
-    return await new service().update(payload);
+    if (payload._id) {
+      delete payload._id;
+    }
+
+    return await new service({ apiKey, settings }).update(payload);
   } catch (error) {
     console.error('[updateEntityRecord] Error updating entity', error);
     return null;
@@ -63,9 +81,14 @@ export async function updateEntityRecord ({ service, payload }) {
 /**
  * Adapter to create a new entity using a given service.
  */
-export async function createEntityRecord ({ service, payload }) {
+export async function createEntityRecord ({
+  service,
+  payload,
+  apiKey = '',
+  settings = {}
+}) {
   try {
-    return await new service().create(payload);
+    return await new service({ apiKey, settings }).create(payload);
   } catch (error) {
     console.error('[createEntityRecord] Error creating entity', error);
     return null;

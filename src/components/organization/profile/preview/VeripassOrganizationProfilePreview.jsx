@@ -152,8 +152,8 @@ export const VeripassOrganizationProfilePreview = ({
           >
             <section className="profile-info-container row justify-content-between">
               <article className="col-10 d-flex">
-                <article className="avatar-wrapper">
-                  <Avatar src={avatarUrl} sx={{ width: 168, height: 168, bgcolor: '#fff' }} alt="User avatar" />
+                <article className="avatar-wrapper mx-4">
+                  <Avatar src={avatarUrl} sx={{ width: 138, height: 138, bgcolor: '#fff' }} alt="User avatar" />
                 </article>
                 <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
                   <div className="d-flex flex-column  w-100">
