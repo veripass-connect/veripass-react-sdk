@@ -61,7 +61,7 @@ module.exports = {
       extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: path.resolve('dist', 'styles', 'main.css'),
+      extract: false,
       inject: true,
       modules: false,
       minimize: true,
