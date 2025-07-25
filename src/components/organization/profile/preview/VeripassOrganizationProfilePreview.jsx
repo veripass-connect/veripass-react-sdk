@@ -151,25 +151,25 @@ export const VeripassOrganizationProfilePreview = ({
             style={{ background: `url(${coverUrl}) center/cover no-repeat` }}
           >
             <section className="profile-info-container row justify-content-between">
-              <article className="col-10 d-flex">
+              <section className="col-10 d-flex">
                 <article className="avatar-wrapper mx-4">
-                  <Avatar src={avatarUrl} sx={{ width: 138, height: 138, bgcolor: '#fff' }} alt="User avatar" />
+                  <Avatar src={avatarUrl} sx={{ width: 98, height: 98, bgcolor: '#fff' }} alt="User avatar" />
                 </article>
                 <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
                   <div className="d-flex flex-column  w-100">
-                    <ProfileIdentityFullName as="h2" style={{ marginBottom: 0 }} className="text-truncate w-100">
+                    <ProfileIdentityFullName as="h5" style={{ marginBottom: 0 }} className="text-truncate w-100">
                       <strong>{identity?.organization_profile?.display_name}</strong>
                     </ProfileIdentityFullName>
                     {identity?.organization_profile?.bio && (
-                      <ProfileIdentityBio as="h6" style={{ fontWeight: '300' }}>
+                      <ProfileIdentityBio as="body2" style={{ fontWeight: '300' }}>
                         {identity?.organization_profile?.bio}
                       </ProfileIdentityBio>
                     )}
                   </div>
                 </article>
-              </article>
+              </section>
 
-              <article className="profile-actions col-2 justify-content-end">
+              <section className="profile-actions col-2 justify-content-end">
                 <IconButton
                   aria-label="more"
                   id="long-button"
@@ -210,7 +210,7 @@ export const VeripassOrganizationProfilePreview = ({
                     </MenuItem>
                   </MenuList>
                 </Menu>
-              </article>
+              </section>
             </section>
           </header>
 

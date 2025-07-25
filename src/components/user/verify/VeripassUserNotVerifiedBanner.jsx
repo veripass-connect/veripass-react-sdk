@@ -20,7 +20,7 @@ export const VeripassUserNotVerifiedBanner = ({ entity }) => {
           <article className="d-flex mx-2">
             <GppGoodOutlinedIcon className="my-auto d-block text-danger" sx={{ fontSize: 40 }} />
           </article>
-          <article className="d-flex flex-column">
+          <article className="d-flex flex-column flex-grow-1">
             <header className="d-flex align-items-center justify-content-between mb-1 mt-4">
               <h4>Get verified</h4>
               <VeripassUserVerifyButton
