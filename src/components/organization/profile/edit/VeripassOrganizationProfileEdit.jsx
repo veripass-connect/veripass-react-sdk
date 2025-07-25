@@ -87,7 +87,7 @@ const initialState = {
     raw_address: '',
   },
   is_verified: false,
-  profile_ui_settings: '',
+  profile_ui_settings: {},
 };
 
 const ProfileIdentityFullName = styled(KarlaTypography)`
@@ -180,17 +180,8 @@ export const VeripassOrganizationProfileEdit = ({
       }
       setIsLoading(true);
 
-      // Setup random ui settings
-      userProfileData.profile_ui_settings = {
-        profile_picture_url: PROFILE_PICTURES[Math.floor(Math.random() * 25) + 1].uri,
-        cover_picture_url: COVER_IMAGES[Math.floor(Math.random() * 23) + 1].uri,
-      };
-      const payload = {
-        user_profile: userProfileData,
-        user_security: { password: userProfileData.password, require_password_reset: true },
-      };
       const response = await updateEntityRecord({
-        payload,
+        payload: entity,
         service: OrganizationManagementService,
         settings: { environment },
         apiKey,

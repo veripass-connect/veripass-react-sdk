@@ -21,7 +21,7 @@ export const VeripassUserNotVerifiedBanner = ({ entity }) => {
             <GppGoodOutlinedIcon className="my-auto d-block text-danger" sx={{ fontSize: 40 }} />
           </article>
           <article className="d-flex flex-column">
-            <header className="d-flex align-items-center justify-content-between my-1">
+            <header className="d-flex align-items-center justify-content-between mb-1 mt-4">
               <h4>Get verified</h4>
               <VeripassUserVerifyButton
                 className="btn my-auto me-2 text-danger"
@@ -29,7 +29,7 @@ export const VeripassUserNotVerifiedBanner = ({ entity }) => {
                 onVerifyClick={() => {}}
               />
             </header>
-            <section>
+            <section className='mb-4'>
               <p className="font-11 text-start">
                 Verifying this user's identity with Veripass will build trust and open up more opportunities. It secures their
                 interactions and enhances their profile.
