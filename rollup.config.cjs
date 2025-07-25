@@ -46,6 +46,7 @@ module.exports = {
         { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
         { find: '@constants', replacement: path.resolve(__dirname, 'src/constants') },
         { find: '@assets', replacement: path.resolve(__dirname, 'src/assets') },
+        { find: '@', replacement: path.resolve(__dirname, 'src') },
       ],
     }),
     resolve({

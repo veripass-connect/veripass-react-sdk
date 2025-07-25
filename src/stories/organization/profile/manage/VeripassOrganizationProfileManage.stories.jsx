@@ -1,11 +1,11 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassOrganizationProfileView } from '../../../components/organization/profile/VeripassOrganizationProfileView';
-import { AuthProvider } from '../../../hooks/useAuth.hook';
+import { VeripassOrganizationProfileManage } from '../../../../components/organization/profile/manage/VeripassOrganizationProfileManage';
+import { AuthProvider } from '../../../../hooks/useAuth.hook';
 
 export default {
-  title: 'Organization/Profile/VeripassOrganizationProfileView',
-  component: VeripassOrganizationProfileView,
+  title: 'Organization/Profile/VeripassOrganizationProfileManage',
+  component: VeripassOrganizationProfileManage,
   parameters: {
     layout: 'centered',
   },
@@ -28,7 +28,7 @@ export default {
 const Template = (args) => (
   <MemoryRouter>
     <AuthProvider {...args}>
-      <VeripassOrganizationProfileView {...args} />
+      <VeripassOrganizationProfileManage {...args} />
     </AuthProvider>
   </MemoryRouter>
 );
@@ -37,7 +37,7 @@ export const Default = Template.bind({});
 Default.args = {
   veripassIdentity: {
     identity: 'veripass-xyz789',
-    profile: {
+    organization_profile: {
       display_name: 'Blackwood Stone Holdings, inc.',
       slug: 'blackwood-stone-holdings',
       primary_address: { formatted_address: '169 Madison Ave, New York, NY 10016' },

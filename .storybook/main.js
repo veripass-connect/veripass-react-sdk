@@ -23,6 +23,7 @@ const config = {
       '@styles': path.resolve(__dirname, '../src/styles'),
       '@constants': path.resolve(__dirname, '../src/constants'),
       '@assets': path.resolve(__dirname, '../src/assets'),
+      '@': path.resolve(__dirname, '../src'),
     };
     return config;
   },

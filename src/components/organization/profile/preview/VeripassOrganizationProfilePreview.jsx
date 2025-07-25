@@ -10,7 +10,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { Box, Avatar, Grid, Typography, Button } from '@mui/material';
+import { Box, Avatar, Grid, Typography, MenuList, ListItemIcon, IconButton, Menu, MenuItem, Paper } from '@mui/material';
+import { MoreVert as MoreVertIcon, Edit as EditIcon } from '@mui/icons-material';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
@@ -31,44 +32,19 @@ const statusCodeMessages = {
   401: 'Error authenticating',
 };
 
-const Header = styled.header`
-  position: relative;
-  border-radius: 8px;
-  height: 225px;
-  background: url(${(p) => p.coverurl}) center/cover no-repeat;
-`;
-
-const AvatarWrapper = styled.div`
-  position: absolute;
-  bottom: -100px;
-  left: 24px;
-  border: 4px solid white;
-  border-radius: 50%;
-`;
-
-const HeaderInfo = styled.div`
-  position: absolute;
-  bottom: -90px;
-  left: 220px;
-`;
-
-const Name = styled(KarlaTypography)`
+const ProfileIdentityFullName = styled(KarlaTypography)`
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0;
 `;
 
-const Bio = styled(Typography)`
+const ProfileIdentityBio = styled(Typography)`
   color: #646b71 !important;
   font-size: 0.9rem;
   margin-top: 4px;
 `;
 
-const Content = styled.div`
-  padding: 120px 24px 24px;
-`;
-
-export const VeripassOrganizationProfileView = ({
+export const VeripassOrganizationProfilePreview = ({
   ui = {
     profilePhoto: {
       height: '75',
@@ -80,19 +56,21 @@ export const VeripassOrganizationProfileView = ({
   isPopupContext = false,
   veripassIdentity = {},
   veripassId = '',
+  itemOnAction = () => {},
 }) => {
   // Hooks
   const authProvider = useAuth();
   const searchParams = new URLSearchParams(window?.location?.search);
 
   // UI States
-  const [isLoading, setIsLoading] = useState(false);
   const [internalVeripassIdentity, setInternalVeripassIdentity] = useState(null);
   const [coverUrl, setCoverUrl] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const hasExternal = veripassIdentity && Object.keys(veripassIdentity).length > 0;
   const identity = hasExternal ? veripassIdentity : internalVeripassIdentity;
+  const open = Boolean(anchorEl);
 
   // Fixed Variables
   const phone = identity?.organization_profile?.primary_phone_number;
@@ -132,30 +110,15 @@ export const VeripassOrganizationProfileView = ({
     }
   };
 
-  const initializeComponent = async () => {
-    setErrors();
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  const getOrganization = async () => {
-    const entityResponse = await fetchEntityCollection({
-      service: OrganizationManagementService,
-      payload: {
-        queryselector: 'id',
-        query: {
-          search: veripassId,
-        },
-      },
-      apiKey,
-      settings: { environment },
-    });
-
-    setIsLoading(false);
-
-    if (!entityResponse?.success) {
-      return;
-    }
-
-    setInternalVeripassIdentity(entityResponse?.result?.items?.[0] || {});
+  const initializeComponent = async () => {
+    setErrors();
   };
 
   useEffect(() => {
@@ -167,13 +130,6 @@ export const VeripassOrganizationProfileView = ({
       setInternalVeripassIdentity(veripassIdentity);
     }
   }, [veripassIdentity]);
-
-  useEffect(() => {
-    if (!hasExternal && veripassId) {
-      setIsLoading(true);
-      getOrganization();
-    }
-  }, [veripassId]);
 
   useEffect(() => {
     if (identity && Object.keys(identity).length > 0) {
@@ -190,31 +146,75 @@ export const VeripassOrganizationProfileView = ({
     <>
       <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: true, vertical: 'bottom', alignment: 'end' }}>
         <Card style={{ padding: '2rem', position: 'relative', overflow: 'hidden' }}>
-          <Header coverurl={coverUrl}>
-            <AvatarWrapper>
-              <Avatar
-                src={avatarUrl}
-                sx={{ width: 168, height: 168 }}
-                style={{ border: '10px solid rgb(255 255 255 / 50%)' }}
-                alt="User avatar"
-              />
-            </AvatarWrapper>
-            <HeaderInfo>
-              <Name as="h2" style={{ marginBottom: 0 }}>
-                <strong>{identity?.organization_profile?.display_name}</strong>
-              </Name>
-              {identity?.organization_profile?.bio && (
-                <Bio as="h6" style={{ fontWeight: '300' }}>
-                  {identity?.organization_profile?.bio}
-                </Bio>
-              )}
-            </HeaderInfo>
-            <Button variant="outlined" style={{ position: 'absolute', right: 0, bottom: '-65px' }}>
-              Edit
-            </Button>
-          </Header>
+          <header
+            className="profile-header position-relative rounded-3"
+            style={{ background: `url(${coverUrl}) center/cover no-repeat` }}
+          >
+            <section className="profile-info-container row justify-content-between">
+              <article className="col-10 d-flex">
+                <article className="avatar-wrapper">
+                  <Avatar src={avatarUrl} sx={{ width: 168, height: 168, bgcolor: '#fff' }} alt="User avatar" />
+                </article>
+                <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
+                  <div className="d-flex flex-column  w-100">
+                    <ProfileIdentityFullName as="h2" style={{ marginBottom: 0 }} className="text-truncate w-100">
+                      <strong>{identity?.organization_profile?.display_name}</strong>
+                    </ProfileIdentityFullName>
+                    {identity?.organization_profile?.bio && (
+                      <ProfileIdentityBio as="h6" style={{ fontWeight: '300' }}>
+                        {identity?.organization_profile?.bio}
+                      </ProfileIdentityBio>
+                    )}
+                  </div>
+                </article>
+              </article>
 
-          <Content>
+              <article className="profile-actions col-2 justify-content-end">
+                <IconButton
+                  aria-label="more"
+                  id="long-button"
+                  aria-controls={open ? 'long-menu' : undefined}
+                  aria-expanded={open ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'long-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  slotProps={{
+                    paper: {
+                      style: {
+                        maxHeight: 48 * 4.5,
+                        width: '20ch',
+                      },
+                    },
+                  }}
+                >
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        itemOnAction('edit');
+                      }}
+                    >
+                      <ListItemIcon>
+                        <EditIcon fontSize="small" />
+                      </ListItemIcon>
+                      <Typography variant="inherit">Edit</Typography>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </article>
+            </section>
+          </header>
+
+          <main className="profile-content">
             <Typography variant="h6">{identity?.display_name}</Typography>
             <Typography variant="caption" color="textSecondary" gutterBottom>
               {identity?.bio}
@@ -279,7 +279,7 @@ export const VeripassOrganizationProfileView = ({
             <section style={{ marginTop: '5rem' }}>
               <VeripassUserVerificationStatus entity={identity} sx={{ mt: 2 }} />
             </section>
-          </Content>
+          </main>
 
           {isEditable && (
             <FooterNotice>

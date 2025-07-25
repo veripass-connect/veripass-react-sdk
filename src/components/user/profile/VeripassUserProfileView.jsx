@@ -9,7 +9,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { Box, Avatar, Grid, Typography } from '@mui/material';
+import { Box, Avatar, Grid, Typography, Button } from '@mui/material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
@@ -28,34 +29,13 @@ const statusCodeMessages = {
   401: 'Error authenticating',
 };
 
-const Header = styled.header`
-  position: relative;
-  border-radius: 8px;
-  height: 225px;
-  background: url(${(p) => p.coverurl}) center/cover no-repeat;
-`;
-
-const AvatarWrapper = styled.div`
-  position: absolute;
-  bottom: -100px;
-  left: 24px;
-  border: 4px solid white;
-  border-radius: 50%;
-`;
-
-const HeaderInfo = styled.div`
-  position: absolute;
-  bottom: -90px;
-  left: 220px;
-`;
-
-const Name = styled(KarlaTypography)`
+const ProfileIdentityFullName = styled(KarlaTypography)`
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0;
 `;
 
-const Bio = styled(Typography)`
+const ProfileIdentityBio = styled(Typography)`
   color: #646b71 !important;
   font-size: 0.9rem;
   margin-top: 4px;
@@ -63,12 +43,6 @@ const Bio = styled(Typography)`
 
 const Content = styled.div`
   padding: 120px 24px 24px;
-`;
-
-const Field = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 0;
 `;
 
 export const VeripassUserProfileView = ({
@@ -157,26 +131,39 @@ export const VeripassUserProfileView = ({
     <>
       <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: true, vertical: 'bottom', alignment: 'end' }}>
         <Card style={{ padding: '2rem', position: 'relative', overflow: 'hidden' }}>
-          <Header coverurl={coverUrl}>
-            <AvatarWrapper>
-              <Avatar
-                src={avatarUrl}
-                sx={{ width: 168, height: 168 }}
-                style={{ border: '10px solid rgb(255 255 255 / 50%)' }}
-                alt="User avatar"
-              />
-            </AvatarWrapper>
-            <HeaderInfo>
-              <Name as="h2" style={{ marginBottom: 0 }}>
-                <strong>{veripassIdentity?.profile?.display_name}</strong>
-              </Name>
-              {veripassIdentity?.profile?.bio && (
-                <Bio as="h6" style={{ fontWeight: '300' }}>
-                  {veripassIdentity?.profile?.bio}
-                </Bio>
-              )}
-            </HeaderInfo>
-          </Header>
+          <header className="profile-header position-relative rounded-3" style={{ background: `url(${coverUrl}) center/cover no-repeat` }}>
+            <section className="profile-info-container row justify-content-between">
+              <article className='col-10 d-flex'>
+                <article className="avatar-wrapper">
+                  <Avatar src={avatarUrl} sx={{ width: 168, height: 168, bgcolor: '#fff' }} alt="User avatar" />
+                </article>
+                <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
+                  <div className='d-flex flex-column  w-100'>
+                    <ProfileIdentityFullName as="h2" style={{ marginBottom: 0 }} className='text-truncate w-100'>
+                      <strong>{veripassIdentity?.profile?.display_name}</strong>
+                    </ProfileIdentityFullName>
+                    {veripassIdentity?.profile?.bio && (
+                      <ProfileIdentityBio as="h6" style={{ fontWeight: '300' }}>
+                        {veripassIdentity?.profile?.bio}
+                      </ProfileIdentityBio>
+                    )}
+                  </div>
+                </article>
+              </article>
+
+              <article className="profile-actions col-2 justify-content-end">
+                <Button
+                  variant="outlined"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    itemOnAction('edit', null);
+                  }}
+                >
+                  Edit
+                </Button>
+              </article>
+            </section>
+          </header>
 
           <Content>
             <Typography variant="h6">{veripassIdentity?.display_name}</Typography>
@@ -188,19 +175,26 @@ export const VeripassUserProfileView = ({
               <Box component="dl" sx={{ m: 0 }}>
                 <Grid container spacing={3} component="div">
                   <Grid item xs={12} md={6}>
-                    <Typography variant="body1">
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{
+                        color: 'text.secondary',
+                        fontSize: '0.875rem',
+                        textTransform: 'none',
+                        mr: 1,
+                        mb: 0,
+                      }}
+                      style={{ marginBottom: 0 }}
+                    >
                       <strong>Universal Veripass ID</strong>
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <div>
-                      <Typography variant="body1" style={{ marginBottom: 0 }}>
-                        <strong>{veripassIdentity?.identity}</strong>
-                      </Typography>
-                      <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
-                        https://me.veripass.com.co/{veripassIdentity?.identity}
-                      </Typography>
-                    </div>
+                    <Typography variant="h5" style={{ marginBottom: 0 }}>
+                      <strong>{veripassIdentity?.identity}</strong>
+                    </Typography>
+                    <Typography style={{ marginBottom: 0, color: '#646b71 !important' }} sx={{ color: '#646b71 !important' }}>
+                      https://me.veripass.com.co/{veripassIdentity?.identity}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Box>
