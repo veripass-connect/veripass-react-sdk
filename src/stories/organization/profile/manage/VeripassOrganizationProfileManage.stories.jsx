@@ -65,4 +65,10 @@ Default.args = {
   environment: 'development',
   apiKey: '',
   debug: true,
+  ui: {
+    profilePhoto: {
+      height: '95',
+    },
+    inputSize: 'small',
+  },
 };

@@ -105,8 +105,9 @@ const ProfileIdentityBio = styled(Typography)`
 export const VeripassOrganizationProfileEdit = ({
   ui = {
     profilePhoto: {
-      height: '75',
+      height: '85',
     },
+    inputSize: 'small',
   },
   redirectUrl = '',
   environment = 'production',
@@ -258,7 +259,6 @@ export const VeripassOrganizationProfileEdit = ({
                   </div>
                 </article>
               </section>
-
             </section>
           </header>
 
@@ -283,6 +283,7 @@ export const VeripassOrganizationProfileEdit = ({
                         ),
                       },
                     }}
+                    size={ui?.inputSize}
                   />
                 </section>
                 <section className="col-12 col-md-6">
@@ -310,6 +311,7 @@ export const VeripassOrganizationProfileEdit = ({
                         ),
                       },
                     }}
+                    size={ui?.inputSize}
                   />
                 </section>
               </article>
@@ -334,6 +336,7 @@ export const VeripassOrganizationProfileEdit = ({
                         ),
                       },
                     }}
+                    size={ui?.inputSize}
                   />
                 </section>
               </article>
@@ -346,6 +349,7 @@ export const VeripassOrganizationProfileEdit = ({
                     onChange={(event) => {
                       handleDataChange('primary_national_id', event);
                     }}
+                    ui={{ ...ui, ...{ documentType: true } }}
                   />
                   <FormHelperText className="mb-0">Please write the primary organization legal national id.</FormHelperText>
                   {userNationalIdValidationInProgress && (
@@ -370,6 +374,7 @@ export const VeripassOrganizationProfileEdit = ({
                     }}
                     disabled={isExistingUser}
                     variant={isExistingUser ? 'filled' : 'outlined'}
+                    ui={ui}
                   />
                   <FormHelperText>Principal phone number and or used with WhatsApp</FormHelperText>
                 </article>
@@ -394,6 +399,7 @@ export const VeripassOrganizationProfileEdit = ({
                         ),
                       },
                     }}
+                    size={ui?.inputSize}
                   />
                 </section>
               </article>

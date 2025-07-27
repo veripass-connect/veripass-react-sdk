@@ -27,8 +27,9 @@ const statusCodeMessages = {
 export const VeripassOrganizationProfileManage = ({
   ui = {
     profilePhoto: {
-      height: '75',
+      height: '95',
     },
+    inputSize: 'small',
   },
   redirectUrl = '',
   environment = 'production',
