@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
-import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
-import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import styled from 'styled-components';
@@ -10,7 +8,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { Box, Avatar, Grid, Typography, Button, InputAdornment, TextField, FormHelperText } from '@mui/material';
+import { Avatar, Typography, Button, InputAdornment, TextField, FormHelperText } from '@mui/material';
 import {
   Business as BusinessIcon,
   Email as EmailIcon,
@@ -22,8 +20,6 @@ import { NationalIdentificationSelector, PhoneCountrySelector, useDebounce } fro
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { COVER_IMAGES } from '@constants/cover-images';
-import { PROFILE_PICTURES } from '@constants/profile-pictures';
 import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 

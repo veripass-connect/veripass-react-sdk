@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
-import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import styled from 'styled-components';
@@ -20,8 +19,6 @@ import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 
 const swal = withReactContent(Swal);
-
-import { OrganizationManagementService } from '@services';
 
 const statusCodeMessages = {
   461: 'The data provided does not match any registered application',
