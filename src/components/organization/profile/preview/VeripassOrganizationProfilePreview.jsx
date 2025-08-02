@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
-import { useAuth } from '@hooks/useAuth.hook';
-
 import styled from 'styled-components';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { Box, Avatar, Grid, Typography, MenuList, ListItemIcon, IconButton, Menu, MenuItem, Paper } from '@mui/material';
 import { MoreVert as MoreVertIcon, Edit as EditIcon } from '@mui/icons-material';
+
+
+import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
+import { useAuth } from '@hooks/useAuth.hook';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
@@ -18,16 +18,6 @@ import '@styles/styles.css';
 import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
 
-const swal = withReactContent(Swal);
-
-const statusCodeMessages = {
-  461: 'The data provided does not match any registered application',
-  462: 'Unauthorized user. After 3 failed attempts, your account will be locked for 24 hours.',
-  463: 'The user is not registered in this application, needs to register',
-  464: 'Unauthorized. After 3 failed attempts, your account will be locked for 24 hours.',
-  465: 'API key is missing or invalid',
-  401: 'Error authenticating',
-};
 
 const ProfileIdentityFullName = styled(KarlaTypography)`
   font-size: 1.5rem;
@@ -56,6 +46,7 @@ export const VeripassOrganizationProfilePreview = ({
   itemOnAction = () => {},
 }) => {
   // Hooks
+    const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
   const searchParams = new URLSearchParams(window?.location?.search);
 
@@ -81,31 +72,6 @@ export const VeripassOrganizationProfilePreview = ({
   ].filter(Boolean);
 
   // Entity states
-  const showError = ({ title, message }) => {
-    Swal.fire({
-      title: title || 'Failed to sign-in',
-      text: message || '',
-      icon: 'error',
-    }).then(() => {
-      searchParams.delete('error');
-      window.location.replace(`${window?.location?.pathname}?${searchParams.toString()}`);
-    });
-  };
-
-  const setErrors = () => {
-    const error = searchParams.get('error');
-
-    switch (error) {
-      case 'insufficient_permissions':
-        showError({ title: 'Insufficient permissions', message: 'You do not have sufficient permissions to enter.' });
-        break;
-      case 'access_denied':
-        showError({ title: 'Access denied', message: 'Your account does not have access to this application.' });
-        break;
-      default:
-        break;
-    }
-  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -115,7 +81,7 @@ export const VeripassOrganizationProfilePreview = ({
   };
 
   const initializeComponent = async () => {
-    setErrors();
+    showErrorFromUrl();
   };
 
   useEffect(() => {

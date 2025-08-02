@@ -2,32 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { VeripassUserVerificationStatus } from '@components/user/verify/VeripassUserVerificationStatus';
 
+import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import styled from 'styled-components';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { Box, Avatar, Grid, Typography, Button } from '@mui/material';
-import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
 import defaultCover from '@assets/cover/cover-11.jpg';
 import defaultAvatar from '@assets/characters/character-unknown.svg';
-
-const swal = withReactContent(Swal);
-
-const statusCodeMessages = {
-  461: 'The data provided does not match any registered application',
-  462: 'Unauthorized user. After 3 failed attempts, your account will be locked for 24 hours.',
-  463: 'The user is not registered in this application, needs to register',
-  464: 'Unauthorized. After 3 failed attempts, your account will be locked for 24 hours.',
-  465: 'API key is missing or invalid',
-  401: 'Error authenticating',
-};
 
 const ProfileIdentityFullName = styled(KarlaTypography)`
   font-size: 1.5rem;
@@ -59,6 +46,7 @@ export const VeripassUserProfileView = ({
   veripassId = '',
 }) => {
   // Hooks
+    const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
   const searchParams = new URLSearchParams(window?.location?.search);
 
@@ -84,34 +72,9 @@ export const VeripassUserProfileView = ({
   ].filter(Boolean);
 
   // Entity states
-  const showError = ({ title, message }) => {
-    Swal.fire({
-      title: title || 'Failed to sign-in',
-      text: message || '',
-      icon: 'error',
-    }).then(() => {
-      searchParams.delete('error');
-      window.location.replace(`${window?.location?.pathname}?${searchParams.toString()}`);
-    });
-  };
-
-  const setErrors = () => {
-    const error = searchParams.get('error');
-
-    switch (error) {
-      case 'insufficient_permissions':
-        showError({ title: 'Insufficient permissions', message: 'You do not have sufficient permissions to enter.' });
-        break;
-      case 'access_denied':
-        showError({ title: 'Access denied', message: 'Your account does not have access to this application.' });
-        break;
-      default:
-        break;
-    }
-  };
 
   const initializeComponent = () => {
-    setErrors();
+    showErrorFromUrl();
   };
 
   const setProfileUiSettings = () => {
@@ -131,15 +94,18 @@ export const VeripassUserProfileView = ({
     <>
       <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: true, vertical: 'bottom', alignment: 'end' }}>
         <Card style={{ padding: '2rem', position: 'relative', overflow: 'hidden' }}>
-          <header className="profile-header position-relative rounded-3" style={{ background: `url(${coverUrl}) center/cover no-repeat` }}>
+          <header
+            className="profile-header position-relative rounded-3"
+            style={{ background: `url(${coverUrl}) center/cover no-repeat` }}
+          >
             <section className="profile-info-container row justify-content-between">
-              <article className='col-10 d-flex'>
+              <article className="col-10 d-flex">
                 <article className="avatar-wrapper">
                   <Avatar src={avatarUrl} sx={{ width: 168, height: 168, bgcolor: '#fff' }} alt="User avatar" />
                 </article>
                 <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
-                  <div className='d-flex flex-column  w-100'>
-                    <ProfileIdentityFullName as="h2" style={{ marginBottom: 0 }} className='text-truncate w-100'>
+                  <div className="d-flex flex-column  w-100">
+                    <ProfileIdentityFullName as="h2" style={{ marginBottom: 0 }} className="text-truncate w-100">
                       <strong>{veripassIdentity?.profile?.display_name}</strong>
                     </ProfileIdentityFullName>
                     {veripassIdentity?.profile?.bio && (

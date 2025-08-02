@@ -1,28 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
 import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
-import { useAuth } from '@hooks/useAuth.hook';
 
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
+import { useAuth } from '@hooks/useAuth.hook';
 
 import { VeripassOrganizationProfilePreview, VeripassOrganizationProfileEdit } from '@';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-const swal = withReactContent(Swal);
-
 import { OrganizationManagementService } from '@services';
-
-const statusCodeMessages = {
-  461: 'The data provided does not match any registered application',
-  462: 'Unauthorized user. After 3 failed attempts, your account will be locked for 24 hours.',
-  463: 'The user is not registered in this application, needs to register',
-  464: 'Unauthorized. After 3 failed attempts, your account will be locked for 24 hours.',
-  465: 'API key is missing or invalid',
-  401: 'Error authenticating',
-};
 
 export const VeripassOrganizationProfileManage = ({
   ui = {
@@ -39,6 +27,7 @@ export const VeripassOrganizationProfileManage = ({
   veripassId = '',
 }) => {
   // Hooks
+    const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
   const searchParams = new URLSearchParams(window?.location?.search);
 
@@ -51,31 +40,6 @@ export const VeripassOrganizationProfileManage = ({
   // Fixed Variables
 
   // Entity states
-  const showError = ({ title, message }) => {
-    Swal.fire({
-      title: title || 'Failed to sign-in',
-      text: message || '',
-      icon: 'error',
-    }).then(() => {
-      searchParams.delete('error');
-      window.location.replace(`${window?.location?.pathname}?${searchParams.toString()}`);
-    });
-  };
-
-  const setErrors = () => {
-    const error = searchParams.get('error');
-
-    switch (error) {
-      case 'insufficient_permissions':
-        showError({ title: 'Insufficient permissions', message: 'You do not have sufficient permissions to enter.' });
-        break;
-      case 'access_denied':
-        showError({ title: 'Access denied', message: 'Your account does not have access to this application.' });
-        break;
-      default:
-        break;
-    }
-  };
 
   const itemOnAction = (action, entity) => {
     //setEntitySelected(entity);
@@ -99,7 +63,7 @@ export const VeripassOrganizationProfileManage = ({
   };
 
   const initializeComponent = async () => {
-    setErrors();
+    showErrorFromUrl();
   };
 
   const getOrganization = async () => {
