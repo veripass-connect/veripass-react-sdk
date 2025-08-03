@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { openSnackbar, DataGrid, StatusSelector, PopUp, Alert, useNavigate } from '@link-loom/react-sdk';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -24,29 +25,354 @@ export const VeripassIdentityContractList = ({
   environment = 'production',
   apiKey = '',
   isPopupContext = false,
-  veripassIdentity = {},
-  veripassId = '',
   readOnly = false,
+  contractParties = {
+    principal_id: '',
+    counterparty_id: '',
+  },
 }) => {
   // Hooks
   const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
-  const searchParams = new URLSearchParams(window?.location?.search);
 
   // Models
+  const [statuses, setStatuses] = useState({});
+  const [entities, setEntities] = useState([]);
+  const [formattedEntities, setFormattedEntities] = useState([]);
+  const [entitySelected, setEntitySelected] = useState(null);
 
   // UI states
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [alertConfigs, setAlertConfigs] = useState(null);
+  const [showAlert, setShowAlert] = useState(null);
+  const [activeModal, setActiveModal] = useState(null);
+  const [isEmptyEntities, setIsEmptyEntities] = useState(false);
+  const [showDeleted, setShowDeleted] = useState(false);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [rowCount, setRowCount] = useState(0);
 
   // Configs
+  const actions = [
+    {
+      id: 'copy',
+      label: 'Copy Actions',
+      type: 'group',
+      items: [
+        { id: 'copy-id', label: 'Copiar Id' },
+        { id: 'copy-link', label: 'Copiar link' },
+        { id: 'new-tab', label: 'Tab nuevo' },
+      ],
+    },
+    { id: 'quick-view', icon: <i className="fe-search me-1"></i>, label: 'Vista rápida', type: 'action' },
+    ...(!readOnly
+    ? []
+    : [
+        { id: 'edit', icon: <i className="fe-edit me-1"></i>, label: 'Editar', type: 'action' },
+        { id: 'inactive', icon: <i className="fe-power me-1"></i>, label: 'Inactivar', type: 'action' },
+        { id: 'delete', icon: <i className="fe-delete me-1"></i>, label: 'Borrar', type: 'action' },
+      ]),
+  ];
+  const columns = [
+    {
+      field: 'display_name',
+      headerName: 'Nombre',
+      flex: 1,
+      minWidth: 100,
+      renderCell: (params) => {
+        return (
+          <section className="d-flex align-items-center w-100">
+            <StatusSelector
+              status={params?.row?.status}
+              statuses={statuses}
+              size="small"
+              statusSelected={(status) => {
+                itemOnAction('update-status', { entity: params?.row || {}, status });
+              }}
+            />
+            <button
+              className="btn btn-link-dark text-truncate"
+              onClick={() => {
+                itemOnAction('quick-view', { entity: params?.row || {} });
+              }}
+            >
+              {params?.row?.veripass_profile?.display_name}
+            </button>
+          </section>
+        );
+      },
+    },
+    {
+      field: 'primary_email_address',
+      headerName: 'Email',
+      sortable: true,
+      width: 300,
+      flex: 2,
+      valueGetter: (params) => params?.row?.veripass_profile?.primary_email_address || '',
+      renderCell: (params) => {
+        return <>{params?.row?.veripass_profile?.primary_email_address}</>;
+      },
+    },
+    {
+      field: 'primary_phone_number',
+      headerName: 'Celular',
+      width: 500,
+      flex: 2,
+      valueGetter: (params) => params?.row?.veripass_profile?.primary_phone_number || '',
+      renderCell: (params) => {
+        return (
+          <>
+            +{params?.row?.veripass_profile?.primary_phone_number?.country?.dial_code}{' '}
+            {params?.row?.veripass_profile?.primary_phone_number?.phone_number}
+          </>
+        );
+      },
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      type: 'string',
+      sortable: false,
+      disableColumnMenu: true,
+      editable: false,
+      renderCell: 'actions',
+    },
+  ];
 
   // Component functions
-  const initializeComponent = async () => {
-    showErrorFromUrl();
+  const getEntityUrl = ({ relative, id }) => {
+    const relativeUrl = `https://me.veripass.com.co/contract/${id}`;
+    if (relative) {
+      return relativeUrl;
+    }
+
+    return window.location.host + relativeUrl;
   };
 
-  const getOrganization = async () => {
+  const filterEntities = () => {
+    const formattedEntities = showDeleted ? entities : entities.filter((entity) => entity?.status?.name !== 'deleted');
+
+    // TODO: Format entities here if is needed
+    setFormattedEntities(formattedEntities.map((entity) => entity));
+  };
+
+  const handleFilterChange = async (newFilterModel) => {
+    if (!newFilterModel.quickFilterValues?.length) {
+      initializeComponent();
+      return;
+    }
+
+    const filteredItemsResponse = await fetchEntityCollection({
+      service: UserManagementService,
+      selector: 'name',
+      query: {
+        search: newFilterModel.quickFilterValues.join(' '),
+      },
+      page: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+    });
+
+    if (!filteredItemsResponse?.success || !filteredItemsResponse.result?.items) {
+      setEntities([]);
+      setRowCount(0);
+      return;
+    }
+
+    setEntities(filteredItemsResponse.result.items);
+    setRowCount(filteredItemsResponse.result.totalItems);
+  };
+
+  /**
+   * Executes an action when alert is confirmed
+   * @param {boolean} isConfirmed Validates if alert is confirmed or not
+   * @returns
+   */
+  const alertOnConfirmed = (isConfirmed) => {
+    setShowAlert(false);
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    switch (alertConfigs.currentAction) {
+      case 'error-created':
+        //navigate(getEntityUrl({ relative: true, id: entitySelected?.id }), { newTab: false });
+        break;
+      case 'error-inactive':
+        break;
+      case 'error-deleted':
+        break;
+      case 'error-update':
+        break;
+      default:
+        break;
+    }
+  };
+
+  const itemOnError = ({ title, description, action }) => {
+    setAlertConfigs({
+      title,
+      description,
+      typeIcon: 'error',
+      confirmButtonText: 'Exit',
+      cancelButtonText: 'Try again',
+      cancelButtonClass: 'btn btn-white',
+      showCancelButton: true,
+      currentAction: action,
+    });
+    setShowAlert(true);
+  };
+
+  const itemOnAction = (action, entity) => {
+    setEntitySelected(entity);
+
+    switch (action) {
+      case 'quick-view':
+        setActiveModal(action);
+        break;
+      case 'create':
+        setActiveModal(action);
+        break;
+      case 'edit':
+        setActiveModal(action);
+        break;
+      case 'inactive':
+        setActiveModal(action);
+        break;
+      case 'delete':
+        setActiveModal(action);
+        break;
+      case 'update-status':
+        updateItemStatus(entity);
+        break;
+      case 'copy-id':
+        navigator.clipboard.writeText(entity.id);
+        openSnackbar('Id copied!', 'success');
+        break;
+      case 'copy-link':
+        navigator.clipboard.writeText(getEntityUrl({ relative: false, id: entity?.id }));
+        openSnackbar('Link copied!', 'success');
+        break;
+      case 'new-tab':
+        navigate(getEntityUrl({ relative: true, id: entity?.id }), { newTab: true });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const onUpdatedEntity = (action, response) => {
+    switch (action) {
+      case 'create':
+        itemOnCreated(response);
+        openSnackbar('Usuario creado satisfactoriamente.', 'success');
+        break;
+      case 'inactive':
+        itemOnInactivated(response);
+
+        break;
+      case 'delete':
+        itemOnDeleted(response);
+        break;
+    }
+  };
+
+  const entityCreatedSuccessfully = (response) => {
+    const entity = response.result ?? {};
+
+    const createdEntity = (prevState) => {
+      const newEntities = [...prevState, entity];
+
+      return newEntities;
+    };
+
+    setFormattedEntities(createdEntity);
+    setEntities(createdEntity);
+
+    setEntitySelected(entity);
+    setIsEmptyEntities(false);
+
+    if (showAlert) {
+      return;
+    }
+
+    openSnackbar('Item created successfully', 'success');
+  };
+
+  const itemOnCreated = (response) => {
+    if (!response || !response?.success) {
+      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se creaba el usuario.', action: 'error-created' });
+      return;
+    }
+
+    entityCreatedSuccessfully(response);
+  };
+
+  const itemOnInactivated = (response) => {
+    if (!response || !response.success) {
+      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se inactivaba el usuario.', action: 'error-inactive' });
+      return;
+    }
+
+    const updatedEntity = response.result ?? {};
+    const updateEntity = (prevState) => {
+      return prevState.map((entity) => (entity.id === updatedEntity.id ? updatedEntity : entity));
+    };
+
+    setFormattedEntities(updateEntity);
+
+    openSnackbar('El usuario ha sido inactivado.', 'success');
+  };
+
+  const itemOnDeleted = (response) => {
+    if (!response || !response.success) {
+      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se eliminaba el usuario.', action: 'error-delete' });
+      return;
+    }
+
+    const updatedEntity = response.result ?? {};
+    const deleteEntity = (prevState) => {
+      const newEntities = prevState.filter((_entity) => _entity.id !== updatedEntity.id);
+
+      return newEntities;
+    };
+
+    setFormattedEntities(deleteEntity);
+
+    openSnackbar('El usuario ha sido eliminado.', 'success');
+  };
+
+  const itemOnUpdate = (response) => {
+    setActiveModal(null);
+
+    if (!response || !response.success) {
+      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se actualizaba el usuario.', action: 'error-update' });
+      return;
+    }
+
+    refreshEntity(response);
+    openSnackbar('Usuario actualizado exitosamente.', 'success');
+  };
+
+  const updateItemStatus = async ({ entity, status }) => {
+    entity.status = status;
+    const response = await updateEntityRecord({ service: UserManagementService, payload: entity });
+
+    itemOnUpdate(response);
+  };
+
+  const refreshEntity = (response) => {
+    const updatedEntity = response.result ?? {};
+    const updateEntity = (prevState) => {
+      return prevState.map((entity) => (entity.id === updatedEntity.id ? updatedEntity : entity));
+    };
+
+    setFormattedEntities(updateEntity);
+  };
+
+  const getIdentityContracts = async () => {
     const entityResponse = await fetchEntityCollection({
       service: OrganizationManagementService,
       payload: {
@@ -68,19 +394,106 @@ export const VeripassIdentityContractList = ({
     //setInternalVeripassIdentity(entityResponse?.result?.items?.[0] || {});
   };
 
+  const initializeComponent = async () => {
+    showErrorFromUrl();
+    getIdentityContracts();
+  };
+
   useEffect(() => {
-    if (
-      veripassIdentity &&
-      Object.keys(veripassIdentity).length > 0 &&
-      veripassIdentity?.identity !== internalVeripassIdentity?.identity
-    ) {
-      setInternalVeripassIdentity(veripassIdentity);
-    }
-  }, [veripassIdentity]);
+    filterEntities();
+  }, [entities]);
+
+  useEffect(() => {
+    getIdentityContracts();
+  }, [paginationModel]);
 
   useEffect(() => {
     initializeComponent();
   }, []);
 
-  return <></>;
+  return (
+    <>
+      {loading ? (
+        <PlaceholderComponent />
+      ) : (
+        <>
+          {isEmptyEntities && (
+            <>
+              <section className="col-12 col-lg-12 col-xl-10 mx-auto d-block shadow-lg mt-4">
+                <div className="card rounded-8">
+                  <div className="card-body">
+                    <article className="container pt-2 text-center">
+                      <h3 className="text-center">Aún no hay información registrada.</h3>
+                      <p className="text-muted">Empieza creando tu primer usuario para comenzar a gestionar esta sección.</p>
+                      <img src="/assets/images/empty-content.svg" alt="empty content" className="d-block mx-auto" height="250" />
+                      <button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
+                        Crear usuario
+                      </button>
+                    </article>
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
+
+          {!isEmptyEntities && (
+            <>
+              <section className="col-12 col-lg-12 col-xl-12 mx-auto d-block shadow-lg mt-4">
+                <div className="card rounded-8">
+                  <header className="d-flex flex-row justify-content-between px-4 pt-4">
+                    <section>
+                      <h4 className="mt-0 header-title">Todos los usuarios de la organization</h4>
+                      <p className="text-muted font-14 mb-3">Visualiza, organiza y optimiza tus usuarios con total facilidad.</p>
+                    </section>
+                    <section className="align-items-sm-baseline d-flex dropdown">
+                      <button
+                        className="btn btn-purple"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          itemOnAction('create', null);
+                        }}
+                      >
+                        <i className="mdi mdi-plus me-1"></i> Crear usuario
+                      </button>
+                    </section>
+                  </header>
+
+                  <section className="px-4 pb-4">
+                    <DataGrid
+                      columns={columns}
+                      rows={formattedEntities}
+                      actions={actions}
+                      enableActions
+                      onMenuItemClick={itemOnAction}
+                      localeText={undefined}
+                      pageSizeOptions={[10, 20, 50, 100]}
+                      disableRowSelectionOnClick={true}
+                      initialState={{ pagination: { paginationModel } }}
+                      paginationMode="server"
+                      rowCount={rowCount}
+                      paginationModel={paginationModel}
+                      onPaginationModelChange={(model) => {
+                        console.log(model);
+                        setPaginationModel(model);
+                      }}
+                      onFilterModelChange={handleFilterChange}
+                      onSortModelChange={(data) => {
+                        console.log(data);
+                      }}
+                      loading={loading}
+                      sx={{
+                        border: 'none',
+                      }}
+                    />
+                  </section>
+                </div>
+              </section>
+            </>
+          )}
+        </>
+      )}
+
+      {showAlert === true && <Alert config={alertConfigs} setConfirm={alertOnConfirmed} />}
+    </>
+  );
 };
