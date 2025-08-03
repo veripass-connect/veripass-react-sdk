@@ -104,7 +104,6 @@ export const VeripassOrganizationProfileEdit = ({
   // Hooks
     const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
-  const searchParams = new URLSearchParams(window?.location?.search);
 
   // Models
   const [entity, setEntity] = useState(initialState);

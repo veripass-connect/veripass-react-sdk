@@ -48,7 +48,6 @@ export const VeripassOrganizationProfilePreview = ({
   // Hooks
     const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
-  const searchParams = new URLSearchParams(window?.location?.search);
 
   // UI States
   const [internalVeripassIdentity, setInternalVeripassIdentity] = useState(null);
