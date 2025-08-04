@@ -12,7 +12,7 @@ import '@styles/styles.css';
 
 const swal = withReactContent(Swal);
 
-import { OrganizationManagementService } from '@services';
+import { IdentityContractService } from '@services';
 
 export const VeripassIdentityContractList = ({
   ui = {
@@ -68,12 +68,12 @@ export const VeripassIdentityContractList = ({
     },
     { id: 'quick-view', icon: <i className="fe-search me-1"></i>, label: 'Vista rápida', type: 'action' },
     ...(!readOnly
-    ? []
-    : [
-        { id: 'edit', icon: <i className="fe-edit me-1"></i>, label: 'Editar', type: 'action' },
-        { id: 'inactive', icon: <i className="fe-power me-1"></i>, label: 'Inactivar', type: 'action' },
-        { id: 'delete', icon: <i className="fe-delete me-1"></i>, label: 'Borrar', type: 'action' },
-      ]),
+      ? []
+      : [
+          { id: 'edit', icon: <i className="fe-edit me-1"></i>, label: 'Editar', type: 'action' },
+          { id: 'inactive', icon: <i className="fe-power me-1"></i>, label: 'Inactivar', type: 'action' },
+          { id: 'delete', icon: <i className="fe-delete me-1"></i>, label: 'Borrar', type: 'action' },
+        ]),
   ];
   const columns = [
     {
@@ -373,8 +373,12 @@ export const VeripassIdentityContractList = ({
   };
 
   const getIdentityContracts = async () => {
+    if (!contractParties || !contractParties.counterparty_id || !contractParties.principal_id) {
+      return;
+    }
+
     const entityResponse = await fetchEntityCollection({
-      service: OrganizationManagementService,
+      service: IdentityContractService,
       payload: {
         queryselector: 'id',
         query: {

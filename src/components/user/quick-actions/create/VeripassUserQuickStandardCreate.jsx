@@ -182,8 +182,8 @@ export const VeripassUserQuickStandardCreate = ({
         cover_picture_url: COVER_IMAGES[Math.floor(Math.random() * 23) + 1].uri,
       };
       const user = {
-        user_profile: userProfileData,
-        user_security: { password: userProfileData.password, require_password_reset: true },
+        profile: userProfileData,
+        security: { password: userProfileData.password, require_password_reset: true },
       };
       const response = await createEntity({ payload: user, Service: UserManagementService, environment, apiKey });
 
