@@ -76,8 +76,8 @@ export const VeripassIdentityContractList = ({
   ];
   const columns = [
     {
-      field: 'display_name',
-      headerName: 'Nombre',
+      field: 'principal_party_id',
+      headerName: 'Principal Party',
       flex: 1,
       minWidth: 100,
       renderCell: (params) => {
@@ -97,36 +97,31 @@ export const VeripassIdentityContractList = ({
                 itemOnAction('quick-view', { entity: params?.row || {} });
               }}
             >
-              {params?.row?.veripass_profile?.display_name}
+              {params?.row?.context?.principal_party_display_name}
             </button>
           </section>
         );
       },
     },
     {
-      field: 'primary_email_address',
-      headerName: 'Email',
+      field: 'counterparty_id',
+      headerName: 'Counterparty',
       sortable: true,
       width: 300,
       flex: 2,
-      valueGetter: (params) => params?.row?.veripass_profile?.primary_email_address || '',
+      valueGetter: (params) => params?.row?.counterparty_id || '',
       renderCell: (params) => {
-        return <>{params?.row?.veripass_profile?.primary_email_address}</>;
+        return <>{params?.row?.context?.counterparty_display_name}</>;
       },
     },
     {
-      field: 'primary_phone_number',
-      headerName: 'Celular',
+      field: 'organization_id',
+      headerName: 'Organization',
       width: 500,
       flex: 2,
-      valueGetter: (params) => params?.row?.veripass_profile?.primary_phone_number || '',
+      valueGetter: (params) => params?.row?.organization_id || '',
       renderCell: (params) => {
-        return (
-          <>
-            +{params?.row?.veripass_profile?.primary_phone_number?.country?.dial_code}{' '}
-            {params?.row?.veripass_profile?.primary_phone_number?.phone_number}
-          </>
-        );
+        return <>{params?.row?.context?.organization_display_name}</>;
       },
     },
     {
