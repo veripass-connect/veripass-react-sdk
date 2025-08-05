@@ -38,6 +38,9 @@ export { VeripassOrganizationProfileEdit as VeripassOrganizationProfileEdit } fr
 export { VeripassOrganizationProfilePreview as VeripassOrganizationProfilePreview } from './components/organization/profile/preview/VeripassOrganizationProfilePreview.jsx'
 export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage } from './components/organization/profile/manage/VeripassOrganizationProfileManage.jsx'
 
+/* Identity */
+export { VeripassIdentityContractList as VeripassIdentityContractList } from './components/identity/identity-contract/list/VeripassIdentityContractList.jsx';
+
 export {
   AuthContext,
   AuthProvider,
