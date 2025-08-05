@@ -8,6 +8,7 @@ import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import PlaceholderComponent from '@components/shared/Placeholder.component';
+import empty from '@assets/utils/empty.svg';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
@@ -385,10 +386,12 @@ export const VeripassIdentityContractList = ({
     setLoading(false);
 
     if (!entityResponse?.success) {
+      setIsEmptyEntities(true);
       return;
     }
 
     setEntities(entityResponse?.result?.items || []);
+    setIsEmptyEntities(entityResponse?.result?.items <= 0);
   };
 
   const initializeComponent = async () => {
@@ -420,17 +423,19 @@ export const VeripassIdentityContractList = ({
                   <div className="card rounded-8">
                     <div className="card-body">
                       <article className="container pt-2 text-center">
-                        <h3 className="text-center">Aún no hay información registrada.</h3>
-                        <p className="text-muted">Empieza creando tu primer usuario para comenzar a gestionar esta sección.</p>
+                        <h3 className="text-center">There is no information registered yet.</h3>
+                        <p className="text-muted">This section has no records yet. Once contracts are created or assigned, they will appear here.</p>
                         <img
-                          src="/assets/images/empty-content.svg"
+                          src={empty}
                           alt="empty content"
                           className="d-block mx-auto"
                           height="250"
                         />
-                        <button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
-                          Crear usuario
-                        </button>
+                        {!readOnly && (
+                          <Button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
+                            Crear usuario
+                          </Button>
+                        )}
                       </article>
                     </div>
                   </div>
