@@ -13,6 +13,7 @@ export async function fetchEntityCollection ({
     exclude_status = 'deleted',
     page = 1,
     pageSize = 10,
+    ...rest
   } = payload;
 
   try {
@@ -22,6 +23,7 @@ export async function fetchEntityCollection ({
       search: query.search || '',
       page,
       pageSize,
+      ...rest,
     });
   } catch (error) {
     console.error('[fetchEntityCollection] Error loading entities', error);

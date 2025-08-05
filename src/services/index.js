@@ -42,6 +42,9 @@ import LegalContractTypeService from './legal/contract-type/contract-type.servic
 
 import DeviceManagementService from './device/device-management.service';
 
+import IdentityManagementService from './identity/entities/identity-management/identity-management.service';
+import IdentityContractService from './identity/relationships/identity-contract/identity-contract.service';
+
 export {
   InsightService,
   SystemService,
@@ -84,5 +87,8 @@ export {
   LegalContractManagementService,
   LegalContractTypeService,
 
-  DeviceManagementService
+  DeviceManagementService,
+
+  IdentityManagementService,
+  IdentityContractService
 };

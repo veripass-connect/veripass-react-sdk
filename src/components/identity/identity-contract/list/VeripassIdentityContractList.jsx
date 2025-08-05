@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { openSnackbar, DataGrid, StatusSelector, PopUp, Alert, useNavigate } from '@link-loom/react-sdk';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
+import { openSnackbar, DataGrid, StatusSelector, Alert, useNavigate } from '@link-loom/react-sdk';
+import { Button } from '@mui/material';
 
 import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
 import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
 
+import PlaceholderComponent from '@components/shared/Placeholder.component';
 import '@styles/fonts.css';
 import '@styles/styles.css';
-
-const swal = withReactContent(Swal);
 
 import { IdentityContractService } from '@services';
 
@@ -381,26 +380,24 @@ export const VeripassIdentityContractList = ({
       service: IdentityContractService,
       payload: {
         queryselector: 'id',
-        query: {
-          search: veripassId,
-        },
+        counterparty_id: contractParties.counterparty_id,
+        principal_id: contractParties.principal_id,
       },
       apiKey,
       settings: { environment },
     });
 
-    setIsLoading(false);
+    setLoading(false);
 
     if (!entityResponse?.success) {
       return;
     }
 
-    //setInternalVeripassIdentity(entityResponse?.result?.items?.[0] || {});
+    setEntities(entityResponse?.result?.items || []);
   };
 
   const initializeComponent = async () => {
     showErrorFromUrl();
-    getIdentityContracts();
   };
 
   useEffect(() => {
@@ -417,85 +414,96 @@ export const VeripassIdentityContractList = ({
 
   return (
     <>
-      {loading ? (
-        <PlaceholderComponent />
-      ) : (
-        <>
-          {isEmptyEntities && (
-            <>
-              <section className="col-12 col-lg-12 col-xl-10 mx-auto d-block shadow-lg mt-4">
-                <div className="card rounded-8">
-                  <div className="card-body">
-                    <article className="container pt-2 text-center">
-                      <h3 className="text-center">Aún no hay información registrada.</h3>
-                      <p className="text-muted">Empieza creando tu primer usuario para comenzar a gestionar esta sección.</p>
-                      <img src="/assets/images/empty-content.svg" alt="empty content" className="d-block mx-auto" height="250" />
-                      <button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
-                        Crear usuario
-                      </button>
-                    </article>
+      <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: true, vertical: 'bottom', alignment: 'end' }}>
+        {loading ? (
+          <PlaceholderComponent />
+        ) : (
+          <>
+            {isEmptyEntities && (
+              <>
+                <section className="col-12 col-lg-12 col-xl-10 mx-auto d-block shadow-lg mt-4">
+                  <div className="card rounded-8">
+                    <div className="card-body">
+                      <article className="container pt-2 text-center">
+                        <h3 className="text-center">Aún no hay información registrada.</h3>
+                        <p className="text-muted">Empieza creando tu primer usuario para comenzar a gestionar esta sección.</p>
+                        <img
+                          src="/assets/images/empty-content.svg"
+                          alt="empty content"
+                          className="d-block mx-auto"
+                          height="250"
+                        />
+                        <button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
+                          Crear usuario
+                        </button>
+                      </article>
+                    </div>
                   </div>
-                </div>
-              </section>
-            </>
-          )}
+                </section>
+              </>
+            )}
 
-          {!isEmptyEntities && (
-            <>
-              <section className="col-12 col-lg-12 col-xl-12 mx-auto d-block shadow-lg mt-4">
-                <div className="card rounded-8">
-                  <header className="d-flex flex-row justify-content-between px-4 pt-4">
-                    <section>
-                      <h4 className="mt-0 header-title">Todos los usuarios de la organization</h4>
-                      <p className="text-muted font-14 mb-3">Visualiza, organiza y optimiza tus usuarios con total facilidad.</p>
-                    </section>
-                    <section className="align-items-sm-baseline d-flex dropdown">
-                      <button
-                        className="btn btn-purple"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          itemOnAction('create', null);
+            {!isEmptyEntities && (
+              <>
+                <section className="col-12 col-lg-12 col-xl-12 mx-auto d-block shadow-lg mt-4">
+                  <div className="card rounded-8">
+                    <header className="d-flex flex-row justify-content-between px-4 pt-4">
+                      <section>
+                        <h4 className="mt-0 header-title">Todos tus contratos</h4>
+                        <p className="text-muted font-14 mb-3">
+                          Visualiza, organiza y optimiza tus contratos con total facilidad.
+                        </p>
+                      </section>
+                      <section className="align-items-sm-baseline d-flex dropdown">
+                        {!readOnly && (
+                          <Button
+                            variant="contained"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              itemOnAction('create', null);
+                            }}
+                          >
+                            <i className="mdi mdi-plus me-1"></i> Iniciar contrato
+                          </Button>
+                        )}
+                      </section>
+                    </header>
+
+                    <section className="px-4 pb-4">
+                      <DataGrid
+                        columns={columns}
+                        rows={formattedEntities}
+                        actions={actions}
+                        enableActions
+                        onMenuItemClick={itemOnAction}
+                        localeText={undefined}
+                        pageSizeOptions={[10, 20, 50, 100]}
+                        disableRowSelectionOnClick={true}
+                        initialState={{ pagination: { paginationModel } }}
+                        paginationMode="server"
+                        rowCount={rowCount}
+                        paginationModel={paginationModel}
+                        onPaginationModelChange={(model) => {
+                          console.log(model);
+                          setPaginationModel(model);
                         }}
-                      >
-                        <i className="mdi mdi-plus me-1"></i> Crear usuario
-                      </button>
+                        onFilterModelChange={handleFilterChange}
+                        onSortModelChange={(data) => {
+                          console.log(data);
+                        }}
+                        loading={loading}
+                        sx={{
+                          border: 'none',
+                        }}
+                      />
                     </section>
-                  </header>
-
-                  <section className="px-4 pb-4">
-                    <DataGrid
-                      columns={columns}
-                      rows={formattedEntities}
-                      actions={actions}
-                      enableActions
-                      onMenuItemClick={itemOnAction}
-                      localeText={undefined}
-                      pageSizeOptions={[10, 20, 50, 100]}
-                      disableRowSelectionOnClick={true}
-                      initialState={{ pagination: { paginationModel } }}
-                      paginationMode="server"
-                      rowCount={rowCount}
-                      paginationModel={paginationModel}
-                      onPaginationModelChange={(model) => {
-                        console.log(model);
-                        setPaginationModel(model);
-                      }}
-                      onFilterModelChange={handleFilterChange}
-                      onSortModelChange={(data) => {
-                        console.log(data);
-                      }}
-                      loading={loading}
-                      sx={{
-                        border: 'none',
-                      }}
-                    />
-                  </section>
-                </div>
-              </section>
-            </>
-          )}
-        </>
-      )}
+                  </div>
+                </section>
+              </>
+            )}
+          </>
+        )}
+      </VeripassLayout>
 
       {showAlert === true && <Alert config={alertConfigs} setConfirm={alertOnConfirmed} />}
     </>

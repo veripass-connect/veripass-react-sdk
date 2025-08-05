@@ -1,6 +1,6 @@
 import BaseApi from '../../../base/api.service';
 
-export default class IdentityContractService extends BaseApi {
+export default class IdentityManagementService extends BaseApi {
   constructor (args) {
     super(args);
 

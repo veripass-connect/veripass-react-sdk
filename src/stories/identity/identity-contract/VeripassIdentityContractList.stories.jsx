@@ -41,7 +41,12 @@ Default.args = {
     },
     inputSize: 'small',
   },
-  environment: 'development',
+  environment: 'local',
   apiKey: '',
   debug: true,
+  readOnly: true,
+  contractParties: {
+    principal_id: 'veripass-123',
+    counterparty_id: 'veripass-123',
+  },
 };
