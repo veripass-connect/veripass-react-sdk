@@ -1,11 +1,11 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassIdentityContractList } from '../../../components/identity/identity-contract/list/VeripassIdentityContractList';
-import { AuthProvider } from '../../../hooks/useAuth.hook';
+import { VeripassTeamManagementList } from '../../../../components/team/team-management/list/VeripassTeamManagementList';
+import { AuthProvider } from '../../../../hooks/useAuth.hook';
 
 export default {
-  title: 'Identity/Contract/list/VeripassIdentityContractList',
-  component: VeripassIdentityContractList,
+  title: 'Team/Team-Management/list/VeripassTeamManagementList',
+  component: VeripassTeamManagementList,
   parameters: {
     layout: 'centered',
   },
@@ -28,25 +28,15 @@ export default {
 const Template = (args) => (
   <MemoryRouter>
     <AuthProvider {...args}>
-      <VeripassIdentityContractList {...args} />
+      <VeripassTeamManagementList {...args} />
     </AuthProvider>
   </MemoryRouter>
 );
 
 export const Default = Template.bind({});
 Default.args = {
-  ui: {
-    profilePhoto: {
-      height: '95',
-    },
-    inputSize: 'small',
-  },
   environment: 'local',
   apiKey: '',
   debug: true,
-  readOnly: true,
-  contractParties: {
-    principal_id: 'veripass-123',
-    counterparty_id: 'veripass-123',
-  },
+  readOnly: false,
 };

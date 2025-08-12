@@ -1,39 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
-import { openSnackbar, DataGrid, StatusSelector, Alert, useNavigate } from '@link-loom/react-sdk';
+import { openSnackbar, DataGrid, StatusSelector, PopUp, Alert, useNavigate } from '@link-loom/react-sdk';
 import { Button } from '@mui/material';
+import {
+  Search as SearchIcon,
+  Edit as EditIcon,
+  PowerSettingsNew as PowerSettingsNewIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
 
-import { fetchEntityCollection } from '@services/utils/entityServiceAdapter';
-import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
-import { useAuth } from '@hooks/useAuth.hook';
+/* import {
+  UserManagementCreate,
+  UserManagementDeleteComponent,
+  UserManagementInactiveComponent,
+  UserManagementEditComponent,
+} from '@components/pages'; */
+import { fetchEntityCollection, fetchMultipleEntities, updateEntityRecord } from '@services/utils/entityServiceAdapter';
 
 import PlaceholderComponent from '@components/shared/Placeholder.component';
 import emptyImageUrl from '@assets/utils/empty.svg';
-import '@styles/fonts.css';
-import '@styles/styles.css';
 
-import { IdentityContractService } from '@services';
+import { TeamManagementService } from '@services';
 
-export const VeripassIdentityContractList = ({
+export const VeripassTeamManagementList = ({
   ui = {
     profilePhoto: {
       height: '95',
     },
     inputSize: 'small',
+    sections: {
+      emptyState: {
+        title: 'No records found.',
+        description: 'Start by creating your first team to begin managing this section.',
+        primaryAction: 'Create team',
+      },
+      teams: {
+        title: 'All organization teams',
+        description: 'View, organize, and optimize your institutional teams with ease.',
+        primaryAction: 'Create team',
+      },
+    },
   },
-  redirectUrl = '',
+  entityManagementUrl = '/user/management/',
   environment = 'production',
   apiKey = '',
   isPopupContext = false,
   readOnly = false,
-  contractParties = {
-    principal_id: '',
-    counterparty_id: '',
-  },
 }) => {
   // Hooks
-  const { showErrorFromUrl } = useUrlErrorHandler();
-  const authProvider = useAuth();
+  const navigate = useNavigate();
 
   // Models
   const [statuses, setStatuses] = useState({});
@@ -66,19 +81,15 @@ export const VeripassIdentityContractList = ({
         { id: 'new-tab', label: 'Tab nuevo' },
       ],
     },
-    { id: 'quick-view', icon: <i className="fe-search me-1"></i>, label: 'Vista rápida', type: 'action' },
-    ...(!readOnly
-      ? []
-      : [
-          { id: 'edit', icon: <i className="fe-edit me-1"></i>, label: 'Editar', type: 'action' },
-          { id: 'inactive', icon: <i className="fe-power me-1"></i>, label: 'Inactivar', type: 'action' },
-          { id: 'delete', icon: <i className="fe-delete me-1"></i>, label: 'Borrar', type: 'action' },
-        ]),
+    { id: 'quick-view', icon: <SearchIcon fontSize="small" className="me-1" />, label: 'Quick View', type: 'action' },
+    { id: 'edit', icon: <EditIcon fontSize="small" className="me-1" />, label: 'Edit', type: 'action' },
+    { id: 'inactive', icon: <PowerSettingsNewIcon fontSize="small" className="me-1" />, label: 'Inactive', type: 'action' },
+    { id: 'delete', icon: <DeleteIcon fontSize="small" className="me-1" />, label: 'Delete', type: 'action' },
   ];
   const columns = [
     {
-      field: 'principal_party_id',
-      headerName: 'Principal Party',
+      field: 'display_name',
+      headerName: 'Nombre',
       flex: 1,
       minWidth: 100,
       renderCell: (params) => {
@@ -98,31 +109,36 @@ export const VeripassIdentityContractList = ({
                 itemOnAction('quick-view', { entity: params?.row || {} });
               }}
             >
-              {params?.row?.context?.principal_party_display_name}
+              {params?.row?.veripass_profile?.display_name}
             </button>
           </section>
         );
       },
     },
     {
-      field: 'counterparty_id',
-      headerName: 'Counterparty',
+      field: 'primary_email_address',
+      headerName: 'Email',
       sortable: true,
       width: 300,
       flex: 2,
-      valueGetter: (params) => params?.row?.counterparty_id || '',
+      valueGetter: (params) => params?.row?.veripass_profile?.primary_email_address || '',
       renderCell: (params) => {
-        return <>{params?.row?.context?.counterparty_display_name}</>;
+        return <>{params?.row?.veripass_profile?.primary_email_address}</>;
       },
     },
     {
-      field: 'organization_id',
-      headerName: 'Organization',
+      field: 'primary_phone_number',
+      headerName: 'Celular',
       width: 500,
       flex: 2,
-      valueGetter: (params) => params?.row?.organization_id || '',
+      valueGetter: (params) => params?.row?.veripass_profile?.primary_phone_number || '',
       renderCell: (params) => {
-        return <>{params?.row?.context?.organization_display_name}</>;
+        return (
+          <>
+            +{params?.row?.veripass_profile?.primary_phone_number?.country?.dial_code}{' '}
+            {params?.row?.veripass_profile?.primary_phone_number?.phone_number}
+          </>
+        );
       },
     },
     {
@@ -138,7 +154,7 @@ export const VeripassIdentityContractList = ({
 
   // Component functions
   const getEntityUrl = ({ relative, id }) => {
-    const relativeUrl = `https://me.veripass.com.co/contract/${id}`;
+    const relativeUrl = `${entityManagementUrl}${id}`;
     if (relative) {
       return relativeUrl;
     }
@@ -160,7 +176,7 @@ export const VeripassIdentityContractList = ({
     }
 
     const filteredItemsResponse = await fetchEntityCollection({
-      service: UserManagementService,
+      service: TeamManagementService,
       selector: 'name',
       query: {
         search: newFilterModel.quickFilterValues.join(' '),
@@ -264,7 +280,7 @@ export const VeripassIdentityContractList = ({
     switch (action) {
       case 'create':
         itemOnCreated(response);
-        openSnackbar('Usuario creado satisfactoriamente.', 'success');
+        openSnackbar('Team was created successfully.', 'success');
         break;
       case 'inactive':
         itemOnInactivated(response);
@@ -295,12 +311,12 @@ export const VeripassIdentityContractList = ({
       return;
     }
 
-    openSnackbar('Item created successfully', 'success');
+    openSnackbar('Team created successfully', 'success');
   };
 
   const itemOnCreated = (response) => {
     if (!response || !response?.success) {
-      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se creaba el usuario.', action: 'error-created' });
+      itemOnError({ title: 'Error', description: 'An error occurred while creating the team.', action: 'error-created' });
       return;
     }
 
@@ -309,7 +325,7 @@ export const VeripassIdentityContractList = ({
 
   const itemOnInactivated = (response) => {
     if (!response || !response.success) {
-      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se inactivaba el usuario.', action: 'error-inactive' });
+      itemOnError({ title: 'Error', description: 'An error occurred while deactivating the team.', action: 'error-inactive' });
       return;
     }
 
@@ -320,12 +336,12 @@ export const VeripassIdentityContractList = ({
 
     setFormattedEntities(updateEntity);
 
-    openSnackbar('El usuario ha sido inactivado.', 'success');
+    openSnackbar('The team has been deactivated.', 'success');
   };
 
   const itemOnDeleted = (response) => {
     if (!response || !response.success) {
-      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se eliminaba el usuario.', action: 'error-delete' });
+      itemOnError({ title: 'Error', description: 'An error occurred while deleting the team.', action: 'error-delete' });
       return;
     }
 
@@ -338,24 +354,29 @@ export const VeripassIdentityContractList = ({
 
     setFormattedEntities(deleteEntity);
 
-    openSnackbar('El usuario ha sido eliminado.', 'success');
+    openSnackbar('The team has been eliminated.', 'success');
   };
 
   const itemOnUpdate = (response) => {
     setActiveModal(null);
 
     if (!response || !response.success) {
-      itemOnError({ title: 'Error', description: 'Algo ocurrió mientras se actualizaba el usuario.', action: 'error-update' });
+      itemOnError({ title: 'Error', description: 'An error occurred while updating the team.', action: 'error-update' });
       return;
     }
 
     refreshEntity(response);
-    openSnackbar('Usuario actualizado exitosamente.', 'success');
+    openSnackbar('Team updated succesfully.', 'success');
   };
 
   const updateItemStatus = async ({ entity, status }) => {
     entity.status = status;
-    const response = await updateEntityRecord({ service: UserManagementService, payload: entity });
+    const response = await updateEntityRecord({
+      service: TeamManagementService,
+      payload: entity,
+      apiKey,
+      settings: { environment },
+    });
 
     itemOnUpdate(response);
   };
@@ -369,35 +390,40 @@ export const VeripassIdentityContractList = ({
     setFormattedEntities(updateEntity);
   };
 
-  const getIdentityContracts = async () => {
-    if (!contractParties || !contractParties.counterparty_id || !contractParties.principal_id) {
-      return;
-    }
-
-    const entityResponse = await fetchEntityCollection({
-      service: IdentityContractService,
-      payload: {
-        queryselector: 'id',
-        counterparty_id: contractParties.counterparty_id,
-        principal_id: contractParties.principal_id,
+  const initializeComponent = async () => {
+    const [users, statuses] = await fetchMultipleEntities([
+      {
+        service: TeamManagementService,
+        payload: {
+          queryselector: 'all',
+          exclude_status: 'deleted',
+          search: '',
+          page: paginationModel.page + 1,
+          pageSize: paginationModel.pageSize,
+        },
+        apiKey,
+        settings: { environment },
       },
-      apiKey,
-      settings: { environment },
-    });
+      {
+        service: TeamManagementService,
+        payload: {
+          queryselector: 'statuses',
+        },
+        apiKey,
+        settings: { environment },
+      },
+    ]);
 
     setLoading(false);
 
-    if (!entityResponse?.success) {
+    if (!users?.success || !users?.result?.items?.length) {
       setIsEmptyEntities(true);
       return;
     }
 
-    setEntities(entityResponse?.result?.items || []);
-    setIsEmptyEntities(entityResponse?.result?.items <= 0);
-  };
-
-  const initializeComponent = async () => {
-    showErrorFromUrl();
+    setEntities(users.result.items || []);
+    setStatuses(statuses.result || {});
+    setRowCount(users.result.totalItems || 0);
   };
 
   useEffect(() => {
@@ -405,12 +431,9 @@ export const VeripassIdentityContractList = ({
   }, [entities]);
 
   useEffect(() => {
-    getIdentityContracts();
-  }, [paginationModel]);
-
-  useEffect(() => {
+    setLoading(true);
     initializeComponent();
-  }, []);
+  }, [paginationModel]);
 
   return (
     <>
@@ -425,14 +448,13 @@ export const VeripassIdentityContractList = ({
                   <div className="card rounded-8">
                     <div className="card-body">
                       <article className="container pt-2 text-center">
-                        <h3 className="text-center">There is no information registered yet.</h3>
-                        <p className="text-muted">
-                          This section has no records yet. Once contracts are created or assigned, they will appear here.
-                        </p>
+                        <h3 className="text-center">{ui?.sections?.emptyState?.title}</h3>
+                        <p className="text-muted">{ui?.sections?.emptyState?.description}</p>
                         <img src={emptyImageUrl} alt="empty content" className="d-block mx-auto" height="250" />
+
                         {!readOnly && (
-                          <Button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
-                            Crear usuario
+                          <Button  variant="contained" className="my-3 me-3" onClick={() => itemOnAction('create')}>
+                            {ui?.sections?.emptyState?.primaryAction}
                           </Button>
                         )}
                       </article>
@@ -448,23 +470,19 @@ export const VeripassIdentityContractList = ({
                   <div className="card rounded-8">
                     <header className="d-flex flex-row justify-content-between px-4 pt-4">
                       <section>
-                        <h4 className="mt-0 header-title">Todos tus contratos</h4>
-                        <p className="text-muted font-14 mb-3">
-                          Visualiza, organiza y optimiza tus contratos con total facilidad.
-                        </p>
+                        <h4 className="mt-0 header-title">{ui?.sections?.teams?.title}</h4>
+                        <p className="text-muted font-14 mb-3">{ui?.sections?.teams?.description}</p>
                       </section>
                       <section className="align-items-sm-baseline d-flex dropdown">
-                        {!readOnly && (
-                          <Button
-                            variant="contained"
-                            onClick={(event) => {
-                              event.preventDefault();
-                              itemOnAction('create', null);
-                            }}
-                          >
-                            <i className="mdi mdi-plus me-1"></i> Iniciar contrato
-                          </Button>
-                        )}
+                        <button
+                          className="btn btn-purple"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            itemOnAction('create', null);
+                          }}
+                        >
+                          <i className="mdi mdi-plus me-1"></i> {ui?.sections?.teams?.primaryAction}
+                        </button>
                       </section>
                     </header>
 
@@ -505,6 +523,52 @@ export const VeripassIdentityContractList = ({
       </VeripassLayout>
 
       {showAlert === true && <Alert config={alertConfigs} setConfirm={alertOnConfirmed} />}
+
+      <PopUp
+        data-testid="veripass-contract-modal"
+        id="veripass-contract-modal"
+        isOpen={Boolean(activeModal)}
+        setIsOpen={(isOpen) => setActiveModal(isOpen ? Boolean(activeModal) : null)}
+        className="col-lg-7 col-md-8 col-12"
+      >
+        {/*  {activeModal === 'create' && (
+          <UserManagementCreate
+            setIsOpen={() => setActiveModal(null)}
+            onUpdatedEntity={onUpdatedEntity}
+            entitySelected={entitySelected}
+            isPopupContext
+          />
+        )}
+
+        {activeModal === 'inactive' && (
+          <UserManagementInactiveComponent
+            setIsOpen={() => setActiveModal(null)}
+            id={entitySelected.id}
+            onUpdatedEntity={onUpdatedEntity}
+            entitySelected={entitySelected}
+            isPopupContext
+          />
+        )}
+
+        {activeModal === 'delete' && (
+          <UserManagementDeleteComponent
+            setIsOpen={() => setActiveModal(null)}
+            id={entitySelected.id}
+            onUpdatedEntity={onUpdatedEntity}
+            entitySelected={entitySelected}
+            isPopupContext
+          />
+        )}
+
+        {activeModal === 'edit' && (
+          <UserManagementEditComponent
+            onUpdatedEntity={onUpdatedEntity}
+            entitySelected={entitySelected}
+            setIsOpen={() => setActiveModal(null)}
+            isPopupContext
+          />
+        )} */}
+      </PopUp>
     </>
   );
 };
