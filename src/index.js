@@ -41,6 +41,9 @@ export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage 
 /* Identity */
 export { VeripassIdentityContractList as VeripassIdentityContractList } from './components/identity/identity-contract/list/VeripassIdentityContractList.jsx';
 
+/* Team */
+export { VeripassTeamManagementList as VeripassTeamManagementList } from './components/team/team-management/list/VeripassTeamManagementList.jsx';
+
 export {
   AuthContext,
   AuthProvider,
