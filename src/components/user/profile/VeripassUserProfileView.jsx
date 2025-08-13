@@ -29,7 +29,7 @@ const ProfileIdentityBio = styled(Typography)`
 `;
 
 const Content = styled.div`
-  padding: 120px 24px 24px;
+  padding: 170px 24px 24px;
 `;
 
 export const VeripassUserProfileView = ({

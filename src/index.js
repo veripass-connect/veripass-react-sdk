@@ -43,6 +43,7 @@ export { VeripassIdentityContractList as VeripassIdentityContractList } from './
 
 /* Team */
 export { VeripassTeamManagementList as VeripassTeamManagementList } from './components/team/team-management/list/VeripassTeamManagementList.jsx';
+export { VeripassMyPrincipalTeamList as VeripassMyPrincipalTeamList } from './components/team/team-management/preview/VeripassMyPrincipalTeamList.jsx';
 
 export {
   AuthContext,
