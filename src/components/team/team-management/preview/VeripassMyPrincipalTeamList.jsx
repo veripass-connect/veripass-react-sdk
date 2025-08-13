@@ -112,7 +112,7 @@ export const VeripassMyPrincipalTeamList = ({
         <div className="row g-3">
           {teamUserList.map((_user) => (
             <article className="col-xl-3 col-md-6" key={_user.id}>
-              <article className="card shadow">
+              <article className="card shadow-xs">
                 <div className="card-body widget-user">
                   <div className="d-flex align-items-center">
                     <header className="flex-shrink-0 avatar-lg me-3">
