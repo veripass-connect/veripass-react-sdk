@@ -10,28 +10,6 @@
     "README.md",
     "LICENSE"
   ],
-  "dependencies": {
-    "@cyntler/react-doc-viewer": "^1.14.1",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@link-loom/react-sdk": "^1.1.33",
-    "@mediapipe/camera_utils": "^0.3.1675466862",
-    "@mediapipe/face_mesh": "^0.4.1633559619",
-    "@mui/icons-material": "^6.1.1",
-    "@mui/material": "6.5.0",
-    "@mui/x-data-grid": "^7.17.0",
-    "@tensorflow/tfjs": "^4.20.0",
-    "@yaireo/tagify": "^4.22.2",
-    "axios": "^1.7.7",
-    "bootstrap": "^5.3.3",
-    "clipboard": "^2.0.11",
-    "dayjs": "^1.11.13",
-    "dotenv": "^16.4.5",
-    "react-router-dom": "^6.26.2",
-    "react-select": "^5.8.0",
-    "sweetalert2": "^11.22.4",
-    "sweetalert2-react-content": "^5.1.0"
-  },
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -55,6 +33,38 @@
     "javascript",
     "react"
   ],
+  "peerDependencies": {
+    "react": "^17 || ^18 || ^19",
+    "react-dom": "^17 || ^18 || ^19",
+    "react-router-dom": "^5 || ^6 || ^7"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": false },
+    "react-dom": { "optional": false },
+    "react-router-dom": { "optional": true }
+  },
+  "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@link-loom/react-sdk": "^1.1.33",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "6.5.0",
+    "@mui/x-data-grid": "^7.17.0",
+    "@tensorflow/tfjs": "^4.20.0",
+    "@yaireo/tagify": "^4.22.2",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "clipboard": "^2.0.11",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.5",
+    "react-router-dom": "^6.26.2",
+    "react-select": "^5.8.0",
+    "sweetalert2": "^11.22.4",
+    "sweetalert2-react-content": "^5.1.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.24.3",

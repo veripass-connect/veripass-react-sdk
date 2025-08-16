@@ -27,6 +27,11 @@ module.exports = {
       sourcemap: true,
     },
   ],
+  external: (id) =>
+    id === 'react' ||
+    id === 'react-dom' ||
+    id === 'react/jsx-runtime' ||
+    id === 'react-router-dom',
   onwarn: function (warning, warn) {
     if (warning.message && warning.message.includes('use client')) {
       return;
