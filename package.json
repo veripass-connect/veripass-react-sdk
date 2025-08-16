@@ -1,6 +1,6 @@
 {
   "name": "@veripass/react-sdk",
-  "version": "1.1.23",
+  "version": "1.1.24",
   "description": "UI SDK components for Veripass",
   "main": "dist/react-sdk.cjs.js",
   "module": "dist/react-sdk.esm.js",
@@ -39,9 +39,15 @@
     "react-router-dom": "^5 || ^6 || ^7"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": false },
-    "react-dom": { "optional": false },
-    "react-router-dom": { "optional": true }
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    },
+    "react-router-dom": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.14.1",
