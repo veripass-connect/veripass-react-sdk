@@ -73,13 +73,13 @@ export const VeripassLayout = ({
       className="veripass"
       style={{ boxSizing: 'border-box' }}
     >
-      {ui?.showLogo && ui?.vertical === 'top' && (
+      {ui?.showLogo === true && ui?.vertical === 'top' && (
         <PoweredBy align={ui?.alignment} position={ui?.vertical} />
       )}
 
       <main {...props}>{children}</main>
 
-      {ui?.showLogo && ui?.vertical === 'bottom' && (
+      {ui?.showLogo === true && ui?.vertical === 'bottom' && (
         <PoweredBy align={ui?.alignment} position={ui?.vertical} />
       )}
     </Container>
