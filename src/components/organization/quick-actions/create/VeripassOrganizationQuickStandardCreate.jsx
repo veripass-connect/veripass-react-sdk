@@ -131,9 +131,9 @@ export const VeripassOrganizationQuickStandardCreate = ({
         {ui?.showHeader === true && (
           <header className="row mb-4">
             <article className="col-12">
-              <h4 className="header-title">{ui?.title || 'Create User'}</h4>
+              <h4 className="header-title">{ui?.title || 'Create organization'}</h4>
               <p className="sub-header">
-                {ui?.subtitle || "To get started, fill out some basic information about who you're adding as a user."}
+                {ui?.subtitle || "To get started, fill out some basic information about new organization."}
               </p>
             </article>
           </header>
