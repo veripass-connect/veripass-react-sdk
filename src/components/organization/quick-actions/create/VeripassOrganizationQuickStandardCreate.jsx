@@ -73,6 +73,8 @@ export const VeripassOrganizationQuickStandardCreate = ({
   // Callbacks
   const handlePhoneChange = useCallback(
     (payload) => {
+      console.log('[parent] onPhoneChange', payload);
+      
       handleDataChange('primary_phone_number', payload);
     },
     [handleDataChange],
