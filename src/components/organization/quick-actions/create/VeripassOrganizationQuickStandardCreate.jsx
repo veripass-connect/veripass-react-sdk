@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 
@@ -64,6 +64,19 @@ export const VeripassOrganizationQuickStandardCreate = ({
 
   // UI States
   const [isLoading, setIsLoading] = useState(false);
+
+  // Memos
+  const inputLabelShrink = useMemo(() => ({ shrink: true }), []);
+  const slugAdornment = useMemo(() => <InputAdornment position="start">@</InputAdornment>, []);
+  const slugInputProps = useMemo(() => ({ startAdornment: slugAdornment }), [slugAdornment]);
+
+  // Callbacks
+  const handlePhoneChange = useCallback(
+    (payload) => {
+      handleDataChange('primary_phone_number', payload);
+    },
+    [handleDataChange],
+  );
 
   const resetForm = () => {
     setOrganizationProfileData(initialState);
@@ -152,14 +165,11 @@ export const VeripassOrganizationQuickStandardCreate = ({
                   type="text"
                   id="slug-input"
                   label="Slug"
-                  value={organizationProfileData.slug}
+                  InputProps={slugInputProps}
+                  InputLabelProps={inputLabelShrink}
                   placeholder=""
                   helperText="This is a unique app slug"
                   required
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">@</InputAdornment>,
-                  }}
-                  InputLabelProps={{ shrink: true }}
                   onChange={(event) => {
                     handleDataChange('slug', event.target.value);
                   }}
@@ -203,9 +213,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
               <section className="mb-3 col-12 col-md-6">
                 <PhoneCountrySelector
                   label="Phone number"
-                  onPhoneChange={(event) => {
-                    handleDataChange('primary_phone_number', event);
-                  }}
+                  onPhoneChange={handlePhoneChange}
                   disabled={false}
                   variant="outlined"
                 />
