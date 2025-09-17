@@ -87,8 +87,8 @@ const initialState = {
 };
 
 export const VeripassUserQuickStandardCreate = ({
-  ui,
-  entitySelected,
+  ui = { showHeader: false },
+  entity,
   onEvent,
   setIsOpen,
   isPopupContext = false,
@@ -217,7 +217,7 @@ export const VeripassUserQuickStandardCreate = ({
     <VeripassLayout isPopupContext={isPopupContext}>
       <section className="mb-0">
         {showHeader && (
-          <header className="row">
+          <header className="row mb-4">
             <article className="col-12">
               <h4 className="header-title">{ui?.title || 'Create User'}</h4>
               <p className="sub-header">

@@ -129,7 +129,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
     <VeripassLayout isPopupContext={isPopupContext}>
       <section className="mb-0">
         {ui?.showHeader === true && (
-          <header className="row">
+          <header className="row mb-4">
             <article className="col-12">
               <h4 className="header-title">{ui?.title || 'Create User'}</h4>
               <p className="sub-header">
