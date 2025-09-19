@@ -101,7 +101,7 @@ export const VeripassOrganizationQuickStandardCreate = ({
       setIsLoading(true);
 
       const organization = {
-        organization_profile: organizationProfileData,
+        profile: organizationProfileData,
       };
       const response = await createEntity({ payload: organization, Service: OrganizationManagementService, environment, apiKey });
 
