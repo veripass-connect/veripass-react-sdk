@@ -1,36 +1,35 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { VeripassStandardSignin } from '@components/auth/signin/standard-signin/VeripassStandardSignin';
+import { VeripassStandardSignup } from '@components/auth/signup/standard-signup/VeripassStandardSignup.component';
 import { AuthProvider } from '@hooks/useAuth.hook';
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import AppleIcon from '@mui/icons-material/Apple';
 
 export default {
-  title: 'Authentication/standard/VeripassStandardSignin',
-  component: VeripassStandardSignin,
+  title: 'Authentication/standard/VeripassStandardSignup',
+  component: VeripassStandardSignup,
   parameters: {
-    layout: 'fullscreen', // Changed from centered to fullscreen for split layout
+    layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Standard Sign-in component with split-screen layout capability.',
+        component: 'Standard Sign-up component with split-screen layout.',
       },
     },
   },
   tags: ['autodocs'],
   argTypes: {
-    ui: { control: 'object', description: 'UI overrides, including sideImage, logo, title, providers, etc.' },
-    organization: { control: 'object', description: 'Organization branding (logo, name, slogan)' },
-    // Legacy props hidden or mapped
+    ui: { control: 'object' },
+    organization: { control: 'object' },
+    // Disable flattened props
     sideImage: { table: { disable: true } },
     providers: { table: { disable: true } },
-    showForgotPass: { table: { disable: true } },
 
     redirectUrl: { control: 'text' },
     environment: {
       control: 'select',
       options: ['development', 'staging', 'production'],
     },
-    apiKey: { control: 'text' },
   },
   decorators: [
     (Story) => (
@@ -43,42 +42,32 @@ export default {
   ],
 };
 
-const Template = (args) => <VeripassStandardSignin {...args} />;
+const Template = (args) => <VeripassStandardSignup {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
   organization: {
     name: 'Sommatic AI',
-    slogan: 'Empowering your digital intelligence.',
+    slogan: 'Building the next generation of intelligence.',
   },
   ui: {
     logo: {
       src: 'https://id.etrune.com/assets/img/logo-2x.png',
       height: '40',
     },
-    title: 'Welcome back to the future',
+    title: 'Join the AI revolution',
     showTitle: true,
-    showForgotPass: true,
     sideImage: {
       src: 'https://images.unsplash.com/photo-1579547621706-1a9c79d5c9f1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'AI Abstract Art',
-      overlayText1: 'Unlock your creative potential',
-      overlayText2: 'Your intelligence hub',
+      alt: 'Futuristic Landscape',
+      overlayText1: 'Start building tomorrow, today.',
+      overlayText2: 'Create your account',
     },
     providers: [
       { id: 'google', icon: <GoogleIcon />, onClick: () => alert('Google') },
-      { id: 'github', icon: <GitHubIcon />, onClick: () => alert('Github') },
+      { id: 'apple', icon: <AppleIcon />, onClick: () => alert('Apple') },
     ],
   },
-  redirectUrl: '/home',
+  redirectUrl: '/dashboard',
   environment: 'development',
-};
-
-export const NoImage = Template.bind({});
-NoImage.args = {
-  ...Default.args,
-  ui: {
-    ...Default.args.ui,
-    sideImage: null,
-  },
 };
