@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
-
+import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout';
 import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Card } from '@components/shared/styling/Card';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link } from '@mui/material';
+import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link, Divider } from '@mui/material';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import LockIcon from '@mui/icons-material/Lock';
 
 import '@styles/fonts.css';
 import '@styles/styles.css';
@@ -20,10 +17,9 @@ import '@styles/styles.css';
 import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 
 import { SecurityService } from '@services';
+import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 const swal = withReactContent(Swal);
-
-import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 async function signInStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
   const entityService = new SecurityService({ apiKey, settings: { environment } });
@@ -45,21 +41,32 @@ async function signInStandard({ payload, authProvider, redirectUrl, apiKey, envi
 export const VeripassStandardSignin = ({
   ui = {
     logo: {
-      height: '75',
+      height: '40',
     },
+    title: 'Log in using email address',
+    showTitle: true,
   },
   organization = {
     name: '',
     logoSrc: '',
     slogan: '',
   },
+  sideImage = {
+    src: '',
+    alt: 'Login Cover',
+    overlayText1: '',
+    overlayText2: '',
+  },
+  providers = [],
+  showForgotPass = true,
   redirectUrl = '',
   environment = 'production',
   apiKey = '',
   isPopupContext = false,
+  initialEmail = '', // Allow pre-filling email from Manager
 }) => {
   // Hooks
-    const { showErrorFromUrl } = useUrlErrorHandler();
+  const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
 
   // UI States
@@ -67,7 +74,7 @@ export const VeripassStandardSignin = ({
   const [showPassword, setShowPassword] = React.useState(false);
 
   // Entity states
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
@@ -81,7 +88,6 @@ export const VeripassStandardSignin = ({
           text: 'Please enter an email.',
           icon: 'error',
         });
-
         return;
       }
 
@@ -91,7 +97,6 @@ export const VeripassStandardSignin = ({
           text: 'Please enter a password.',
           icon: 'error',
         });
-
         return;
       }
 
@@ -112,123 +117,175 @@ export const VeripassStandardSignin = ({
   }, []);
 
   return (
-    <>
-      <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: false, vertical: 'bottom', alignment: 'end' }}>
-        <header style={{ textAlign: 'center' }}>
-          <a href="/">
+    <VeripassAuthLayout sideImage={sideImage}>
+      {/* Organization Branding */}
+      <header className="mb-5">
+        <div className="d-flex align-items-center mb-3">
+          {(organization?.logoSrc || ui?.logo?.src) && (
             <img
-              src={organization?.logoSrc}
-              alt={organization?.name}
-              height={ui?.logo?.height}
-              style={{ display: 'block', margin: '0 auto' }}
+              src={organization?.logoSrc || ui?.logo?.src}
+              alt={organization?.name || 'Logo'}
+              height={ui?.logo?.height || 40}
+              className="me-3"
             />
-          </a>
-          <Typography variant="body2" style={{ marginTop: '16px', marginBottom: '24px', color: '#98a6ad', fontWeight: 300 }}>
-            {organization?.slogan}
-          </Typography>
-        </header>
+          )}
+        </div>
 
-        <Card style={{ padding: '2.25rem 2.25rem 1.23rem 2.25rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <KarlaTypography style={{ color: '#343a40' }}>Log in using email address</KarlaTypography>
-          </div>
-
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <section style={{ marginBottom: '16px', margin: '10px 0' }}>
-              <TextField
-                fullWidth
-                type="email"
-                id="email-input"
-                label="Email address"
-                value={email}
-                placeholder="Type your email"
-                required
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="etrune-email"
-                InputLabelProps={{ shrink: true }}
-              />
-            </section>
-
-            <section style={{ marginBottom: '16px' }}>
-              <TextField
-                fullWidth
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => setShowPassword((show) => !show)}
-                        onMouseDown={(event) => {
-                          event.preventDefault();
-                        }}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                InputLabelProps={{ shrink: true }}
-              />
-            </section>
-
-            <section style={{ marginBottom: '16px', width: '100%' }}>
-              <Link
-                href="recover-password"
-                underline="hover"
-                style={{
-                  marginLeft: '8px',
-                  color: 'gray',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  textDecoration: 'none',
-                }}
-              >
-                <LockIcon style={{ marginRight: '5px', color: '#98a6ad', fontSize: '18px' }} />
-                <Typography variant="body2" style={{ color: '#98a6ad', fontWeight: '400' }}>
-                  Forgot password?
-                </Typography>
-              </Link>
-            </section>
-
-            <footer style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={isLoading}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  border: '2px solid #232931',
-                  backgroundColor: '#323a46',
-                  color: '#fff',
-                  '&:hover': {
-                    backgroundColor: '#3d4c61',
-                  },
-                  width: '100%',
-                }}
-              >
-                {isLoading && <CircularProgress size={20} style={{ marginRight: '8px', color: '#fff' }} />}
-                {isLoading ? 'Loading...' : 'Log in'}
-              </Button>
-            </footer>
-
-            <section style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-              <Typography
-                style={{ fontSize: '0.775rem', marginRight: '7px', color: '#98a6ad', fontWeight: '400', marginBottom: '0' }}
-              >
-                Powered by
+        {(organization?.name || organization?.slogan) && (
+          <div>
+            {organization?.name && (
+              <Typography variant="h5" fontWeight="bold">
+                {organization.name}
               </Typography>
-              <img src={veripassLogo} alt="Veripass logo" height="15" style={{ marginTop: 'auto', marginBottom: 'auto' }} />
-            </section>
-          </form>
-        </Card>
-      </VeripassLayout>
-    </>
+            )}
+          </div>
+        )}
+
+        <div className="mt-4">
+          <KarlaTypography variant="h4" style={{ fontWeight: 'bold', color: '#000' }}>
+            {ui?.showTitle !== false ? ui?.title || 'Log in using email address' : ''}
+          </KarlaTypography>
+          {organization?.slogan && (
+            <Typography variant="body2" color="textSecondary" className="mt-2">
+              {organization.slogan}
+            </Typography>
+          )}
+        </div>
+      </header>
+
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <section className="mb-3">
+          <Typography variant="caption" display="block" gutterBottom className="fw-bold mb-1">
+            Your email
+          </Typography>
+          <TextField
+            fullWidth
+            type="email"
+            id="email-input"
+            placeholder="name@example.com"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+            variant="outlined"
+            size="small"
+            InputProps={{
+              style: { backgroundColor: '#fff' },
+            }}
+          />
+        </section>
+
+        <section className="mb-4">
+          <Typography variant="caption" display="block" gutterBottom className="fw-bold mb-1">
+            Password
+          </Typography>
+          <TextField
+            fullWidth
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Enter your password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((show) => !show)}
+                    onMouseDown={(event) => event.preventDefault()}
+                    edge="end"
+                    size="small"
+                  >
+                    {showPassword ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </section>
+
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
+          fullWidth
+          size="large"
+          sx={{
+            backgroundColor: '#000',
+            color: '#fff',
+            textTransform: 'none',
+            py: 1.5,
+            '&:hover': {
+              backgroundColor: '#333',
+            },
+            mb: 2,
+          }}
+        >
+          {isLoading && <CircularProgress size={20} style={{ marginRight: '8px', color: '#fff' }} />}
+          {isLoading ? 'Loading...' : 'Log in'}
+        </Button>
+
+        {showForgotPass && (
+          <div className="d-flex justify-content-end mb-4">
+            <Link
+              href={redirectUrl ? `${redirectUrl}/recover-password` : '/recover-password'}
+              underline="hover"
+              color="inherit"
+              fontSize="0.875rem"
+            >
+              Forgot password?
+            </Link>
+          </div>
+        )}
+
+        {providers && providers.length > 0 && (
+          <>
+            <div className="d-flex align-items-center mb-4">
+              <Divider sx={{ flexGrow: 1 }} />
+              <Typography variant="caption" className="mx-3 text-muted">
+                or continue with
+              </Typography>
+              <Divider sx={{ flexGrow: 1 }} />
+            </div>
+
+            <div className="d-flex justify-content-center gap-3">
+              {providers.map((provider) => (
+                <Button
+                  key={provider.id}
+                  variant="outlined"
+                  color="inherit"
+                  onClick={provider.onClick}
+                  sx={{
+                    minWidth: 'auto',
+                    width: '60px',
+                    height: '40px',
+                    borderColor: '#e0e0e0',
+                  }}
+                >
+                  {provider.icon}
+                </Button>
+              ))}
+            </div>
+          </>
+        )}
+
+        <div className="mt-5 text-center">
+          <Typography variant="caption" color="textSecondary">
+            Don't have an account?{' '}
+            <Link href="#" underline="hover" color="warning.main" fontWeight="bold">
+              Register
+            </Link>
+          </Typography>
+        </div>
+
+        <div className="mt-4 pt-4 d-flex justify-content-center align-items-center">
+          <Typography variant="caption" style={{ color: '#98a6ad', marginRight: '5px' }}>
+            Powered by
+          </Typography>
+          <img src={veripassLogo} alt="Veripass logo" height="12" />
+        </div>
+      </form>
+    </VeripassAuthLayout>
   );
 };
