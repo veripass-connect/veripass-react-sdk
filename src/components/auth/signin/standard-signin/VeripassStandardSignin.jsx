@@ -94,11 +94,16 @@ export const VeripassStandardSignin = ({
   environment = 'production',
   apiKey = '',
   initialEmail = '',
+  registerUrl = '',
+  onRegisterClick,
 }) => {
   const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
   const showForgotPass = ui.showForgotPass !== undefined ? ui.showForgotPass : true;
   const providers = ui.providers || [];
   const theme = ui?.theme || {};
+
+  const finalRegisterUrl = ui.registerUrl || registerUrl || '#';
+  const finalOnRegisterClick = ui.onRegisterClick || onRegisterClick;
 
   const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
@@ -259,7 +264,13 @@ export const VeripassStandardSignin = ({
           <Typography variant="caption" className="veripass-text-secondary">
             Don't have an account?{' '}
             <Link
-              href="#"
+              href={finalRegisterUrl}
+              onClick={(e) => {
+                if (finalOnRegisterClick) {
+                  e.preventDefault();
+                  finalOnRegisterClick(e);
+                }
+              }}
               underline="hover"
               style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
               className="veripass-fw-bold"

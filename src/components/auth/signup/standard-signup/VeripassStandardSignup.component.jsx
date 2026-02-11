@@ -59,7 +59,7 @@ async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, envi
 
 /**
  * Standard Sign-up component with split-screen layout.
- * Collects First Name, Last Name, Email, and Password.
+ * Collects Email and Password.
  *
  * @component
  */
@@ -92,10 +92,15 @@ export const VeripassStandardSignup = ({
   redirectUrl = '',
   environment = 'production',
   apiKey = '',
+  loginUrl = '',
+  onLoginClick,
 }) => {
   const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
   const providers = ui.providers || [];
   const theme = ui?.theme || {};
+
+  const finalLoginUrl = ui.loginUrl || loginUrl || '#';
+  const finalOnLoginClick = ui.onLoginClick || onLoginClick;
 
   const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
@@ -105,8 +110,6 @@ export const VeripassStandardSignup = ({
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -114,7 +117,7 @@ export const VeripassStandardSignup = ({
 
     try {
       await signUpStandard({
-        payload: { email, password, firstName, lastName },
+        payload: { email, password },
         authProvider,
         redirectUrl,
         apiKey,
@@ -143,26 +146,6 @@ export const VeripassStandardSignup = ({
       </header>
 
       <form onSubmit={handleSubmit} autoComplete="off">
-        <section className="veripass-mb-3">
-          <TextField
-            fullWidth
-            label="First Name"
-            placeholder="John"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            size="small"
-            className="veripass-mb-3"
-          />
-          <TextField
-            fullWidth
-            label="Last Name"
-            placeholder="Doe"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            size="small"
-          />
-        </section>
-
         <section className="veripass-mb-3">
           <TextField
             fullWidth
@@ -238,7 +221,13 @@ export const VeripassStandardSignup = ({
           <Typography variant="caption" className="veripass-text-secondary">
             Already have an account?{' '}
             <Link
-              href="#"
+              href={finalLoginUrl}
+              onClick={(e) => {
+                if (finalOnLoginClick) {
+                  e.preventDefault();
+                  finalOnLoginClick(e);
+                }
+              }}
               underline="hover"
               style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
               className="veripass-fw-bold"
