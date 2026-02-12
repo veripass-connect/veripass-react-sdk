@@ -50,6 +50,6 @@ export { VeripassMyPrincipalTeamList as VeripassMyPrincipalTeamList } from './co
 export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth.hook.jsx';
 export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';
 
-import './styles/styles.css';
 import './styles/fonts.css';
+import './styles/styles.css';
 import './styles/bootstrap-namespaced.css';
