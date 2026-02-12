@@ -22,7 +22,7 @@ export default {
     ui: { control: 'object' },
     organization: { control: 'object' },
     // Disable flattened props
-    sideImage: { table: { disable: true } },
+    heroImage: { table: { disable: true } },
     providers: { table: { disable: true } },
 
     redirectUrl: { control: 'text' },
@@ -57,11 +57,11 @@ Default.args = {
     },
     title: 'Join the AI revolution',
     showTitle: true,
-    sideImage: {
+    heroImage: {
       src: 'https://images.unsplash.com/photo-1579547621706-1a9c79d5c9f1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       alt: 'Futuristic Landscape',
-      overlayText1: 'Start building tomorrow, today.',
-      overlayText2: 'Create your account',
+      title: 'Start building tomorrow, today.',
+      subtitle: 'Create your account',
     },
     providers: [
       { id: 'google', icon: <GoogleIcon />, onClick: () => alert('Google') },

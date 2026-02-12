@@ -154,20 +154,12 @@ export const VeripassStandardSignin = ({
     initializeComponent();
   }, []);
 
-  // Map heroImage to sideImage for VeripassAuthLayout compatibility
-  const layoutSideImage = {
-    src: heroImage.src,
-    alt: heroImage.alt,
-    overlayText1: heroImage.title,
-    overlayText2: heroImage.subtitle,
-  };
-
   return (
-    <VeripassAuthLayout sideImage={layoutSideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src}>
       <header className="veripass-my-4">
-        <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
+        <h2 className="veripass-fw-bold veripass-text-dark veripass-mb-2">
           {ui?.showTitle !== false ? ui?.title || 'Log in using email address' : ''}
-        </KarlaTypography>
+        </h2>
         {organization?.slogan && (
           <Typography variant="body1" className="veripass-text-secondary">
             {organization.slogan}

@@ -3,6 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { VeripassSignInManager } from '@components/auth/signin/manager/VeripassSignInManager.component';
 import { AuthProvider } from '@hooks/useAuth.hook';
 import GoogleIcon from '@mui/icons-material/Google';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import AppleIcon from '@mui/icons-material/Apple';
+import MicrosoftIcon from '@mui/icons-material/Window';
 
 export default {
   title: 'Authentication/manager/VeripassSignInManager',
@@ -25,7 +28,7 @@ export default {
     ui: { control: 'object' },
     organization: { control: 'object' },
     // Disable flattened
-    sideImage: { table: { disable: true } },
+    heroImage: { table: { disable: true } },
     providers: { table: { disable: true } },
   },
   decorators: [
@@ -53,13 +56,18 @@ const commonArgs = {
     },
     title: 'Sign in to Sommatic',
     showTitle: true,
-    sideImage: {
+    heroImage: {
       src: 'https://images.unsplash.com/photo-1579547621706-1a9c79d5c9f1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       alt: 'Cybersecurity',
-      overlayText1: 'Securely access your agents.',
-      overlayText2: 'Intelligence awaits',
+      title: 'Securely access your agents.',
+      subtitle: 'Intelligence awaits',
     },
-    providers: [{ id: 'google', icon: <GoogleIcon />, onClick: () => alert('Google') }],
+    providers: [
+      { id: 'google', icon: <GoogleIcon />, onClick: () => alert('Google') },
+      { id: 'github', icon: <GitHubIcon />, onClick: () => alert('GitHub') },
+      { id: 'apple', icon: <AppleIcon />, onClick: () => alert('Apple') },
+      { id: 'microsoft', icon: <MicrosoftIcon />, onClick: () => alert('Microsoft') },
+    ],
   },
 };
 

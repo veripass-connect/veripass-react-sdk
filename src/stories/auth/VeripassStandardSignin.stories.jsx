@@ -18,10 +18,10 @@ export default {
   },
   tags: ['autodocs'],
   argTypes: {
-    ui: { control: 'object', description: 'UI overrides, including sideImage, logo, title, providers, etc.' },
+    ui: { control: 'object', description: 'UI overrides, including heroImage, logo, title, providers, etc.' },
     organization: { control: 'object', description: 'Organization branding (logo, name, slogan)' },
     // Legacy props hidden or mapped
-    sideImage: { table: { disable: true } },
+    heroImage: { table: { disable: true } },
     providers: { table: { disable: true } },
     showForgotPass: { table: { disable: true } },
 
@@ -59,11 +59,11 @@ Default.args = {
     title: 'Welcome back to the future',
     showTitle: true,
     showForgotPass: true,
-    sideImage: {
+    heroImage: {
       src: 'https://images.unsplash.com/photo-1579547621706-1a9c79d5c9f1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       alt: 'AI Abstract Art',
-      overlayText1: 'Unlock your creative potential',
-      overlayText2: 'Your intelligence hub',
+      title: 'Unlock your creative potential',
+      subtitle: 'Your intelligence hub',
     },
     providers: [
       { id: 'google', icon: <GoogleIcon />, onClick: () => alert('Google') },
@@ -79,6 +79,6 @@ NoImage.args = {
   ...Default.args,
   ui: {
     ...Default.args.ui,
-    sideImage: null,
+    heroImage: null,
   },
 };

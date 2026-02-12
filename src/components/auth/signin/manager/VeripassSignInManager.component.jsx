@@ -91,23 +91,12 @@ export const VeripassSignInManager = ({
     );
   }
 
-  // Discovery View
-  // Mapping heroImage to sideImage for VeripassAuthLayout compatibility if needed, or update Layout too.
-  // Assuming Layout expects sideImage structure unless updated.
-  // For now, mapping semantic 'heroImage' to 'sideImage' props for Layout
-  const layoutSideImage = {
-    src: heroImage.src,
-    alt: heroImage.alt,
-    overlayText1: heroImage.title,
-    overlayText2: heroImage.subtitle,
-  };
-
   return (
-    <VeripassAuthLayout sideImage={layoutSideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src}>
       <header className="veripass-my-4">
-        <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
+        <h2 className="veripass-fw-bold veripass-text-dark veripass-mb-2">
           {ui?.showTitle !== false ? ui?.title || 'Sign in' : ''}
-        </KarlaTypography>
+        </h2>
         <Typography variant="body1" className="veripass-text-secondary">
           Enter your email or phone to continue
         </Typography>

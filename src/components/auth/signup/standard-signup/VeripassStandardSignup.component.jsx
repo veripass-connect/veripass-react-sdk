@@ -81,11 +81,11 @@ export const VeripassStandardSignup = ({
     },
     title: 'Create an account',
     showTitle: true,
-    sideImage: {
+    heroImage: {
       src: '',
       alt: 'Cover',
-      overlayText1: '',
-      overlayText2: '',
+      title: '',
+      subtitle: '',
     },
     providers: [],
     theme: {
@@ -105,7 +105,7 @@ export const VeripassStandardSignup = ({
   loginUrl = '',
   onLoginClick,
 }) => {
-  const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
+  const heroImage = ui.heroImage || { src: '', alt: 'Cover' };
   const providers = ui.providers || [];
   const theme = ui?.theme || {};
 
@@ -149,12 +149,12 @@ export const VeripassStandardSignup = ({
   };
 
   return (
-    <VeripassAuthLayout sideImage={sideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src}>
       <header className="veripass-mb-4">
         <div className="veripass-mt-4">
-          <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
+          <h2 className="veripass-fw-bold veripass-text-dark veripass-mb-2">
             {ui?.showTitle !== false ? ui?.title || 'Create an account' : ''}
-          </KarlaTypography>
+          </h2>
           {organization?.slogan && (
             <Typography variant="body1" className="veripass-text-secondary">
               {organization.slogan}

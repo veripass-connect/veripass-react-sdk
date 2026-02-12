@@ -62,36 +62,13 @@ module.exports = {
       extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: 'veripass-react-sdk.css',
-      inject: false,
+      inject: true,
       modules: false,
+      use: ['sass'],
       minimize: true,
       sourceMap: true,
+      config: false,
     }),
-    // Embed extracted CSS into JS bundles so the SDK is self-contained (plug-and-play)
-    {
-      name: 'inject-css-into-bundle',
-      generateBundle(options, bundle) {
-        const cssFileName = 'veripass-react-sdk.css';
-        const cssAsset = bundle[cssFileName];
-
-        if (cssAsset && cssAsset.source) {
-          const cssContent = JSON.stringify(cssAsset.source.toString());
-          const injectCode = `(function(){try{if(typeof document!=='undefined'){var s=document.createElement('style');s.setAttribute('data-veripass-sdk','');s.textContent=${cssContent};document.head.appendChild(s);}}catch(e){console.warn('Veripass SDK: Could not inject styles',e);}})();\n`;
-
-          for (const key of Object.keys(bundle)) {
-            const chunk = bundle[key];
-            if (chunk.type === 'chunk' && chunk.isEntry) {
-              chunk.code = injectCode + chunk.code;
-            }
-          }
-
-          // Remove CSS file from dist — everything is inside the JS now
-          delete bundle[cssFileName];
-          delete bundle[cssFileName + '.map'];
-        }
-      },
-    },
     url({
       include: ['**/*.woff', '**/*.woff2', '**/*.eot', '**/*.ttf'],
       limit: 0,
