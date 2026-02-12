@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout';
 import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
@@ -39,11 +40,10 @@ const ProviderButton = styled(Button)({
   borderColor: '#e0e0e0',
 });
 
-// Assuming generic signup function similar to signin
-async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
+async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, environment, navigate }) {
   const entityService = new SecurityService({ apiKey, settings: { environment } });
 
-  const entityResponse = await entityService.signUpWithStandard(payload);
+  const entityResponse = await entityService.signUpStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {
     await swal.fire({
@@ -54,7 +54,17 @@ async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, envi
     return;
   }
 
-  authProvider.login({ user: entityResponse.result || {}, redirectUrl });
+  if (entityResponse.result) {
+    authProvider.login({ user: entityResponse.result });
+  }
+
+  if (redirectUrl) {
+    if (navigate) {
+      navigate(redirectUrl);
+    } else {
+      window.location.href = redirectUrl;
+    }
+  }
 }
 
 /**
@@ -105,6 +115,13 @@ export const VeripassStandardSignup = ({
   const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
 
+  let navigate;
+  try {
+    navigate = useNavigate();
+  } catch (e) {
+    console.warn('VeripassStandardSignup: useNavigate hook failed or no router context.', e);
+  }
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -122,6 +139,7 @@ export const VeripassStandardSignup = ({
         redirectUrl,
         apiKey,
         environment,
+        navigate,
       });
     } catch (error) {
       console.error(error);
