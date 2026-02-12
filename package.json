@@ -15,7 +15,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build:css": "sass src/styles/_bootstrap-namespaced.scss src/styles/bootstrap-namespaced.css && postcss src/styles/bootstrap-namespaced.css -o src/styles/bootstrap-namespaced.css"
+    "build:css": "sass src/styles/_bootstrap-namespaced.scss src/styles/bootstrap-namespaced.css && postcss src/styles/bootstrap-namespaced.css -o src/styles/bootstrap-namespaced.css",
+    "version-patch": "npm version patch",
+    "version-deploy": "npm publish"
   },
   "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
   "license": "MIT",
