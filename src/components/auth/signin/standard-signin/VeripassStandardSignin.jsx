@@ -15,8 +15,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
-
 import { SecurityService } from '@services';
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
@@ -280,13 +278,6 @@ export const VeripassStandardSignin = ({
             </Link>
           </Typography>
         </div>
-
-        <footer className="veripass-mt-4 veripass-pt-4 veripass-d-flex veripass-justify-content-center veripass-align-items-center">
-          <Typography variant="caption" className="veripass-text-secondary veripass-me-1">
-            Powered by
-          </Typography>
-          <img src={veripassLogo} alt="Veripass logo" height="12" />
-        </footer>
       </form>
     </VeripassAuthLayout>
   );

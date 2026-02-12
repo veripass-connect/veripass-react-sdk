@@ -4,7 +4,6 @@ import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout'
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, Typography, Button, Divider, Link } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 
 const BrandButton = styled(Button)(({ theme, customTheme }) => ({
   backgroundColor: customTheme?.brandPrimary || '#000000',
@@ -148,7 +147,7 @@ export const VeripassSignInManager = ({
           </section>
         )}
 
-        <div className="veripass-mt-5 veripass-text-center">
+        <div className="veripass-mt-2 veripass-text-center">
           <Typography variant="caption" className="veripass-text-secondary">
             Don't have an account?{' '}
             <Link
@@ -167,13 +166,6 @@ export const VeripassSignInManager = ({
             </Link>
           </Typography>
         </div>
-
-        <footer className="veripass-mt-5 veripass-text-center">
-          <Typography variant="caption" className="veripass-text-secondary veripass-me-1">
-            Powered by
-          </Typography>
-          <img src={veripassLogo} alt="Veripass logo" height="12" />
-        </footer>
       </form>
     </VeripassAuthLayout>
   );
