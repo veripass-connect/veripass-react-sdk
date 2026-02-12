@@ -83,7 +83,7 @@ export const VeripassIdentityContractList = ({
       minWidth: 100,
       renderCell: (params) => {
         return (
-          <section className="d-flex align-items-center w-100">
+          <section className="veripass-d-flex veripass-align-items-center veripass-w-100">
             <StatusSelector
               status={params?.row?.status}
               statuses={statuses}
@@ -93,7 +93,7 @@ export const VeripassIdentityContractList = ({
               }}
             />
             <button
-              className="btn btn-link-dark text-truncate"
+              className="veripass-btn veripass-btn-link-dark veripass-text-truncate"
               onClick={() => {
                 itemOnAction('quick-view', { entity: params?.row || {} });
               }}
@@ -421,17 +421,20 @@ export const VeripassIdentityContractList = ({
           <>
             {isEmptyEntities && (
               <>
-                <section className="col-12 col-lg-12 col-xl-10 mx-auto d-block shadow-lg mt-4">
-                  <div className="card rounded-8">
-                    <div className="card-body">
-                      <article className="container pt-2 text-center">
-                        <h3 className="text-center">There is no information registered yet.</h3>
-                        <p className="text-muted">
+                <section className="veripass-col-12 veripass-col-lg-12 veripass-col-xl-10 veripass-mx-auto veripass-d-block veripass-shadow-lg veripass-mt-4">
+                  <div className="veripass-card veripass-rounded-8">
+                    <div className="veripass-card-body">
+                      <article className="veripass-container veripass-pt-2 veripass-text-center">
+                        <h3 className="veripass-text-center">There is no information registered yet.</h3>
+                        <p className="veripass-text-muted">
                           This section has no records yet. Once contracts are created or assigned, they will appear here.
                         </p>
-                        <img src={emptyImageUrl} alt="empty content" className="d-block mx-auto" height="250" />
+                        <img src={emptyImageUrl} alt="empty content" className="veripass-d-block veripass-mx-auto" height="250" />
                         {!readOnly && (
-                          <Button className="btn btn-bordered-purple my-3 me-3" onClick={() => itemOnAction('create')}>
+                          <Button
+                            className="veripass-btn veripass-btn-bordered-purple veripass-my-3 veripass-me-3"
+                            onClick={() => itemOnAction('create')}
+                          >
                             Crear usuario
                           </Button>
                         )}
@@ -444,16 +447,16 @@ export const VeripassIdentityContractList = ({
 
             {!isEmptyEntities && (
               <>
-                <section className="col-12 col-lg-12 col-xl-12 mx-auto d-block shadow-lg mt-4">
-                  <div className="card rounded-8">
-                    <header className="d-flex flex-row justify-content-between px-4 pt-4">
+                <section className="veripass-col-12 veripass-col-lg-12 veripass-col-xl-12 veripass-mx-auto veripass-d-block veripass-shadow-lg veripass-mt-4">
+                  <div className="veripass-card veripass-rounded-8">
+                    <header className="veripass-d-flex veripass-flex-row veripass-justify-content-between veripass-px-4 veripass-pt-4">
                       <section>
-                        <h4 className="mt-0 header-title">Todos tus contratos</h4>
-                        <p className="text-muted font-14 mb-3">
+                        <h4 className="veripass-mt-0 header-title">Todos tus contratos</h4>
+                        <p className="veripass-text-muted font-14 veripass-mb-3">
                           Visualiza, organiza y optimiza tus contratos con total facilidad.
                         </p>
                       </section>
-                      <section className="align-items-sm-baseline d-flex dropdown">
+                      <section className="veripass-align-items-sm-baseline veripass-d-flex veripass-dropdown">
                         {!readOnly && (
                           <Button
                             variant="contained"
@@ -462,13 +465,13 @@ export const VeripassIdentityContractList = ({
                               itemOnAction('create', null);
                             }}
                           >
-                            <i className="mdi mdi-plus me-1"></i> Iniciar contrato
+                            <i className="mdi mdi-plus veripass-me-1"></i> Iniciar contrato
                           </Button>
                         )}
                       </section>
                     </header>
 
-                    <section className="px-4 pb-4">
+                    <section className="veripass-px-4 veripass-pb-4">
                       <DataGrid
                         columns={columns}
                         rows={formattedEntities}

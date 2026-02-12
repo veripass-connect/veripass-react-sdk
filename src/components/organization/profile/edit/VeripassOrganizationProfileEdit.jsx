@@ -102,7 +102,7 @@ export const VeripassOrganizationProfileEdit = ({
   itemOnAction = () => {},
 }) => {
   // Hooks
-    const { showErrorFromUrl } = useUrlErrorHandler();
+  const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
 
   // Models
@@ -197,17 +197,21 @@ export const VeripassOrganizationProfileEdit = ({
       <VeripassLayout isPopupContext={isPopupContext} ui={{ showLogo: true, vertical: 'bottom', alignment: 'end' }}>
         <Card style={{ padding: '2rem', position: 'relative', overflow: 'hidden' }}>
           <header
-            className="profile-header position-relative rounded-3"
+            className="profile-header veripass-position-relative veripass-rounded-3"
             style={{ background: `url(${coverUrl}) center/cover no-repeat` }}
           >
-            <section className="profile-info-container row justify-content-between">
-              <section className="col-10 d-flex">
-                <article className="avatar-wrapper mx-4">
+            <section className="profile-info-container veripass-row veripass-justify-content-between">
+              <section className="veripass-col-10 veripass-d-flex">
+                <article className="avatar-wrapper veripass-mx-4">
                   <Avatar src={avatarUrl} sx={{ width: 98, height: 98, bgcolor: '#fff' }} alt="User avatar" />
                 </article>
-                <article className="profile-info d-flex align-items-end flex-fill overflow-hidden">
-                  <div className="d-flex flex-column  w-100">
-                    <ProfileIdentityFullName as="h5" style={{ marginBottom: 0 }} className="text-truncate w-100">
+                <article className="profile-info veripass-d-flex veripass-align-items-end veripass-flex-fill veripass-overflow-hidden">
+                  <div className="veripass-d-flex veripass-flex-column  veripass-w-100">
+                    <ProfileIdentityFullName
+                      as="h5"
+                      style={{ marginBottom: 0 }}
+                      className="veripass-text-truncate veripass-w-100"
+                    >
                       <strong>{identity?.organization_profile?.display_name}</strong>
                     </ProfileIdentityFullName>
                     {identity?.organization_profile?.bio && (
@@ -222,9 +226,9 @@ export const VeripassOrganizationProfileEdit = ({
           </header>
 
           <main className="profile-content">
-            <section className="d-flex flex-column justify-content-between pt-3 px-4 flex-wrap gap-4">
-              <article className="row">
-                <section className="col-12 col-md-6">
+            <section className="veripass-d-flex veripass-flex-column veripass-justify-content-between veripass-pt-3 veripass-px-4 veripass-flex-wrap veripass-gap-4">
+              <article className="veripass-row">
+                <section className="veripass-col-12 veripass-col-md-6">
                   <TextField
                     fullWidth
                     id="display_name"
@@ -245,9 +249,9 @@ export const VeripassOrganizationProfileEdit = ({
                     size={ui?.inputSize}
                   />
                 </section>
-                <section className="col-12 col-md-6">
+                <section className="veripass-col-12 veripass-col-md-6">
                   <TextField
-                    className="w-100"
+                    className="veripass-w-100"
                     type="email"
                     id="email-input"
                     label="Primary email address"
@@ -275,8 +279,8 @@ export const VeripassOrganizationProfileEdit = ({
                 </section>
               </article>
 
-              <article className="row">
-                <section className="col-12">
+              <article className="veripass-row">
+                <section className="veripass-col-12">
                   <TextField
                     fullWidth
                     id="organization_slug"
@@ -300,8 +304,8 @@ export const VeripassOrganizationProfileEdit = ({
                 </section>
               </article>
 
-              <article className="row">
-                <section className="col-12">
+              <article className="veripass-row">
+                <section className="veripass-col-12">
                   <NationalIdentificationSelector
                     label="National identification number"
                     defaultDocumentType="Passport"
@@ -310,22 +314,24 @@ export const VeripassOrganizationProfileEdit = ({
                     }}
                     ui={{ ...ui, ...{ documentType: true } }}
                   />
-                  <FormHelperText className="mb-0">Please write the primary organization legal national id.</FormHelperText>
+                  <FormHelperText className="veripass-mb-0">
+                    Please write the primary organization legal national id.
+                  </FormHelperText>
                   {userNationalIdValidationInProgress && (
-                    <FormHelperText className="d-flex text-primary">
-                      <CircularProgress size={20} className="me-2" /> Validating user existence...
+                    <FormHelperText className="veripass-d-flex veripass-text-primary">
+                      <CircularProgress size={20} className="veripass-me-2" /> Validating user existence...
                     </FormHelperText>
                   )}
                   {isExistingUser && entity?.primary_national_id?.identification && (
-                    <FormHelperText className="d-flex text-danger">
+                    <FormHelperText className="veripass-d-flex veripass-text-danger">
                       Organization already exists. You only can view it and add it to this organization.
                     </FormHelperText>
                   )}
                 </section>
               </article>
 
-              <article className="row">
-                <article className="col-12">
+              <article className="veripass-row">
+                <article className="veripass-col-12">
                   <PhoneCountrySelector
                     label="Phone number"
                     onPhoneChange={(event) => {
@@ -363,12 +369,12 @@ export const VeripassOrganizationProfileEdit = ({
                 </section>
               </article>
 
-              <footer className="row">
-                <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
+              <footer className="veripass-row">
+                <section className="veripass-mb-0 veripass-h-25 veripass-d-flex veripass-justify-content-end veripass-align-items-end">
                   <Button
                     type="button"
                     variant="contained"
-                    className="my-2"
+                    className="veripass-my-2"
                     onClick={handleSubmit}
                     disabled={!entity?.primary_national_id?.identification}
                     sx={{
