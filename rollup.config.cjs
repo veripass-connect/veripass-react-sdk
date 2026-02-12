@@ -27,11 +27,7 @@ module.exports = {
       sourcemap: true,
     },
   ],
-  external: (id) =>
-    id === 'react' ||
-    id === 'react-dom' ||
-    id === 'react/jsx-runtime' ||
-    id === 'react-router-dom',
+  external: (id) => id === 'react' || id === 'react-dom' || id === 'react/jsx-runtime' || id === 'react-router-dom',
   onwarn: function (warning, warn) {
     if (warning.message && warning.message.includes('use client')) {
       return;
@@ -66,8 +62,8 @@ module.exports = {
       extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: false,
-      inject: true,
+      extract: 'veripass-react-sdk.css',
+      inject: false,
       modules: false,
       minimize: true,
       sourceMap: true,
@@ -90,8 +86,8 @@ module.exports = {
     copy({
       targets: [
         { src: 'src/fonts/*', dest: 'dist/fonts' },
-        { src: 'src/assets/*', dest: 'dist/assets' }
-      ]
-    })
+        { src: 'src/assets/*', dest: 'dist/assets' },
+      ],
+    }),
   ],
 };

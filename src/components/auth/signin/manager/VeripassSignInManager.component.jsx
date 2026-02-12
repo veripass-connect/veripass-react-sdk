@@ -38,11 +38,11 @@ export const VeripassSignInManager = ({
     },
     title: 'Sign in',
     showTitle: true,
-    sideImage: {
+    heroImage: {
       src: '',
       alt: 'Cover',
-      overlayText1: '',
-      overlayText2: '',
+      title: '',
+      subtitle: '',
     },
     providers: [],
     theme: {
@@ -57,7 +57,7 @@ export const VeripassSignInManager = ({
   onRegisterClick,
   ...props
 }) => {
-  const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
+  const heroImage = ui.heroImage || { src: '', alt: 'Cover' };
   const providers = ui.providers || [];
   const theme = ui?.theme || {};
 
@@ -77,7 +77,7 @@ export const VeripassSignInManager = ({
   if (view === 'standard') {
     return (
       <VeripassStandardSignin
-        sideImage={sideImage}
+        heroImage={heroImage}
         organization={organization}
         providers={providers}
         ui={{
@@ -92,8 +92,18 @@ export const VeripassSignInManager = ({
   }
 
   // Discovery View
+  // Mapping heroImage to sideImage for VeripassAuthLayout compatibility if needed, or update Layout too.
+  // Assuming Layout expects sideImage structure unless updated.
+  // For now, mapping semantic 'heroImage' to 'sideImage' props for Layout
+  const layoutSideImage = {
+    src: heroImage.src,
+    alt: heroImage.alt,
+    overlayText1: heroImage.title,
+    overlayText2: heroImage.subtitle,
+  };
+
   return (
-    <VeripassAuthLayout sideImage={sideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout sideImage={layoutSideImage} logo={organization?.logoSrc || ui?.logo?.src}>
       <header className="veripass-my-4">
         <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
           {ui?.showTitle !== false ? ui?.title || 'Sign in' : ''}
