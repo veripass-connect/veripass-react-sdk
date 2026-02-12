@@ -3,24 +3,73 @@ import { VeripassStandardSignin } from '../standard-signin/VeripassStandardSigni
 import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, Typography, Button, Divider, Link } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
 
+const BrandButton = styled(Button)(({ theme, customTheme }) => ({
+  backgroundColor: customTheme?.brandPrimary || '#000000',
+  color: customTheme?.brandPrimaryForeground || '#fff',
+  textTransform: 'none',
+  fontSize: '1rem',
+  fontWeight: 'bold',
+  '&:hover': {
+    backgroundColor: customTheme?.brandPrimary ? `${customTheme.brandPrimary}CC` : '#333333',
+  },
+}));
+
+const ProviderButton = styled(Button)({
+  minWidth: 'auto',
+  width: '60px',
+  height: '40px',
+  borderColor: '#e0e0e0',
+});
+
+/**
+ * Manager component that handles the authentication flow.
+ * Can start with a "Discovery" step (Email/Phone) or directly show the Standard Signin.
+ *
+ * @component
+ */
 export const VeripassSignInManager = ({
+  ui = {
+    logo: {
+      src: '',
+      height: '40',
+    },
+    title: 'Sign in',
+    showTitle: true,
+    sideImage: {
+      src: '',
+      alt: 'Cover',
+      overlayText1: '',
+      overlayText2: '',
+    },
+    providers: [],
+    theme: {
+      brandPrimary: '#000000',
+      brandPrimaryForeground: '#ffffff',
+      linkColor: '#0d6efd',
+    },
+  },
   signinType, // 'standard' | undefined
-  sideImage,
-  organization,
-  providers,
+  organization = { name: '', logoSrc: '', slogan: '' },
+  registerUrl = '',
+  onRegisterClick,
   ...props
 }) => {
-  // If signinType is explicit, bypass discovery
+  const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
+  const providers = ui.providers || [];
+  const theme = ui?.theme || {};
+
   const [view, setView] = useState(signinType === 'standard' ? 'standard' : 'discovery');
   const [identifier, setIdentifier] = useState('');
+
+  const finalRegisterUrl = ui.registerUrl || registerUrl || '#';
+  const finalOnRegisterClick = ui.onRegisterClick || onRegisterClick;
 
   const handleContinue = (e) => {
     e.preventDefault();
     if (identifier) {
-      // Here we would ideally check if identifier exists and what type of auth it needs.
-      // For now, we assume standard password auth.
       setView('standard');
     }
   };
@@ -31,7 +80,12 @@ export const VeripassSignInManager = ({
         sideImage={sideImage}
         organization={organization}
         providers={providers}
-        initialEmail={identifier} // Pass the discovered email
+        ui={{
+          ...ui,
+        }}
+        initialEmail={identifier}
+        registerUrl={registerUrl}
+        onRegisterClick={onRegisterClick}
         {...props}
       />
     );
@@ -39,36 +93,21 @@ export const VeripassSignInManager = ({
 
   // Discovery View
   return (
-    <VeripassAuthLayout sideImage={sideImage}>
-      <header className="mb-5">
-        <div className="d-flex align-items-center mb-3">
-          {(organization?.logoSrc || props.ui?.logo?.src) && (
-            <img
-              src={organization?.logoSrc || props.ui?.logo?.src}
-              alt={organization?.name || 'Logo'}
-              height={props.ui?.logo?.height || 40}
-              className="me-3"
-            />
-          )}
-        </div>
-
-        <div className="mt-4">
-          <KarlaTypography variant="h4" style={{ fontWeight: 'bold', color: '#000' }}>
-            Sign in
-          </KarlaTypography>
-          <Typography variant="body2" color="textSecondary" className="mt-2">
-            Enter your email or phone to continue
-          </Typography>
-        </div>
+    <VeripassAuthLayout sideImage={sideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+      <header className="veripass-my-4">
+        <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
+          {ui?.showTitle !== false ? ui?.title || 'Sign in' : ''}
+        </KarlaTypography>
+        <Typography variant="body1" className="veripass-text-secondary">
+          Enter your email or phone to continue
+        </Typography>
       </header>
 
       <form onSubmit={handleContinue}>
-        <section className="mb-4">
-          <Typography variant="caption" display="block" gutterBottom className="fw-bold mb-1">
-            Email or phone
-          </Typography>
+        <section className="veripass-mb-4">
           <TextField
             fullWidth
+            label="Your email or phone"
             placeholder="Type your email or phone"
             value={identifier}
             required
@@ -79,70 +118,63 @@ export const VeripassSignInManager = ({
           />
         </section>
 
-        <Button
+        <BrandButton
           type="submit"
           variant="contained"
           fullWidth
           size="large"
-          sx={{
-            backgroundColor: '#2d68fc', // Blue as per screenshot 4
-            color: '#fff',
-            textTransform: 'none',
-            py: 1.5,
-            '&:hover': {
-              backgroundColor: '#1a54e6',
-            },
-            mb: 3,
-          }}
+          className="veripass-mb-3 veripass-py-3 veripass-fw-bold veripass-fs-6"
+          customTheme={theme}
         >
           Continue
-        </Button>
-
-        <div className="text-center mb-4">
-          <Link href="#" underline="hover" color="primary" fontWeight="bold" style={{ textDecoration: 'none' }}>
-            Create account
-          </Link>
-        </div>
+        </BrandButton>
 
         {providers && providers.length > 0 && (
-          <>
-            <div className="d-flex align-items-center mb-4">
-              <Divider sx={{ flexGrow: 1 }} />
-              <Typography variant="caption" className="mx-3 text-muted">
-                or
+          <section>
+            <article className="veripass-d-flex veripass-align-items-center veripass-mb-4">
+              <Divider className="veripass-flex-grow-1" />
+              <Typography variant="caption" className="veripass-mx-3 veripass-text-muted">
+                or continue with
               </Typography>
-              <Divider sx={{ flexGrow: 1 }} />
-            </div>
+              <Divider className="veripass-flex-grow-1" />
+            </article>
 
-            {/* Button for primary provider (e.g. Google) if we want to match Screenshot 4 style 
-                             Screenshot 4 has a full width button "Iniciar sesión con Google".
-                             Current providers prop is array of icons. 
-                             I'll render them as before, or list full buttons? 
-                             screenshot 4 shows ONE extensive button. 
-                             I'll keep the icon list for consistency with Signin/Signup unless instructed.
-                         */}
-            <div className="d-flex justify-content-center gap-3">
+            <article className="veripass-d-flex veripass-justify-content-center veripass-gap-3">
               {providers.map((provider) => (
-                <Button
-                  key={provider.id}
-                  variant="outlined"
-                  color="inherit"
-                  onClick={provider.onClick}
-                  sx={{ minWidth: 'auto', width: '60px', height: '40px', borderColor: '#e0e0e0' }}
-                >
+                <ProviderButton key={provider.id} variant="outlined" color="inherit" onClick={provider.onClick}>
                   {provider.icon}
-                </Button>
+                </ProviderButton>
               ))}
-            </div>
-          </>
+            </article>
+          </section>
         )}
 
-        <div className="mt-5 text-center">
-          <Typography variant="caption" style={{ color: '#98a6ad', marginRight: '5px' }}>
+        <div className="veripass-mt-5 veripass-text-center">
+          <Typography variant="caption" className="veripass-text-secondary">
+            Don't have an account?{' '}
+            <Link
+              href={finalRegisterUrl}
+              onClick={(e) => {
+                if (finalOnRegisterClick) {
+                  e.preventDefault();
+                  finalOnRegisterClick(e);
+                }
+              }}
+              underline="hover"
+              style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
+              className="veripass-fw-bold"
+            >
+              Register
+            </Link>
+          </Typography>
+        </div>
+
+        <footer className="veripass-mt-5 veripass-text-center">
+          <Typography variant="caption" className="veripass-text-secondary veripass-me-1">
             Powered by
           </Typography>
           <img src={veripassLogo} alt="Veripass logo" height="12" />
-        </div>
+        </footer>
       </form>
     </VeripassAuthLayout>
   );

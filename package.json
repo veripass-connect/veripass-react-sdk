@@ -14,7 +14,8 @@
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "build:css": "sass src/styles/_bootstrap-namespaced.scss src/styles/bootstrap-namespaced.css && postcss src/styles/bootstrap-namespaced.css -o src/styles/bootstrap-namespaced.css"
   },
   "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
   "license": "MIT",
@@ -66,7 +67,7 @@
     "clipboard": "^2.0.11",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
-    "react-router-dom": "^6.26.2",
+    "react-router-dom": "^5 || ^6 || ^7",
     "react-select": "^5.8.0",
     "sweetalert2": "^11.22.4",
     "sweetalert2-react-content": "^5.1.0"
@@ -95,11 +96,14 @@
     "@storybook/react-webpack5": "^8.6.0",
     "@storybook/test": "^8.6.0",
     "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.1",
+    "postcss-prefixer": "^3.0.0",
     "prop-types": "^15.8.1",
     "rollup": "^4.13.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
+    "sass": "^1.97.3",
     "storybook": "^8.6.0"
   }
 }

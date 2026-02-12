@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout';
 import { useUrlErrorHandler } from '@hooks/useUrlErrorHandler';
 import { useAuth } from '@hooks/useAuth.hook';
@@ -7,6 +8,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, InputAdornment, IconButton, CircularProgress, Typography, Button, Link, Divider } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -20,12 +22,28 @@ import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-m
 
 const swal = withReactContent(Swal);
 
-// Assuming generic signup function similar to signin
-async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
+const ActionButton = styled(Button)(({ theme, customTheme }) => ({
+  backgroundColor: customTheme?.brandPrimary || '#000000',
+  color: customTheme?.brandPrimaryForeground || '#ffffff',
+  textTransform: 'none',
+  fontWeight: 'bold',
+  fontSize: '1rem',
+  '&:hover': {
+    backgroundColor: customTheme?.brandPrimary ? `${customTheme.brandPrimary}CC` : '#333333',
+  },
+}));
+
+const ProviderButton = styled(Button)({
+  minWidth: 'auto',
+  width: '60px',
+  height: '40px',
+  borderColor: '#e0e0e0',
+});
+
+async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, environment, navigate }) {
   const entityService = new SecurityService({ apiKey, settings: { environment } });
 
-  // Checking if method exists, based on earlier grep it does: signUpWithStandard
-  const entityResponse = await entityService.signUpWithStandard(payload);
+  const entityResponse = await entityService.signUpStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {
     await swal.fire({
@@ -36,38 +54,79 @@ async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, envi
     return;
   }
 
-  // Auto-login after signup? Or redirect to verify?
-  // "Standard signup... very similar to standardsignin"
-  // Usually returns user or token. I'll assume auto-login for now or just message.
-  authProvider.login({ user: entityResponse.result || {}, redirectUrl });
+  if (entityResponse.result) {
+    authProvider.login({ user: entityResponse.result });
+  }
+
+  if (redirectUrl) {
+    if (navigate) {
+      navigate(redirectUrl);
+    } else {
+      window.location.href = redirectUrl;
+    }
+  }
 }
 
+/**
+ * Standard Sign-up component with split-screen layout.
+ * Collects Email and Password.
+ *
+ * @component
+ */
 export const VeripassStandardSignup = ({
   ui = {
-    logo: { height: '40' },
+    logo: {
+      src: '',
+      height: '40',
+    },
     title: 'Create an account',
     showTitle: true,
+    sideImage: {
+      src: '',
+      alt: 'Cover',
+      overlayText1: '',
+      overlayText2: '',
+    },
+    providers: [],
+    theme: {
+      brandPrimary: '#000000',
+      brandPrimaryForeground: '#ffffff',
+      linkColor: '#0d6efd',
+    },
   },
-  organization = { name: '', logoSrc: '', slogan: '' },
-  sideImage,
-  providers = [],
+  organization = {
+    name: '',
+    logoSrc: '',
+    slogan: '',
+  },
   redirectUrl = '',
   environment = 'production',
   apiKey = '',
+  loginUrl = '',
+  onLoginClick,
 }) => {
-  // Hooks
+  const sideImage = ui.sideImage || { src: '', alt: 'Cover' };
+  const providers = ui.providers || [];
+  const theme = ui?.theme || {};
+
+  const finalLoginUrl = ui.loginUrl || loginUrl || '#';
+  const finalOnLoginClick = ui.onLoginClick || onLoginClick;
+
   const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
 
-  // States
+  let navigate;
+  try {
+    navigate = useNavigate();
+  } catch (e) {
+    console.warn('VeripassStandardSignup: useNavigate hook failed or no router context.', e);
+  }
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Form Data
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -75,11 +134,12 @@ export const VeripassStandardSignup = ({
 
     try {
       await signUpStandard({
-        payload: { email, password, firstName, lastName },
+        payload: { email, password },
         authProvider,
         redirectUrl,
         apiKey,
         environment,
+        navigate,
       });
     } catch (error) {
       console.error(error);
@@ -89,35 +149,14 @@ export const VeripassStandardSignup = ({
   };
 
   return (
-    <VeripassAuthLayout sideImage={sideImage}>
-      <header className="mb-5">
-        <div className="d-flex align-items-center mb-3">
-          {(organization?.logoSrc || ui?.logo?.src) && (
-            <img
-              src={organization?.logoSrc || ui?.logo?.src}
-              alt={organization?.name || 'Logo'}
-              height={ui?.logo?.height || 40}
-              className="me-3"
-            />
-          )}
-        </div>
-
-        {(organization?.name || organization?.slogan) && (
-          <div>
-            {organization?.name && (
-              <Typography variant="h5" fontWeight="bold">
-                {organization.name}
-              </Typography>
-            )}
-          </div>
-        )}
-
-        <div className="mt-4">
-          <KarlaTypography variant="h4" style={{ fontWeight: 'bold', color: '#000' }}>
+    <VeripassAuthLayout sideImage={sideImage} logo={organization?.logoSrc || ui?.logo?.src}>
+      <header className="veripass-mb-4">
+        <div className="veripass-mt-4">
+          <KarlaTypography variant="h1" className="veripass-fw-bold veripass-text-dark veripass-mb-2 veripass-display-6">
             {ui?.showTitle !== false ? ui?.title || 'Create an account' : ''}
           </KarlaTypography>
           {organization?.slogan && (
-            <Typography variant="body2" color="textSecondary" className="mt-2">
+            <Typography variant="body1" className="veripass-text-secondary">
               {organization.slogan}
             </Typography>
           )}
@@ -125,41 +164,10 @@ export const VeripassStandardSignup = ({
       </header>
 
       <form onSubmit={handleSubmit} autoComplete="off">
-        <div className="row g-2 mb-3">
-          <div className="col-6">
-            <Typography variant="caption" className="fw-bold mb-1 d-block">
-              First name
-            </Typography>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="First name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="col-6">
-            <Typography variant="caption" className="fw-bold mb-1 d-block">
-              Last name
-            </Typography>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-
-        <section className="mb-3">
-          <Typography variant="caption" display="block" gutterBottom className="fw-bold mb-1">
-            Your email
-          </Typography>
+        <section className="veripass-mb-3">
           <TextField
             fullWidth
+            label="Your email"
             type="email"
             placeholder="name@example.com"
             value={email}
@@ -169,12 +177,10 @@ export const VeripassStandardSignup = ({
           />
         </section>
 
-        <section className="mb-4">
-          <Typography variant="caption" display="block" gutterBottom className="fw-bold mb-1">
-            Create password
-          </Typography>
+        <section className="veripass-mb-4">
           <TextField
             fullWidth
+            label="Create password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Enter your password"
             value={password}
@@ -197,67 +203,64 @@ export const VeripassStandardSignup = ({
           />
         </section>
 
-        <Button
+        <ActionButton
           type="submit"
           variant="contained"
           disabled={isLoading}
           fullWidth
           size="large"
-          sx={{
-            backgroundColor: '#000',
-            color: '#fff',
-            textTransform: 'none',
-            py: 1.5,
-            '&:hover': {
-              backgroundColor: '#333',
-            },
-            mb: 2,
-          }}
+          className="veripass-mb-2 veripass-py-3"
+          customTheme={theme}
         >
-          {isLoading && <CircularProgress size={20} style={{ marginRight: '8px', color: '#fff' }} />}
-          {isLoading ? 'Loading...' : 'Create account'}
-        </Button>
+          {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
+          {isLoading ? 'Create account' : 'Create account'}
+        </ActionButton>
 
         {providers && providers.length > 0 && (
-          <>
-            <div className="d-flex align-items-center mb-4">
-              <Divider sx={{ flexGrow: 1 }} />
-              <Typography variant="caption" className="mx-3 text-muted">
+          <section>
+            <article className="veripass-d-flex veripass-align-items-center veripass-mb-4">
+              <Divider className="veripass-flex-grow-1" />
+              <Typography variant="caption" className="veripass-mx-3 veripass-text-muted">
                 or continue with
               </Typography>
-              <Divider sx={{ flexGrow: 1 }} />
-            </div>
-            <div className="d-flex justify-content-center gap-3">
+              <Divider className="veripass-flex-grow-1" />
+            </article>
+            <article className="veripass-d-flex veripass-justify-content-center veripass-gap-3">
               {providers.map((provider) => (
-                <Button
-                  key={provider.id}
-                  variant="outlined"
-                  color="inherit"
-                  onClick={provider.onClick}
-                  sx={{ minWidth: 'auto', width: '60px', height: '40px', borderColor: '#e0e0e0' }}
-                >
+                <ProviderButton key={provider.id} variant="outlined" color="inherit" onClick={provider.onClick}>
                   {provider.icon}
-                </Button>
+                </ProviderButton>
               ))}
-            </div>
-          </>
+            </article>
+          </section>
         )}
 
-        <div className="mt-5 text-center">
-          <Typography variant="caption" color="textSecondary">
+        <div className="veripass-mt-5 veripass-text-center">
+          <Typography variant="caption" className="veripass-text-secondary">
             Already have an account?{' '}
-            <Link href="#" underline="hover" color="warning.main" fontWeight="bold">
+            <Link
+              href={finalLoginUrl}
+              onClick={(e) => {
+                if (finalOnLoginClick) {
+                  e.preventDefault();
+                  finalOnLoginClick(e);
+                }
+              }}
+              underline="hover"
+              style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
+              className="veripass-fw-bold"
+            >
               Log in
             </Link>
           </Typography>
         </div>
 
-        <div className="mt-4 pt-4 d-flex justify-content-center align-items-center">
-          <Typography variant="caption" style={{ color: '#98a6ad', marginRight: '5px' }}>
+        <footer className="veripass-mt-4 veripass-pt-4 veripass-d-flex veripass-justify-content-center veripass-align-items-center">
+          <Typography variant="caption" className="veripass-text-secondary veripass-me-1">
             Powered by
           </Typography>
           <img src={veripassLogo} alt="Veripass logo" height="12" />
-        </div>
+        </footer>
       </form>
     </VeripassAuthLayout>
   );

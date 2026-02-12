@@ -1,21 +1,23 @@
-.veripass {
-  @import '../../node_modules/bootstrap/scss/functions';
+// Set prefix before importing Bootstrap
+$prefix: "veripass-";
 
-  @import '../../node_modules/bootstrap/scss/variables';
-  @import '../../node_modules/bootstrap/scss/variables-dark';
+// Define placeholders for headings and small/mark to satisfy @extend in _type.scss
+// These will not be output as CSS classes, just used for extension
+h1, h2, h3, h4, h5, h6, small, mark { margin: 0; }
 
-  @import '../../node_modules/bootstrap/scss/maps';
-  @import '../../node_modules/bootstrap/scss/mixins';
-  @import '../../node_modules/bootstrap/scss/root';
-
-  @import '../../node_modules/bootstrap/scss/utilities';
-  /* @import "../../node_modules/bootstrap/scss/reboot";
-  @import '../../node_modules/bootstrap/scss/type'; */
-  @import '../../node_modules/bootstrap/scss/images';
-  @import '../../node_modules/bootstrap/scss/containers';
-  @import '../../node_modules/bootstrap/scss/grid';
-  @import '../../node_modules/bootstrap/scss/helpers';
-  @import '../../node_modules/bootstrap/scss/buttons';
-
-  @import '../../node_modules/bootstrap/scss/utilities/api';
-}
+// Import Bootstrap modules
+@import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
+@import '../../node_modules/bootstrap/scss/variables-dark';
+@import '../../node_modules/bootstrap/scss/maps';
+@import '../../node_modules/bootstrap/scss/mixins';
+@import '../../node_modules/bootstrap/scss/root';
+@import '../../node_modules/bootstrap/scss/utilities';
+// @import '../../node_modules/bootstrap/scss/reboot'; // Excluded preventing conflicts
+@import '../../node_modules/bootstrap/scss/type';
+@import '../../node_modules/bootstrap/scss/images';
+@import '../../node_modules/bootstrap/scss/containers';
+@import '../../node_modules/bootstrap/scss/grid';
+@import '../../node_modules/bootstrap/scss/helpers';
+@import '../../node_modules/bootstrap/scss/buttons';
+@import '../../node_modules/bootstrap/scss/utilities/api';

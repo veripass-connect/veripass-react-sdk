@@ -1,5 +1,6 @@
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const path = require('path');
+const webpack = require('webpack');
 const config = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
@@ -25,6 +26,25 @@ const config = {
       '@assets': path.resolve(__dirname, '../src/assets'),
       '@': path.resolve(__dirname, '../src'),
     };
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@components': path.resolve(__dirname, '../src/components'),
+      '@hooks': path.resolve(__dirname, '../src/hooks'),
+      '@services': path.resolve(__dirname, '../src/services'),
+      '@styles': path.resolve(__dirname, '../src/styles'),
+      '@constants': path.resolve(__dirname, '../src/constants'),
+      '@assets': path.resolve(__dirname, '../src/assets'),
+      '@': path.resolve(__dirname, '../src'),
+    };
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env': JSON.stringify({
+          NODE_ENV: 'development',
+          VERIPASS_PRODUCTION_SERVICE_URL: 'https://api.veripass.dev', // Mock or use local
+          // Add other necessary env vars here
+        }),
+      }),
+    );
     return config;
   },
 };

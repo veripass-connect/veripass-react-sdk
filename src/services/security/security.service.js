@@ -1,7 +1,7 @@
 import BaseApi from '../base/api.service';
 
 export default class SecurityService extends BaseApi {
-  constructor (args) {
+  constructor(args) {
     super(args);
 
     this.api_key = args?.apiKey || '';
@@ -9,47 +9,47 @@ export default class SecurityService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      signUpWithStandard: '/security/signup/standard',
+      signUpStandard: '/security/signup/standard',
       signInStandard: '/security/signin/standard',
       emailRecoverPassword: '/security/password/reset/standard',
       update: '/security/password/new/standard',
       logout: '/security/logout',
     };
-    this.settings = args?.settings || {}
+    this.settings = args?.settings || {};
   }
 
-  async signUpWithStandard (payload) {
+  async signUpStandard(payload) {
     return super.post(payload, {
-      endpoint: this.serviceEndpoints.signUpWithStandard,
-      ...this.settings
+      endpoint: this.serviceEndpoints.signUpStandard,
+      ...this.settings,
     });
   }
 
-  async signInStandard (payload) {
+  async signInStandard(payload) {
     return super.post(payload, {
       endpoint: this.serviceEndpoints.signInStandard,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async logout (payload) {
+  async logout(payload) {
     return super.post(payload, {
       endpoint: this.serviceEndpoints.logout,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async emailRecoverPassword (payload) {
+  async emailRecoverPassword(payload) {
     return super.post(payload, {
       endpoint: this.serviceEndpoints.emailRecoverPassword,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async newPassword (payload) {
+  async newPassword(payload) {
     return super.update(payload, {
       endpoint: this.serviceEndpoints.update,
-      ...this.settings
+      ...this.settings,
     });
   }
 }
