@@ -17,7 +17,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { SecurityService } from '@services';
+import { AuthStandardService as SecurityService } from '@services';
 
 const swal = withReactContent(Swal);
 

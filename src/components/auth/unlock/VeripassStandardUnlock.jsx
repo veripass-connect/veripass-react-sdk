@@ -18,7 +18,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { SecurityService } from '@services';
+import { AuthStandardService as SecurityService } from '@services';
 
 const swal = withReactContent(Swal);
 
@@ -52,7 +52,7 @@ export const VeripassStandardUnlock = ({
   isPopupContext = false,
 }) => {
   // Hooks
-    const { showErrorFromUrl } = useUrlErrorHandler();
+  const { showErrorFromUrl } = useUrlErrorHandler();
   const authProvider = useAuth();
 
   // UI States

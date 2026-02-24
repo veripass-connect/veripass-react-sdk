@@ -17,7 +17,7 @@ import { VeripassActionButton } from '@components/shared/buttons/VeripassActionB
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { SecurityService } from '@services';
+import { AuthStandardService as SecurityService } from '@services';
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 const swal = withReactContent(Swal);

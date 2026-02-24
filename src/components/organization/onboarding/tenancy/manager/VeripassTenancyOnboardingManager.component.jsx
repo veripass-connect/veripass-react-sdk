@@ -2,7 +2,21 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styled from 'styled-components';
+
+import {
+  OrganizationManagementService,
+  TenancyProvisioningService,
+  OrganizationMembershipService,
+} from '@services';
+
 import { VeripassLayout, PoweredBy } from '@components/shared/layouts/VeripassLayout';
+import { VeripassTenancyOnboardingHub } from '../hub/VeripassTenancyOnboardingHub.component';
+import { VeripassTenancyCreateOrganization } from '../create-organization/VeripassTenancyCreateOrganization.component';
+import { VeripassTenancyCreateApplication } from '../create-application/VeripassTenancyCreateApplication.component';
+import { VeripassTenancyChooseOrganization } from '../choose-organization/VeripassTenancyChooseOrganization.component';
+import { VeripassTenancyAllSet } from '../all-set/VeripassTenancyAllSet.component';
+
+
 
 const OnboardingMain = styled('main')({});
 
@@ -32,15 +46,6 @@ const StepIndicator = styled('span')({
   color: '#94a3b8',
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 });
-
-// Child Components
-import { VeripassTenancyOnboardingHub } from '../hub/VeripassTenancyOnboardingHub.component';
-import { VeripassTenancyCreateOrganization } from '../create-organization/VeripassTenancyCreateOrganization.component';
-import { VeripassTenancyCreateApplication } from '../create-application/VeripassTenancyCreateApplication.component';
-import { VeripassTenancyChooseOrganization } from '../choose-organization/VeripassTenancyChooseOrganization.component';
-import { VeripassTenancyAllSet } from '../all-set/VeripassTenancyAllSet.component';
-
-import { OrganizationManagementService, TenancyProvisioningService, UserOrganizationService } from '@services';
 
 const VIEWS = {
   HUB: 'hub',
@@ -176,7 +181,7 @@ export const VeripassTenancyOnboardingManager = ({
     return {
       organizationService: new OrganizationManagementService(),
       provisioningService: new TenancyProvisioningService(),
-      userOrganizationService: new UserOrganizationService(),
+      OrganizationMembershipService: new OrganizationMembershipService(),
     };
   }, [services]);
 
@@ -315,8 +320,8 @@ export const VeripassTenancyOnboardingManager = ({
 
           const doJoin = async () => {
             try {
-              if (activeServices.userOrganizationService && user?.id) {
-                const res = await activeServices.userOrganizationService.create({
+              if (activeServices.OrganizationMembershipService && user?.id) {
+                const res = await activeServices.OrganizationMembershipService.create({
                   organization_id: payload.organizationId,
                   user_id: user.id,
                 });
