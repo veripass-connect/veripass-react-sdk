@@ -67,4 +67,5 @@ import './styles/fonts.css';
 import './styles/styles.css';
 import './styles/bootstrap-namespaced.css';
 
+export * from './services/index';
 export * as services from './services/index';
