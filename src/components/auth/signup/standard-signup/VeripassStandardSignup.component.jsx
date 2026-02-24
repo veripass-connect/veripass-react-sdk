@@ -13,6 +13,8 @@ import { styled } from '@mui/material/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
+import { VeripassActionButton } from '@components/shared/buttons/VeripassActionButton.component';
+
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
@@ -20,17 +22,6 @@ import { SecurityService } from '@services';
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 const swal = withReactContent(Swal);
-
-const ActionButton = styled(Button)(({ theme, customTheme }) => ({
-  backgroundColor: customTheme?.brandPrimary || '#000000',
-  color: customTheme?.brandPrimaryForeground || '#ffffff',
-  textTransform: 'none',
-  fontWeight: 'bold',
-  fontSize: '1rem',
-  '&:hover': {
-    backgroundColor: customTheme?.brandPrimary ? `${customTheme.brandPrimary}CC` : '#333333',
-  },
-}));
 
 const ProviderButton = styled(Button)({
   minWidth: 'auto',
@@ -202,7 +193,7 @@ export const VeripassStandardSignup = ({
           />
         </section>
 
-        <ActionButton
+        <VeripassActionButton
           type="submit"
           variant="contained"
           disabled={isLoading}
@@ -213,7 +204,7 @@ export const VeripassStandardSignup = ({
         >
           {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
           {isLoading ? 'Create account' : 'Create account'}
-        </ActionButton>
+        </VeripassActionButton>
 
         {providers && providers.length > 0 && (
           <section>

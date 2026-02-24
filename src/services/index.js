@@ -45,29 +45,25 @@ import DeviceManagementService from './device/device-management.service';
 import IdentityManagementService from './identity/entities/identity-management/identity-management.service';
 import IdentityContractService from './identity/relationships/identity-contract/identity-contract.service';
 
+import TenancyProvisioningService from './tenancy/tenancy-provisioning.service';
+
 export {
   InsightService,
   SystemService,
-
   SecurityService,
   SecurityCapabilityService,
   SecurityClaimService,
   SecurityRoleService,
   SecurityApiKeyService,
   SecurityAccessProfileService,
-
   ProjectManagementService,
-
   AppManagementService,
   AppEnvironmentService,
-
   OrganizationManagementService,
   OrganizationInformationService,
   OrganizationSettingsService,
   OrganizationTeamsService,
-
   TeamManagementService,
-
   UserManagementService,
   UserProfileService,
   UserIdentityService,
@@ -81,14 +77,11 @@ export {
   UserAppService,
   UserAppRoleService,
   UploadService,
-
   EventLoggerService,
-
   LegalContractManagementService,
   LegalContractTypeService,
-
   DeviceManagementService,
-
   IdentityManagementService,
-  IdentityContractService
+  IdentityContractService,
+  TenancyProvisioningService,
 };

@@ -29,6 +29,9 @@ export { VeripassUserVerificationStatus as VeripassUserVerificationStatus } from
 export { VeripassUserVerifiedBanner as VeripassUserVerifiedBanner } from './components/user/verify/VeripassUserVerifiedBanner';
 export { VeripassUserVerifyButton as VeripassUserVerifyButton } from './components/user/verify/VeripassUserVerifyButton';
 
+// Shared
+export { VeripassActionButton } from './components/shared/buttons/VeripassActionButton.component';
+
 /* User Profile */
 export { VeripassUserProfileView as VeripassUserProfileView } from './components/user/profile/VeripassUserProfileView.jsx';
 
@@ -39,6 +42,16 @@ export { VeripassOrganizationQuickStandardCreate as VeripassOrganizationQuickSta
 export { VeripassOrganizationProfileEdit as VeripassOrganizationProfileEdit } from './components/organization/profile/edit/VeripassOrganizationProfileEdit.jsx';
 export { VeripassOrganizationProfilePreview as VeripassOrganizationProfilePreview } from './components/organization/profile/preview/VeripassOrganizationProfilePreview.jsx';
 export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage } from './components/organization/profile/manage/VeripassOrganizationProfileManage.jsx';
+
+/* Organization Onboarding (Tenancy) */
+export { VeripassTenancyOnboardingManager as VeripassTenancyOnboardingManager } from './components/organization/onboarding/tenancy/manager/VeripassTenancyOnboardingManager.component.jsx';
+export { VeripassTenancyOnboardingHub as VeripassTenancyOnboardingHub } from './components/organization/onboarding/tenancy/hub/VeripassTenancyOnboardingHub.component.jsx';
+export { VeripassTenancyCreateOrganization as VeripassTenancyCreateOrganization } from './components/organization/onboarding/tenancy/create-organization/VeripassTenancyCreateOrganization.component.jsx';
+export { VeripassTenancyFinishSetup as VeripassTenancyFinishSetup } from './components/organization/onboarding/tenancy/finish-setup/VeripassTenancyFinishSetup.component.jsx';
+export { VeripassTenancyChooseOrganization as VeripassTenancyChooseOrganization } from './components/organization/onboarding/tenancy/choose-organization/VeripassTenancyChooseOrganization.component.jsx';
+export { VeripassTenancyAllSet as VeripassTenancyAllSet } from './components/organization/onboarding/tenancy/all-set/VeripassTenancyAllSet.component.jsx';
+export { VeripassSlugInput as VeripassSlugInput } from './components/organization/onboarding/tenancy/shared/VeripassSlugInput.component.jsx';
+export { VeripassSelectableCard as VeripassSelectableCard } from './components/organization/onboarding/tenancy/shared/VeripassSelectableCard.component.jsx';
 
 /* Identity */
 export { VeripassIdentityContractList as VeripassIdentityContractList } from './components/identity/identity-contract/list/VeripassIdentityContractList.jsx';
