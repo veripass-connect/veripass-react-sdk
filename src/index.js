@@ -66,3 +66,5 @@ export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook
 import './styles/fonts.css';
 import './styles/styles.css';
 import './styles/bootstrap-namespaced.css';
+
+export * as services from './services/index';

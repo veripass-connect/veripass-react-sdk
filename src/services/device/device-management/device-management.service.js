@@ -1,6 +1,6 @@
 import BaseApi from '../../base/api.service';
 
-export default class ContractTypeService extends BaseApi {
+export default class DeviceManagementService extends BaseApi {
   constructor(args) {
     super(args);
 
@@ -9,10 +9,9 @@ export default class ContractTypeService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/legal/contract/type/',
-      create: '/legal/contract/type',
-      update: '/legal/contract/type',
-      delete: '/legal/contract/type',
+      get: '/device/',
+      create: '/device/',
+      update: '/device/',
     };
     this.settings = args?.settings || {};
   }
@@ -34,13 +33,6 @@ export default class ContractTypeService extends BaseApi {
   async create(payload) {
     return super.create(payload, {
       endpoint: this.serviceEndpoints.create,
-      ...this.settings,
-    });
-  }
-
-  async delete(payload) {
-    return super.delete(payload, {
-      endpoint: this.serviceEndpoints.delete,
       ...this.settings,
     });
   }

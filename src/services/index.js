@@ -1,87 +1,45 @@
-import SystemService from './system/system.service';
-
-import UserManagementService from './user/user-management.service';
-import UserProfileService from './user/user-profile.service';
-import UserIdentityService from './user/user-identity.service';
-import UserInformationService from './user/user-information.service';
-import UserInformationSensitiveService from './user/user-information-sensitive.service';
-import UserLogService from './user/user-log.service';
-import UserMetadataService from './user/user-metadata.service';
-import UserOrganizationService from './user/user-organization.service';
-import UserSecurityService from './user/user-security.service';
-import UserSettingsService from './user/user-settings.service';
-import UserAppService from './user/user-app.service';
-import UserAppRoleService from './user/user-app-role.service';
-
-import InsightService from './insight/insight.service';
-import UploadService from './upload/upload.service';
-
-import OrganizationManagementService from './organization/organization-management.service';
-import OrganizationInformationService from './organization/organization-information.service';
-import OrganizationSettingsService from './organization/organization-settings.service';
-import OrganizationTeamsService from './organization/organization-teams.service';
-
-import TeamManagementService from './team/team-management.service';
-
-import ProjectManagementService from './project/project-management.service';
-
-import AppManagementService from './app/app-management.service';
-import AppEnvironmentService from './app/app-environment.service';
-
-import SecurityService from './security/security.service';
-import SecurityRoleService from './security/security-role.service';
-import SecurityClaimService from './security/security-claim.service';
-import SecurityCapabilityService from './security/security-capability.service';
-import SecurityApiKeyService from './security/security-api-key.service';
-import SecurityAccessProfileService from './security/security-access-profile.service';
-
-import EventLoggerService from './logger/event-logger/event-logger.service';
-
-import LegalContractManagementService from './legal/contract-management/contract-management.service';
-import LegalContractTypeService from './legal/contract-type/contract-type.service';
-
-import DeviceManagementService from './device/device-management.service';
-
-import IdentityManagementService from './identity/entities/identity-management/identity-management.service';
-import IdentityContractService from './identity/relationships/identity-contract/identity-contract.service';
-
-import TenancyProvisioningService from './tenancy/tenancy-provisioning.service';
-
-export {
-  InsightService,
-  SystemService,
-  SecurityService,
-  SecurityCapabilityService,
-  SecurityClaimService,
-  SecurityRoleService,
-  SecurityApiKeyService,
-  SecurityAccessProfileService,
-  ProjectManagementService,
-  AppManagementService,
-  AppEnvironmentService,
-  OrganizationManagementService,
-  OrganizationInformationService,
-  OrganizationSettingsService,
-  OrganizationTeamsService,
-  TeamManagementService,
-  UserManagementService,
-  UserProfileService,
-  UserIdentityService,
-  UserInformationService,
-  UserInformationSensitiveService,
-  UserLogService,
-  UserMetadataService,
-  UserOrganizationService,
-  UserSecurityService,
-  UserSettingsService,
-  UserAppService,
-  UserAppRoleService,
-  UploadService,
-  EventLoggerService,
-  LegalContractManagementService,
-  LegalContractTypeService,
-  DeviceManagementService,
-  IdentityManagementService,
-  IdentityContractService,
-  TenancyProvisioningService,
-};
+export { default as AppManagementService } from './app/app-management/app-management.service';
+export { default as NotificationService } from './communication/notification/notification.service';
+export { default as DeviceManagementService } from './device/device-management/device-management.service';
+export { default as IdentityManagementService } from './identity/identity-management/identity-management.service';
+export { default as IdentityContractService } from './identity/identity-contract/identity-contract.service';
+export { default as ContractManagementService } from './legal/contract-management/contract-management.service';
+export { default as ContractTypeService } from './legal/contract-type/contract-type.service';
+export { default as EventLoggerService } from './logger/event-logger/event-logger.service';
+export { default as OnboardingManagementService } from './onboarding/onboarding-management/onboarding-management.service';
+export { default as OrganizationApplicationService } from './organization/relationships/organization-application/organization-application.service';
+export { default as OrganizationManagementService } from './organization/organization-management/organization-management.service';
+export { default as OrganizationSettingsService } from './organization/sub-entities/organization-settings/organization-settings.service';
+export { default as OrganizationTeamMembershipService } from './organization/relationships/organization-team-membership/organization-team-membership.service';
+export { default as OrganizationInformationService } from './organization/sub-entities/organization-information/organization-information.service';
+export { default as ProjectManagementService } from './project/project-management/project-management.service';
+export { default as AuthStandardService } from './security/auth-standard/auth-standard.service';
+export { default as AuthTotpEmailService } from './security/auth-totp-email/auth-totp-email.service';
+export { default as AuthTotpPhoneService } from './security/auth-totp-phone/auth-totp-phone.service';
+export { default as ApiKeyService } from './security/api-key/api-key.service';
+export { default as AuthChatbotService } from './security/auth-chatbot/auth-chatbot.service';
+export { default as RoleService } from './security/role/role.service';
+export { default as ClaimService } from './security/claim/claim.service';
+export { default as CapabilityService } from './security/capability/capability.service';
+export { default as AccessProfileService } from './security/access-profile/access-profile.service';
+export { default as SecurityProvisioningService } from './security/provisioning/security-provisioning.service';
+export { default as UploadService } from './storage/upload/upload.service';
+export { default as FileService } from './storage/file-system/file/file.service';
+export { default as FolderService } from './storage/file-system/folder/folder.service';
+export { default as HealthService } from './system/health/health.service';
+export { default as ApiManagerService } from './system/api-manager/api-manager.service';
+export { default as TeamManagementService } from './team/team-management/team-management.service';
+export { default as TenancyProvisioningService } from './tenancy/provisioning/tenancy-provisioning.service';
+export { default as UserManagementService } from './user/user-management/user-management.service';
+export { default as UserProfileService } from './user/sub-entities/user-profile/user-profile.service';
+export { default as ApplicationEntitlementService } from './user/relationships/application-entitlement/application-entitlement.service';
+export { default as ApplicationRoleAssignmentService } from './user/relationships/application-role-assignment/application-role-assignment.service';
+export { default as ClaimGrantService } from './user/relationships/claim-grant/claim-grant.service';
+export { default as CapabilityGrantService } from './user/relationships/capability-grant/capability-grant.service';
+export { default as UserIdentityService } from './user/sub-entities/user-identity/user-identity.service';
+export { default as UserInformationService } from './user/sub-entities/user-information/user-information.service';
+export { default as UserInformationSensitiveService } from './user/sub-entities/user-information-sensitive/user-information-sensitive.service';
+export { default as UserMetadataService } from './user/sub-entities/user-metadata/user-metadata.service';
+export { default as OrganizationMembershipService } from './user/relationships/organization-membership/organization-membership.service';
+export { default as UserSecurityService } from './user/sub-entities/user-security/user-security.service';
+export { default as UserSettingsService } from './user/sub-entities/user-settings/user-settings.service';

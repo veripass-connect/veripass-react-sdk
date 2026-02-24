@@ -1,7 +1,7 @@
 import BaseApi from '../../base/api.service';
 
 export default class EventLoggerService extends BaseApi {
-  constructor (args) {
+  constructor(args) {
     super(args);
 
     this.api_key = args?.apiKey || '';
@@ -14,34 +14,34 @@ export default class EventLoggerService extends BaseApi {
       update: '/logger/event',
       delete: '/logger/event',
     };
-    this.settings = args?.settings || {}
+    this.settings = args?.settings || {};
   }
 
-  async getByParameters (payload) {
+  async getByParameters(payload) {
     return super.getByParameters(payload, {
       endpoint: this.serviceEndpoints.get,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async update (payload) {
+  async update(payload) {
     return super.update(payload, {
       endpoint: this.serviceEndpoints.update,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async create (payload) {
+  async create(payload) {
     return super.create(payload, {
       endpoint: this.serviceEndpoints.create,
-      ...this.settings
+      ...this.settings,
     });
   }
 
-  async delete (payload) {
+  async delete(payload) {
     return super.delete(payload, {
       endpoint: this.serviceEndpoints.delete,
-      ...this.settings
+      ...this.settings,
     });
   }
 }

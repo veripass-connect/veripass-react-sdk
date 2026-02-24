@@ -1,6 +1,6 @@
-import BaseApi from '../../base/api.service';
+import BaseApi from '../../../base/api.service';
 
-export default class ContractTypeService extends BaseApi {
+export default class FileService extends BaseApi {
   constructor(args) {
     super(args);
 
@@ -9,10 +9,10 @@ export default class ContractTypeService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/legal/contract/type/',
-      create: '/legal/contract/type',
-      update: '/legal/contract/type',
-      delete: '/legal/contract/type',
+      get: '/storage/file-system/file/',
+      create: '/storage/file-system/file',
+      update: '/storage/file-system/file',
+      delete: '/storage/file-system/file',
     };
     this.settings = args?.settings || {};
   }
