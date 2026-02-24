@@ -107,13 +107,13 @@ const GoBackLink = styled('button')({
 
 const NAMESPACE = 'veripass-tenancy-onboarding';
 const ACTIONS = {
-  SETUP_BACK: `${NAMESPACE}::finish-setup/back`,
-  SETUP_APP_TOGGLE_UPDATED: `${NAMESPACE}::finish-setup/app-toggle-updated`,
-  SETUP_APP_FORM_UPDATED: `${NAMESPACE}::finish-setup/app-form-updated`,
-  SETUP_SUBMIT: `${NAMESPACE}::finish-setup/submit`,
+  CREATE_APP_BACK: `${NAMESPACE}::create-application/back`,
+  CREATE_APP_TOGGLE_UPDATED: `${NAMESPACE}::create-application/app-toggle-updated`,
+  CREATE_APP_FORM_UPDATED: `${NAMESPACE}::create-application/app-form-updated`,
+  CREATE_APP_SUBMIT: `${NAMESPACE}::create-application/submit`,
 };
 
-function VeripassTenancyFinishSetupComponent({
+function VeripassTenancyCreateApplicationComponent({
   ui = {},
   organization = {},
   organizationForm = {},
@@ -148,7 +148,7 @@ function VeripassTenancyFinishSetupComponent({
     setForm({ ...form, createApp: isChecked });
     if (updateOnAction) {
       updateOnAction({
-        action: ACTIONS.SETUP_APP_TOGGLE_UPDATED,
+        action: ACTIONS.CREATE_APP_TOGGLE_UPDATED,
         namespace: NAMESPACE,
         payload: { createApp: isChecked },
       });
@@ -160,7 +160,7 @@ function VeripassTenancyFinishSetupComponent({
       setForm(newForm);
       if (updateOnAction) {
         updateOnAction({
-          action: ACTIONS.SETUP_APP_FORM_UPDATED,
+          action: ACTIONS.CREATE_APP_FORM_UPDATED,
           namespace: NAMESPACE,
           payload: newForm,
         });
@@ -186,7 +186,7 @@ function VeripassTenancyFinishSetupComponent({
     e.preventDefault();
     if (itemOnAction) {
       itemOnAction({
-        action: ACTIONS.SETUP_SUBMIT,
+        action: ACTIONS.CREATE_APP_SUBMIT,
         namespace: NAMESPACE,
         payload: {
           organization: organizationForm,
@@ -215,11 +215,11 @@ function VeripassTenancyFinishSetupComponent({
       <header className="veripass-mb-4 veripass-text-center">
         {ui.showTitle !== false && (
           <ViewTitle className="veripass-fw-bold veripass-text-dark veripass-mb-2">
-            {copy.finishTitle || 'Complete your workspace'}
+            {copy.createAppTitle || 'Complete your workspace'}
           </ViewTitle>
         )}
         <ViewSubtitle className="veripass-m-0">
-          {copy.finishSubtitle || 'Add your first application to finalize the provisioning.'}
+          {copy.createAppSubtitle || 'Add your first application to finalize the provisioning.'}
         </ViewSubtitle>
       </header>
 
@@ -325,4 +325,4 @@ function VeripassTenancyFinishSetupComponent({
   );
 }
 
-export const VeripassTenancyFinishSetup = VeripassTenancyFinishSetupComponent;
+export const VeripassTenancyCreateApplication = VeripassTenancyCreateApplicationComponent;

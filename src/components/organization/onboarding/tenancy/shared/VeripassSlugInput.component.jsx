@@ -36,7 +36,7 @@ function VeripassSlugInputComponent({
   disabled = false,
   prefix = 'veripass.com/',
   label = 'Organization Slug',
-  placeholder = 'acme-corp',
+  placeholder = 'blackwood-stone-holdings',
   required = false,
   className = '',
 }) {

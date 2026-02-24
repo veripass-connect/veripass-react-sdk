@@ -36,7 +36,7 @@ const StepIndicator = styled('span')({
 // Child Components
 import { VeripassTenancyOnboardingHub } from '../hub/VeripassTenancyOnboardingHub.component';
 import { VeripassTenancyCreateOrganization } from '../create-organization/VeripassTenancyCreateOrganization.component';
-import { VeripassTenancyFinishSetup } from '../finish-setup/VeripassTenancyFinishSetup.component';
+import { VeripassTenancyCreateApplication } from '../create-application/VeripassTenancyCreateApplication.component';
 import { VeripassTenancyChooseOrganization } from '../choose-organization/VeripassTenancyChooseOrganization.component';
 import { VeripassTenancyAllSet } from '../all-set/VeripassTenancyAllSet.component';
 
@@ -45,7 +45,7 @@ import { OrganizationManagementService, TenancyProvisioningService, UserOrganiza
 const VIEWS = {
   HUB: 'hub',
   CREATE_ORGANIZATION: 'create-organization',
-  FINISH_SETUP: 'finish-setup',
+  CREATE_APPLICATION: 'create-application',
   CHOOSE_ORGANIZATION: 'choose-organization',
   ALL_SET: 'all-set',
 };
@@ -58,10 +58,10 @@ const ACTIONS = {
   ORGANIZATION_BACK: `${NAMESPACE}::organization/back`,
   ORGANIZATION_FORM_UPDATED: `${NAMESPACE}::organization/form-updated`,
   ORGANIZATION_CONTINUE: `${NAMESPACE}::organization/continue`,
-  SETUP_BACK: `${NAMESPACE}::finish-setup/back`,
-  SETUP_APP_TOGGLE_UPDATED: `${NAMESPACE}::finish-setup/app-toggle-updated`,
-  SETUP_APP_FORM_UPDATED: `${NAMESPACE}::finish-setup/app-form-updated`,
-  SETUP_SUBMIT: `${NAMESPACE}::finish-setup/submit`,
+  CREATE_APP_BACK: `${NAMESPACE}::create-application/back`,
+  CREATE_APP_TOGGLE_UPDATED: `${NAMESPACE}::create-application/app-toggle-updated`,
+  CREATE_APP_FORM_UPDATED: `${NAMESPACE}::create-application/app-form-updated`,
+  CREATE_APP_SUBMIT: `${NAMESPACE}::create-application/submit`,
   CHOOSE_BACK: `${NAMESPACE}::choose-organization/back`,
   CHOOSE_SEARCH_UPDATED: `${NAMESPACE}::choose-organization/search-updated`,
   CHOOSE_SELECTED_UPDATED: `${NAMESPACE}::choose-organization/selected-updated`,
@@ -118,8 +118,8 @@ export const VeripassTenancyOnboardingManager = ({
       hubSubtitle: 'Choose how you would like to set up your workspace.',
       createTitle: 'Create your organization',
       createSubtitle: 'Enter details to configure your environment.',
-      finishTitle: 'Finish setup',
-      finishSubtitle: 'Review your details and configure your initial application settings.',
+      createAppTitle: 'Finish setup',
+      createAppSubtitle: 'Review your details and configure your initial application settings.',
       chooseTitle: 'Choose your organization',
       chooseSubtitle: 'Select an existing workspace to manage your SDK integration.',
       allSetTitle: "You're all set",
@@ -230,7 +230,7 @@ export const VeripassTenancyOnboardingManager = ({
     }
   };
 
-  const handleFinishSetupSubmit = async (payload) => {
+  const handleCreateAppSubmit = async (payload) => {
     setLoading(true);
     setError(null);
     try {
@@ -284,19 +284,19 @@ export const VeripassTenancyOnboardingManager = ({
 
       case ACTIONS.ORGANIZATION_CONTINUE:
         if (payload?.organization?.name && payload?.organization?.slug) {
-          setView(VIEWS.FINISH_SETUP);
+          setView(VIEWS.CREATE_APPLICATION);
         } else {
           setError('Name and slug are required.');
         }
         break;
 
-      case ACTIONS.SETUP_BACK:
+      case ACTIONS.CREATE_APP_BACK:
         setView(VIEWS.CREATE_ORGANIZATION);
         break;
 
-      case ACTIONS.SETUP_SUBMIT:
+      case ACTIONS.CREATE_APP_SUBMIT:
         if (payload) {
-          handleFinishSetupSubmit(payload);
+          handleCreateAppSubmit(payload);
         }
         break;
 
@@ -389,7 +389,7 @@ export const VeripassTenancyOnboardingManager = ({
         });
         break;
 
-      case ACTIONS.SETUP_APP_TOGGLE_UPDATED:
+      case ACTIONS.CREATE_APP_TOGGLE_UPDATED:
         setAppForm((prev) => {
           const next = { ...prev, createApp: payload.createApp };
           persistFormState({ appForm: next });
@@ -397,7 +397,7 @@ export const VeripassTenancyOnboardingManager = ({
         });
         break;
 
-      case ACTIONS.SETUP_APP_FORM_UPDATED:
+      case ACTIONS.CREATE_APP_FORM_UPDATED:
         setAppForm((prev) => {
           const next = { ...prev, ...payload };
           persistFormState({ appForm: next });
@@ -444,9 +444,9 @@ export const VeripassTenancyOnboardingManager = ({
             error={error}
           />
         );
-      case VIEWS.FINISH_SETUP:
+      case VIEWS.CREATE_APPLICATION:
         return (
-          <VeripassTenancyFinishSetup
+          <VeripassTenancyCreateApplication
             ui={ui}
             organization={organization}
             organizationForm={organizationForm}

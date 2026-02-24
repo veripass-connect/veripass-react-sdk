@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { VeripassTenancyFinishSetup } from '../../../../../components/organization/onboarding/tenancy/finish-setup/VeripassTenancyFinishSetup.component';
+import { VeripassTenancyCreateApplication } from '../../../../../components/organization/onboarding/tenancy/create-application/VeripassTenancyCreateApplication.component';
 import { action } from '@storybook/addon-actions';
 
 export default {
-  title: 'Organization/Onboarding/Tenancy/Finish Setup/VeripassTenancyFinishSetup',
-  component: VeripassTenancyFinishSetup,
+  title: 'Organization/Onboarding/Tenancy/Create Application/VeripassTenancyCreateApplication',
+  component: VeripassTenancyCreateApplication,
+  parameters: {
+    layout: 'fullscreen',
+  },
   argTypes: {
     ui: { description: 'UI configuration object', control: 'object' },
     organization: { description: 'Host organization branding context', control: 'object' },
@@ -17,26 +20,53 @@ export default {
 };
 
 const mockItemOnAction = (e) => {
+  console.log('[CreateApplication] itemOnAction fired:', e);
   action('itemOnAction')(e);
-  console.log('[FinishSetup] itemOnAction fired:', e);
+  alert(`Action: ${e.action}\nPayload: ${JSON.stringify(e.payload, null, 2)}`);
 };
 
 const Template = (args) => {
   const [form, setForm] = useState(args.appForm || { createApp: true, name: '', slug: '', isSlugEdited: false });
 
   const mockUpdateOnAction = (e) => {
+    console.log('[CreateApplication] updateOnAction fired:', e);
     action('updateOnAction')(e);
-    if (e.action.includes('toggle-updated')) {
-      setForm((prev) => ({ ...prev, createApp: e.payload.createApp }));
-    }
-    if (e.action.includes('form-updated')) {
-      setForm(e.payload);
+    if (
+      e.action === 'veripass-tenancy-onboarding::create-application/app-form-updated' ||
+      e.action === 'veripass-tenancy-onboarding::create-application/app-toggle-updated'
+    ) {
+      setForm((prev) => ({ ...prev, ...e.payload }));
     }
   };
 
   return (
-    <div style={{ maxWidth: '480px', margin: '0 auto', padding: '20px', backgroundColor: '#fff' }}>
-      <VeripassTenancyFinishSetup {...args} appForm={form} itemOnAction={mockItemOnAction} updateOnAction={mockUpdateOnAction} />
+    <div
+      style={{
+        backgroundColor: '#f1f5f9',
+        minHeight: '100vh',
+        padding: '40px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '640px',
+          backgroundColor: '#ffffff',
+          borderRadius: '16px',
+          padding: '32px',
+          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        }}
+      >
+        <VeripassTenancyCreateApplication
+          {...args}
+          appForm={form}
+          itemOnAction={mockItemOnAction}
+          updateOnAction={mockUpdateOnAction}
+        />
+      </div>
     </div>
   );
 };
@@ -46,7 +76,7 @@ CreateAppOn.args = {
   isLoading: false,
   error: null,
   ui: {
-    title: 'Finish setup',
+    title: 'Create application',
     showTitle: true,
     theme: {
       brandPrimary: '#000000',
@@ -90,7 +120,7 @@ CustomTheme.args = {
       brandPrimaryForeground: '#ffffff',
     },
     copy: {
-      finishSubtitle: 'Review everything and confirm creation.',
+      createAppSubtitle: 'Review everything and confirm creation.',
     },
   },
 };

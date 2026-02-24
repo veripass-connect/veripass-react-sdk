@@ -47,7 +47,7 @@ export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage 
 export { VeripassTenancyOnboardingManager as VeripassTenancyOnboardingManager } from './components/organization/onboarding/tenancy/manager/VeripassTenancyOnboardingManager.component.jsx';
 export { VeripassTenancyOnboardingHub as VeripassTenancyOnboardingHub } from './components/organization/onboarding/tenancy/hub/VeripassTenancyOnboardingHub.component.jsx';
 export { VeripassTenancyCreateOrganization as VeripassTenancyCreateOrganization } from './components/organization/onboarding/tenancy/create-organization/VeripassTenancyCreateOrganization.component.jsx';
-export { VeripassTenancyFinishSetup as VeripassTenancyFinishSetup } from './components/organization/onboarding/tenancy/finish-setup/VeripassTenancyFinishSetup.component.jsx';
+export { VeripassTenancyCreateApplication as VeripassTenancyCreateApplication } from './components/organization/onboarding/tenancy/create-application/VeripassTenancyCreateApplication.component.jsx';
 export { VeripassTenancyChooseOrganization as VeripassTenancyChooseOrganization } from './components/organization/onboarding/tenancy/choose-organization/VeripassTenancyChooseOrganization.component.jsx';
 export { VeripassTenancyAllSet as VeripassTenancyAllSet } from './components/organization/onboarding/tenancy/all-set/VeripassTenancyAllSet.component.jsx';
 export { VeripassSlugInput as VeripassSlugInput } from './components/organization/onboarding/tenancy/shared/VeripassSlugInput.component.jsx';
