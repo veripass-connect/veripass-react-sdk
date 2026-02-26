@@ -18,14 +18,14 @@ import LockIcon from '@mui/icons-material/Lock';
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { AuthStandardService as SecurityService } from '@services';
+import { AuthStandardService } from '@services';
 
 const swal = withReactContent(Swal);
 
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 async function unlockStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
-  const entityService = new SecurityService({ apiKey, settings: { environment } });
+  const entityService = new AuthStandardService({ apiKey, settings: { environment } });
   const entityResponse = await entityService.signInStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {

@@ -6,60 +6,39 @@ import '@styles/bootstrap-namespaced.css';
 import '@styles/styles.css';
 import '@styles/fonts.css';
 
-import veripassLogo from '@assets/logos/veripass-logo-dark.svg';
+import { PoweredBy } from '@components/shared/PoweredBy/PoweredBy.component';
 
 const Container = styled.article`
   margin: 0 auto;
-  min-width: 450px;
-  width: ${(props) => (props.$ispopup ? '800px' : '100%')};
+  min-width: ${(props) => props.$layout?.minWidth?.xs || '450px'};
+  width: ${(props) => (props.$ispopup ? props.$layout?.width?.xl || '800px' : '100%')};
   ${(props) => (props.$ispopup ? '' : 'flex-grow: 1;')};
 
+  @media (min-width: 1200px) {
+    width: ${(props) => (props.$ispopup ? props.$layout?.width?.xl || '800px' : '100%')};
+    min-width: ${(props) => props.$layout?.minWidth?.xl || props.$layout?.minWidth?.xs || '450px'};
+  }
+
   @media (max-width: 1199px) {
-    width: ${(props) => (props.$ispopup ? '700px' : '100%')};
+    width: ${(props) => (props.$ispopup ? props.$layout?.width?.lg || '700px' : '100%')};
+    min-width: ${(props) => props.$layout?.minWidth?.lg || props.$layout?.minWidth?.xs || '450px'};
   }
 
   @media (max-width: 991px) {
-    width: ${(props) => (props.$ispopup ? '600px' : '100%')};
+    width: ${(props) => (props.$ispopup ? props.$layout?.width?.md || '600px' : '100%')};
+    min-width: ${(props) => props.$layout?.minWidth?.md || props.$layout?.minWidth?.xs || '450px'};
   }
 
   @media (max-width: 767px) {
-    width: ${(props) => (props.$ispopup ? '500px' : '100%')};
+    width: ${(props) => (props.$ispopup ? props.$layout?.width?.sm || '500px' : '100%')};
+    min-width: ${(props) => props.$layout?.minWidth?.sm || props.$layout?.minWidth?.xs || '450px'};
   }
 
   @media (max-width: 575px) {
     width: 100%;
+    min-width: ${(props) => props.$layout?.minWidth?.xs || '100%'};
   }
 `;
-
-export const PoweredBy = ({ align = 'end', position = 'bottom' }) => (
-  <Box
-    component="section"
-    sx={{
-      display: 'flex',
-      justifyContent: align,
-      mb: position === 'top' ? 2 : 0,
-      mt: position === 'bottom' ? 2 : 0,
-      
-    }}
-  >
-    <Typography
-      sx={{
-        mr: 0.5,
-        color: 'text.secondary',
-        fontSize: '0.775rem',
-        fontWeight: 400,
-      }}
-    >
-      Powered by
-    </Typography>
-    <Box
-      component="img"
-      src={veripassLogo}
-      alt="Veripass logo"
-      sx={{ height: 15 }}
-    />
-  </Box>
-);
 
 export const VeripassLayout = ({
   children,
@@ -68,20 +47,12 @@ export const VeripassLayout = ({
   ...props
 }) => {
   return (
-    <Container
-      $ispopup={isPopupContext}
-      className="veripass"
-      style={{ boxSizing: 'border-box' }}
-    >
-      {ui?.showLogo === true && ui?.vertical === 'top' && (
-        <PoweredBy align={ui?.alignment} position={ui?.vertical} />
-      )}
+    <Container $ispopup={isPopupContext} $layout={ui?.layout} className="veripass" style={{ boxSizing: 'border-box' }}>
+      {ui?.showLogo === true && ui?.vertical === 'top' && <PoweredBy align={ui?.alignment} position={ui?.vertical} />}
 
       <main {...props}>{children}</main>
 
-      {ui?.showLogo === true && ui?.vertical === 'bottom' && (
-        <PoweredBy align={ui?.alignment} position={ui?.vertical} />
-      )}
+      {ui?.showLogo === true && ui?.vertical === 'bottom' && <PoweredBy align={ui?.alignment} position={ui?.vertical} />}
     </Container>
   );
 };

@@ -5,7 +5,9 @@ import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
 import { TextField, Typography, Button, Divider, Link } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const BrandButton = styled(Button)(({ theme, customTheme }) => ({
+const BrandButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'customTheme',
+})(({ theme, customTheme }) => ({
   backgroundColor: customTheme?.brandPrimary || '#000000',
   color: customTheme?.brandPrimaryForeground || '#fff',
   textTransform: 'none',
@@ -93,7 +95,7 @@ export const VeripassSignInManager = ({
   }
 
   return (
-    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src} {...props}>
       <header className="veripass-my-4">
         <h2 className="veripass-fw-bold veripass-text-dark veripass-mb-2">
           {ui?.showTitle !== false ? ui?.title || 'Sign in' : ''}

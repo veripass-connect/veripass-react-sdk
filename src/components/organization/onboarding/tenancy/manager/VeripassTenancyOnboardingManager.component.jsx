@@ -5,7 +5,8 @@ import styled from 'styled-components';
 
 import { OrganizationManagementService, TenancyProvisioningService, OrganizationMembershipService } from '@services';
 
-import { VeripassLayout, PoweredBy } from '@components/shared/layouts/VeripassLayout';
+import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
+import { PoweredBy } from '@components/shared/PoweredBy/PoweredBy.component';
 import { VeripassTenancyOnboardingHub } from '../hub/VeripassTenancyOnboardingHub.component';
 import { VeripassTenancyCreateOrganization } from '../create-organization/VeripassTenancyCreateOrganization.component';
 import { VeripassTenancyCreateApplication } from '../create-application/VeripassTenancyCreateApplication.component';
@@ -505,7 +506,7 @@ export const VeripassTenancyOnboardingManager = ({
   };
 
   return (
-    <VeripassLayout isPopupContext={false} ui={{ showLogo: false }}>
+    <VeripassLayout isPopupContext={false} ui={{ ...ui, showLogo: false }}>
       <OnboardingMain className="veripass-d-flex veripass-flex-column veripass-justify-content-center veripass-align-items-center veripass-w-100 veripass-py-4">
         {(view === VIEWS.CHOOSE_ORGANIZATION || view === VIEWS.CREATE_ORGANIZATION || view === VIEWS.FINISH_SETUP) && (
           <BackNav className="veripass-d-flex veripass-justify-content-between veripass-align-items-center">

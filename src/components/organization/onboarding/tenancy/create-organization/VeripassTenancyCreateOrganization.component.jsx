@@ -210,7 +210,7 @@ function VeripassTenancyCreateOrganizationComponent({
           disabled={!isValid || isLoading}
           className="veripass-py-3 veripass-fw-bold veripass-fs-6 veripass-position-relative veripass-mt-4"
         >
-          {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
+          {isLoading && <CircularProgress size={20} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
           Continue
         </VeripassActionButton>
       </form>

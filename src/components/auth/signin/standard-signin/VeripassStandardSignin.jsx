@@ -17,7 +17,7 @@ import { VeripassActionButton } from '@components/shared/buttons/VeripassActionB
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { AuthStandardService as SecurityService } from '@services';
+import { AuthStandardService } from '@services';
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 const swal = withReactContent(Swal);
@@ -30,7 +30,7 @@ const ProviderButton = styled(Button)({
 });
 
 async function signInStandard({ payload, authProvider, redirectUrl, apiKey, environment }) {
-  const entityService = new SecurityService({ apiKey, settings: { environment } });
+  const entityService = new AuthStandardService({ apiKey, settings: { environment } });
   const entityResponse = await entityService.signInStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {
@@ -66,7 +66,7 @@ export const VeripassStandardSignin = ({
       alt: 'Login Cover',
       title: '',
       subtitle: '',
-      borderRadius: '0rem'
+      borderRadius: '0rem',
     },
     providers: [],
     theme: {
@@ -87,6 +87,7 @@ export const VeripassStandardSignin = ({
   registerUrl = '',
   onRegisterClick,
   heroImage: directHeroImage,
+  ...props
 }) => {
   const heroImage = directHeroImage || ui.heroImage || { src: '', alt: 'Cover' };
   const showForgotPass = ui.showForgotPass !== undefined ? ui.showForgotPass : true;
@@ -145,7 +146,7 @@ export const VeripassStandardSignin = ({
   }, []);
 
   return (
-    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src}>
+    <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src} {...props}>
       <header className="veripass-my-4">
         <h2 className="veripass-fw-bold veripass-text-dark veripass-mb-2">
           {ui?.showTitle !== false ? ui?.title || 'Log in using email address' : ''}
@@ -171,6 +172,7 @@ export const VeripassStandardSignin = ({
             autoComplete="email"
             variant="outlined"
             size="small"
+            autoFocus={!initialEmail}
             InputProps={{
               style: { backgroundColor: '#fff' },
             }}
@@ -187,6 +189,7 @@ export const VeripassStandardSignin = ({
             onChange={(event) => setPassword(event.target.value)}
             variant="outlined"
             size="small"
+            autoFocus={!!initialEmail}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -214,7 +217,7 @@ export const VeripassStandardSignin = ({
           className="veripass-mb-2 veripass-py-3"
           customTheme={theme}
         >
-          {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
+          {isLoading && <CircularProgress size={20} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
           {isLoading ? 'Sign in' : 'Sign in'}
         </VeripassActionButton>
 

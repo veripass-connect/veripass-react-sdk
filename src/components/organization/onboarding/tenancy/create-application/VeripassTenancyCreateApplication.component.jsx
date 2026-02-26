@@ -3,7 +3,7 @@ import { Switch, CircularProgress, TextField } from '@mui/material';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import LockIcon from '@mui/icons-material/Lock';
 import ShieldIcon from '@mui/icons-material/Shield';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { VeripassSlugInput } from '../shared/VeripassSlugInput.component';
 
 import { VeripassActionButton } from '@components/shared/buttons/VeripassActionButton.component';
@@ -113,6 +113,82 @@ const ACTIONS = {
   CREATE_APP_SUBMIT: `${NAMESPACE}::create-application/submit`,
 };
 
+const PROVISIONING_STEPS = [
+  'Verifying workspace details...',
+  'Authenticating secure session...',
+  'Setting up your organization...',
+  'Initializing workspace project...',
+  'Creating your application...',
+  'Connecting application to organization...',
+  'Configuring security policies...',
+  'Registering application access...',
+  'Setting up administrator account...',
+  'Assigning permissions...',
+  'Finishing...',
+];
+
+const fadeSlideUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+`;
+
+const fadeSlideUpLast = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const ProgressStepContainer = styled('div')({
+  height: '24px',
+  marginTop: '16px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  overflow: 'hidden',
+  position: 'relative',
+});
+
+const ProgressText = styled('span')(
+  ({ $isLast, $duration }) => css`
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    position: absolute;
+    font-family:
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+    animation: ${$isLast ? fadeSlideUpLast : fadeSlideUp} ${$duration}ms ease-in-out forwards;
+  `,
+);
+
 function VeripassTenancyCreateApplicationComponent({
   ui = {},
   organization = {},
@@ -126,7 +202,28 @@ function VeripassTenancyCreateApplicationComponent({
   apiKey = '',
 }) {
   const [form, setForm] = useState(appForm);
+  const [currentStep, setCurrentStep] = useState(0);
+  const stepDuration = 2400; // ~26 seconds total for 11 steps
   const copy = ui.copy || {};
+
+  useEffect(() => {
+    if (isLoading) {
+      setCurrentStep(0);
+      const interval = setInterval(() => {
+        setCurrentStep((prev) => {
+          if (prev < PROVISIONING_STEPS.length - 1) {
+            return prev + 1;
+          }
+          clearInterval(interval);
+          return prev;
+        });
+      }, stepDuration);
+
+      return () => clearInterval(interval);
+    } else {
+      setCurrentStep(0);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (appForm.createApp === undefined) {
@@ -309,11 +406,20 @@ function VeripassTenancyCreateApplicationComponent({
           size="large"
           type="submit"
           disabled={!isValid || isLoading}
-          className="veripass-py-3 veripass-fw-bold veripass-fs-6 veripass-position-relative"
+          className="veripass-py-3 veripass-fw-bold veripass-fs-6 veripass-position-relative veripass-mb-2"
         >
-          {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
-          {ui.primaryActionLabel || 'Create my workspace'}
+          {isLoading && <CircularProgress size={20} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
+
+          {isLoading ? ui.primaryActionLoadingLabel || 'Creating workspace...' : ui.primaryActionLabel || 'Create my workspace'}
         </VeripassActionButton>
+
+        {isLoading && (
+          <ProgressStepContainer>
+            <ProgressText key={currentStep} $isLast={currentStep === PROVISIONING_STEPS.length - 1} $duration={stepDuration}>
+              {copy.provisioningSteps?.[currentStep] || PROVISIONING_STEPS[currentStep]}
+            </ProgressText>
+          </ProgressStepContainer>
+        )}
       </form>
 
       <FooterDivider />

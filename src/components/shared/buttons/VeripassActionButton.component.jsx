@@ -1,7 +1,9 @@
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-export const VeripassActionButton = styled(Button)(({ theme, customTheme }) => ({
+export const VeripassActionButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'customTheme',
+})(({ theme, customTheme }) => ({
   backgroundColor: customTheme?.brandPrimary || '#000000',
   color: customTheme?.brandPrimaryForeground || '#ffffff',
   textTransform: 'none',

@@ -1,11 +1,38 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Typography } from '@mui/material';
-import { PoweredBy } from '@components/shared/layouts/VeripassLayout';
+import { PoweredBy } from '@components/shared/PoweredBy/PoweredBy.component';
 import '@styles/bootstrap-namespaced.css';
 
-export const VeripassAuthLayout = ({ heroImage = { src: '', alt: 'Cover', title: '', subtitle: '' }, logo = null, children }) => {
+const StyledLayoutContainer = styled.section`
+  height: 70vh;
+  border: ${(props) => props.$border || '0.8rem solid #fff'};
+  border-radius: ${(props) => props.$borderRadius || '2rem'};
+
+  min-width: 475px;
+
+  @media (min-width: 768px) {
+    min-width: 420px;
+  }
+
+  @media (min-width: 992px) {
+    min-width: 900px;
+  }
+`;
+
+export const VeripassAuthLayout = ({
+  heroImage = { src: '', alt: 'Cover', title: '', subtitle: '' },
+  logo = null,
+  borderRadius = '2rem',
+  border = '0.8rem solid #fff',
+  children,
+}) => {
   return (
-    <section style={{ height: '70vh', width: '100%', overflowX: 'hidden', backgroundColor: '#fff' }}>
+    <StyledLayoutContainer
+      className="veripass-w-100 veripass-bg-white veripass-overflow-hidden"
+      $border={border}
+      $borderRadius={borderRadius}
+    >
       <article className="veripass-container-fluid veripass-h-100 veripass-p-0">
         <article className="veripass-row veripass-h-100 veripass-g-0">
           <aside
@@ -71,6 +98,6 @@ export const VeripassAuthLayout = ({ heroImage = { src: '', alt: 'Cover', title:
           </main>
         </article>
       </article>
-    </section>
+    </StyledLayoutContainer>
   );
 };

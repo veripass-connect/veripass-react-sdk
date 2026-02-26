@@ -18,7 +18,7 @@ import { VeripassActionButton } from '@components/shared/buttons/VeripassActionB
 import '@styles/fonts.css';
 import '@styles/styles.css';
 
-import { AuthStandardService as SecurityService } from '@services';
+import { AuthStandardService } from '@services';
 import { SECURITY_STATUS_CODE_MESSAGES } from '@constants/security-status-code-messages';
 
 const swal = withReactContent(Swal);
@@ -31,14 +31,14 @@ const ProviderButton = styled(Button)({
 });
 
 async function signUpStandard({ payload, authProvider, redirectUrl, apiKey, environment, navigate }) {
-  const entityService = new SecurityService({ apiKey, settings: { environment } });
+  const entityService = new AuthStandardService({ apiKey, settings: { environment } });
 
   const entityResponse = await entityService.signUpStandard(payload);
 
   if (!entityResponse || !entityResponse.result) {
     await swal.fire({
       title: 'Sign-up error',
-      text: SECURITY_STATUS_CODE_MESSAGES[entityResponse.status] || 'An error occurred',
+      text: SECURITY_STATUS_CODE_MESSAGES[entityResponse.status] || entityResponse.message || 'An error occurred',
       icon: 'error',
     });
     return;
@@ -202,8 +202,8 @@ export const VeripassStandardSignup = ({
           className="veripass-mb-2 veripass-py-3"
           customTheme={theme}
         >
-          {isLoading && <CircularProgress size={20} className="veripass-me-2 veripass-text-white" />}
-          {isLoading ? 'Create account' : 'Create account'}
+          {isLoading && <CircularProgress size={20} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
+          {isLoading ? 'Creating account...' : 'Create account'}
         </VeripassActionButton>
 
         {providers && providers.length > 0 && (
