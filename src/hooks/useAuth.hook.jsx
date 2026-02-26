@@ -21,7 +21,7 @@ export const AuthProvider = ({ children, debug }) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   // State to manage user data, persisted in local storage
-  const [user, setUser] = useLocalStorage('veripass-user-data', null);
+  const [user, setUser] = useLocalStorage('veripass::auth::user-data', null);
 
   useEffect(() => {
     const extractPublicPaths = (child, parentPath = '') => {
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children, debug }) => {
    * @returns {object|null} The user data stored in local storage, or null if not found.
    */
   const getToken = () => {
-    const value = window.localStorage.getItem('veripass-user-data');
+    const value = window.localStorage.getItem('veripass::auth::user-data');
     return JSON.parse(value);
   };
 

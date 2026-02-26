@@ -198,7 +198,15 @@ const ACTIONS = {
   ALL_SET_GO_DASHBOARD: `${NAMESPACE}::all-set/go-dashboard`,
 };
 
-function VeripassTenancyAllSetComponent({ ui = {}, organization = {}, itemOnAction, updateOnAction, countdownSeconds = 15 }) {
+function VeripassTenancyAllSetComponent({
+  ui = {},
+  organization = {},
+  itemOnAction,
+  updateOnAction,
+  countdownSeconds = 15,
+  environment = 'production',
+  apiKey = '',
+}) {
   // Hooks
   const [countdown, setCountdown] = useState(countdownSeconds);
   const copy = ui.copy || {};

@@ -3,11 +3,7 @@ import { Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styled from 'styled-components';
 
-import {
-  OrganizationManagementService,
-  TenancyProvisioningService,
-  OrganizationMembershipService,
-} from '@services';
+import { OrganizationManagementService, TenancyProvisioningService, OrganizationMembershipService } from '@services';
 
 import { VeripassLayout, PoweredBy } from '@components/shared/layouts/VeripassLayout';
 import { VeripassTenancyOnboardingHub } from '../hub/VeripassTenancyOnboardingHub.component';
@@ -15,8 +11,6 @@ import { VeripassTenancyCreateOrganization } from '../create-organization/Veripa
 import { VeripassTenancyCreateApplication } from '../create-application/VeripassTenancyCreateApplication.component';
 import { VeripassTenancyChooseOrganization } from '../choose-organization/VeripassTenancyChooseOrganization.component';
 import { VeripassTenancyAllSet } from '../all-set/VeripassTenancyAllSet.component';
-
-
 
 const OnboardingMain = styled('main')({});
 
@@ -138,6 +132,8 @@ export const VeripassTenancyOnboardingManager = ({
   onEvent,
   services,
   countdownSeconds = 15,
+  environment = 'production',
+  apiKey = '',
   ...props
 }) => {
   // --- Restore saved state ---
@@ -178,12 +174,15 @@ export const VeripassTenancyOnboardingManager = ({
   // Initialize service instances only if mock services are not provided
   const activeServices = useMemo(() => {
     if (services) return services;
+
+    const serviceSettings = { settings: { environment }, apiKey };
+    console.log('service Settings: ', serviceSettings);
     return {
-      organizationService: new OrganizationManagementService(),
-      provisioningService: new TenancyProvisioningService(),
-      OrganizationMembershipService: new OrganizationMembershipService(),
+      organizationService: new OrganizationManagementService(serviceSettings),
+      provisioningService: new TenancyProvisioningService(serviceSettings),
+      OrganizationMembershipService: new OrganizationMembershipService(serviceSettings),
     };
-  }, [services]);
+  }, [services, environment, apiKey]);
 
   // Sync view to URL hash and persist
   useEffect(() => {
@@ -236,37 +235,41 @@ export const VeripassTenancyOnboardingManager = ({
   };
 
   const handleCreateAppSubmit = async (payload) => {
-    setLoading(true);
-    setError(null);
     try {
-      if (activeServices.provisioningService) {
-        // Provisioning expects { organization, application } payload. Map 'name' to 'display_name'
-        const provisionPayload = {
-          organization: {
-            display_name: payload.organization.name,
-            slug: payload.organization.slug,
-            description: payload.organization.description,
-          },
-          application: payload.createApp ? payload.application : undefined,
-        };
-
-        const res = await activeServices.provisioningService.create(provisionPayload);
-
-        if (res && res.success) {
-          // The result from provision likely contains the created entities
-          const allSetResult = {
-            organization: res.result?.organization || payload.organization,
-            application: res.result?.application || (payload.createApp ? payload.application : null),
-          };
-          setResult(allSetResult);
-          saveState({ view: VIEWS.ALL_SET, result: allSetResult, organizationForm, appForm });
-          setView(VIEWS.ALL_SET);
-        } else {
-          throw new Error(res?.message || 'Failed to provision tenancy');
-        }
-      } else {
+      if (!activeServices.provisioningService) {
         throw new Error('Provisioning service not available');
       }
+
+      setLoading(true);
+      setError(null);
+
+      // Provisioning expects { organization, application } payload. Map 'name' to 'display_name'
+      const provisionPayload = {
+        organization: {
+          display_name: payload.organization.name,
+          slug: payload.organization.slug,
+          description: payload.organization.description,
+        },
+        application: payload.createApp ? payload.application : undefined,
+        admin: {
+          id: user?.id,
+        },
+      };
+
+      const provisioningResponse = await activeServices.provisioningService.create(provisionPayload);
+
+      if (!provisioningResponse || !provisioningResponse.success) {
+        throw new Error(provisioningResponse?.message || 'Failed to provision tenancy');
+      }
+
+      // The result from provision likely contains the created entities
+      const allSetResult = {
+        organization: provisioningResponse.result?.organization || payload.organization,
+        application: provisioningResponse.result?.application || (payload.createApp ? payload.application : null),
+      };
+      setResult(allSetResult);
+      saveState({ view: VIEWS.ALL_SET, result: allSetResult, organizationForm, appForm });
+      setView(VIEWS.ALL_SET);
     } catch (err) {
       setError(err.message || 'An unexpected error occurred during setup.');
     } finally {
@@ -435,6 +438,8 @@ export const VeripassTenancyOnboardingManager = ({
             selectedAction={selectedAction}
             itemOnAction={handleItemOnAction}
             updateOnAction={handleUpdateOnAction}
+            environment={environment}
+            apiKey={apiKey}
           />
         );
       case VIEWS.CREATE_ORGANIZATION:
@@ -447,6 +452,8 @@ export const VeripassTenancyOnboardingManager = ({
             updateOnAction={handleUpdateOnAction}
             isLoading={loading}
             error={error}
+            environment={environment}
+            apiKey={apiKey}
           />
         );
       case VIEWS.CREATE_APPLICATION:
@@ -460,6 +467,8 @@ export const VeripassTenancyOnboardingManager = ({
             updateOnAction={handleUpdateOnAction}
             isLoading={loading}
             error={error}
+            environment={environment}
+            apiKey={apiKey}
           />
         );
       case VIEWS.CHOOSE_ORGANIZATION:
@@ -474,6 +483,8 @@ export const VeripassTenancyOnboardingManager = ({
             updateOnAction={handleUpdateOnAction}
             loading={loading}
             error={error}
+            environment={environment}
+            apiKey={apiKey}
           />
         );
       case VIEWS.ALL_SET:
@@ -484,6 +495,8 @@ export const VeripassTenancyOnboardingManager = ({
             itemOnAction={handleItemOnAction}
             updateOnAction={handleUpdateOnAction}
             countdownSeconds={countdownSeconds}
+            environment={environment}
+            apiKey={apiKey}
           />
         );
       default:

@@ -66,6 +66,7 @@ export const VeripassStandardSignin = ({
       alt: 'Login Cover',
       title: '',
       subtitle: '',
+      borderRadius: '0rem'
     },
     providers: [],
     theme: {

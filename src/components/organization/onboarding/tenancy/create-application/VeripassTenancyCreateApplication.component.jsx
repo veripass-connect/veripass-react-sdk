@@ -122,6 +122,8 @@ function VeripassTenancyCreateApplicationComponent({
   updateOnAction,
   isLoading = false,
   error = null,
+  environment = 'production',
+  apiKey = '',
 }) {
   const [form, setForm] = useState(appForm);
   const copy = ui.copy || {};

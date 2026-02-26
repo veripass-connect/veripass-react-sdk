@@ -9,38 +9,46 @@ export default class AuthStandardService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/security/auth-standard/',
-      create: '/security/auth-standard',
-      update: '/security/auth-standard',
-      delete: '/security/auth-standard',
+      signUpStandard: '/security/signup/standard',
+      signInStandard: '/security/signin/standard',
+      emailRecoverPassword: '/security/password/reset/standard',
+      update: '/security/password/new/standard',
+      logout: '/security/logout',
     };
     this.settings = args?.settings || {};
   }
 
-  async getByParameters(payload) {
-    return super.getByParameters(payload, {
-      endpoint: this.serviceEndpoints.get,
+  async signUpStandard(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.signUpStandard,
       ...this.settings,
     });
   }
 
-  async update(payload) {
+  async signInStandard(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.signInStandard,
+      ...this.settings,
+    });
+  }
+
+  async logout(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.logout,
+      ...this.settings,
+    });
+  }
+
+  async emailRecoverPassword(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.emailRecoverPassword,
+      ...this.settings,
+    });
+  }
+
+  async newPassword(payload) {
     return super.update(payload, {
       endpoint: this.serviceEndpoints.update,
-      ...this.settings,
-    });
-  }
-
-  async create(payload) {
-    return super.create(payload, {
-      endpoint: this.serviceEndpoints.create,
-      ...this.settings,
-    });
-  }
-
-  async delete(payload) {
-    return super.delete(payload, {
-      endpoint: this.serviceEndpoints.delete,
       ...this.settings,
     });
   }

@@ -149,6 +149,8 @@ function VeripassTenancyChooseOrganizationComponent({
   updateOnAction,
   loading = false,
   error = null,
+  environment = 'production',
+  apiKey = '',
 }) {
   // Hooks
   const [search, setSearch] = useState(searchValue);

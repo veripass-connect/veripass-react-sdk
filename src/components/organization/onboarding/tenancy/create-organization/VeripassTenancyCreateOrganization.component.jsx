@@ -73,6 +73,8 @@ function VeripassTenancyCreateOrganizationComponent({
   updateOnAction,
   isLoading = false,
   error = null,
+  environment = 'production',
+  apiKey = '',
 }) {
   // Hooks
   const [form, setForm] = useState(organizationForm);

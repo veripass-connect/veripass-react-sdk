@@ -7,9 +7,9 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
 import { VeripassActionButton } from '@components/shared/buttons/VeripassActionButton.component';
 
-const ViewTitle = styled('h2')({
+const ViewTitle = styled('h3')({
   fontSize: '2rem',
-  color: '#0f172a',
+  color: '#0f172a!important',
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 });
 
@@ -31,6 +31,8 @@ function VeripassTenancyOnboardingHubComponent({
   selectedAction: initialSelectedAction = 'create',
   itemOnAction,
   updateOnAction,
+  environment = 'production',
+  apiKey = '',
 }) {
   // Hooks
   // ...

@@ -54,6 +54,7 @@ export const VeripassSignInManager = ({
   organization = { name: '', logoSrc: '', slogan: '' },
   registerUrl = '',
   onRegisterClick,
+  redirectUrl,
   ...props
 }) => {
   const heroImage = ui.heroImage || { src: '', alt: 'Cover' };
@@ -85,6 +86,7 @@ export const VeripassSignInManager = ({
         initialEmail={identifier}
         registerUrl={registerUrl}
         onRegisterClick={onRegisterClick}
+        redirectUrl={redirectUrl}
         {...props}
       />
     );
