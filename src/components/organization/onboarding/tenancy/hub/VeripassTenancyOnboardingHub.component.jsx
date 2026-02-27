@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { VeripassSelectableCard } from '../shared/VeripassSelectableCard.component';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 
 import { VeripassActionButton } from '@components/shared/buttons/VeripassActionButton.component';
 
@@ -28,7 +29,7 @@ const ACTIONS = {
 function VeripassTenancyOnboardingHubComponent({
   ui = {},
   organization = {},
-  selectedAction: initialSelectedAction = 'create-organization',
+  selectedAction: initialSelectedAction = 'join-host',
   itemOnAction,
   updateOnAction,
   environment = 'production',
@@ -41,7 +42,7 @@ function VeripassTenancyOnboardingHubComponent({
   // ...
 
   // UI states
-  const [selectedAction, setSelectedAction] = useState(initialSelectedAction || 'create-organization');
+  const [selectedAction, setSelectedAction] = useState(initialSelectedAction || 'join-host');
   const copy = ui.copy || {};
 
   // Configs
@@ -87,6 +88,15 @@ function VeripassTenancyOnboardingHubComponent({
       </header>
 
       <main className="veripass-mb-4">
+        <VeripassSelectableCard
+          title={copy.hubJoinTitle || `Join ${organization.name || 'Host Platform'}`}
+          description={copy.hubJoinSubtitle || 'Enter exploration mode and set up your workspace later.'}
+          icon={<RocketLaunchIcon />}
+          selected={selectedAction === 'join-host'}
+          onClick={() => handleSelection('join-host')}
+          ui={ui}
+        />
+
         <VeripassSelectableCard
           title={copy.hubCreateTitle || 'Create organization'}
           description={copy.hubCreateSubtitle || 'Start a new workspace from scratch for your team.'}

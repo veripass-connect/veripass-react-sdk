@@ -9,38 +9,22 @@ export default class TenancyProvisioningService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/tenancy/provisioning/',
-      create: '/tenancy/provisioning',
-      update: '/tenancy/provisioning',
-      delete: '/tenancy/provisioning',
+      provisionWorkspace: '/tenancy/provisioning',
+      joinHost: '/tenancy/provisioning/join-host',
     };
     this.settings = args?.settings || {};
   }
 
-  async getByParameters(payload) {
-    return super.getByParameters(payload, {
-      endpoint: this.serviceEndpoints.get,
-      ...this.settings,
-    });
-  }
-
-  async update(payload) {
-    return super.update(payload, {
-      endpoint: this.serviceEndpoints.update,
-      ...this.settings,
-    });
-  }
-
-  async create(payload) {
+  async provisionWorkspace(payload) {
     return super.create(payload, {
-      endpoint: this.serviceEndpoints.create,
+      endpoint: this.serviceEndpoints.provisionWorkspace,
       ...this.settings,
     });
   }
 
-  async delete(payload) {
-    return super.delete(payload, {
-      endpoint: this.serviceEndpoints.delete,
+  async joinHost(payload) {
+    return super.create(payload, {
+      endpoint: this.serviceEndpoints.joinHost,
       ...this.settings,
     });
   }
