@@ -36,7 +36,7 @@ const Template = (args) => (
 
 export const DefaultTheme = Template.bind({});
 DefaultTheme.args = {
-  selectedAction: 'create',
+  selectedAction: 'create-organization',
   ui: {
     title: "Let's get started",
     showTitle: true,
@@ -58,12 +58,12 @@ DefaultTheme.args = {
 export const ChooseSelected = Template.bind({});
 ChooseSelected.args = {
   ...DefaultTheme.args,
-  selectedAction: 'choose',
+  selectedAction: 'choose-organization',
 };
 
 export const CustomTheme = Template.bind({});
 CustomTheme.args = {
-  selectedAction: 'create',
+  selectedAction: 'create-organization',
   ui: {
     title: 'Welcome to Acme Corp',
     showTitle: true,

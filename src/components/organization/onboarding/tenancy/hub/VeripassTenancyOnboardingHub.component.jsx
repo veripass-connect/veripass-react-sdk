@@ -28,7 +28,7 @@ const ACTIONS = {
 function VeripassTenancyOnboardingHubComponent({
   ui = {},
   organization = {},
-  selectedAction: initialSelectedAction = 'create',
+  selectedAction: initialSelectedAction = 'create-organization',
   itemOnAction,
   updateOnAction,
   environment = 'production',
@@ -41,7 +41,7 @@ function VeripassTenancyOnboardingHubComponent({
   // ...
 
   // UI states
-  const [selectedAction, setSelectedAction] = useState(initialSelectedAction || 'create');
+  const [selectedAction, setSelectedAction] = useState(initialSelectedAction || 'create-organization');
   const copy = ui.copy || {};
 
   // Configs
@@ -91,8 +91,8 @@ function VeripassTenancyOnboardingHubComponent({
           title={copy.hubCreateTitle || 'Create organization'}
           description={copy.hubCreateSubtitle || 'Start a new workspace from scratch for your team.'}
           icon={<AddBusinessIcon />}
-          selected={selectedAction === 'create'}
-          onClick={() => handleSelection('create')}
+          selected={selectedAction === 'create-organization'}
+          onClick={() => handleSelection('create-organization')}
           ui={ui}
         />
 
@@ -100,8 +100,8 @@ function VeripassTenancyOnboardingHubComponent({
           title={copy.hubChooseTitle || 'Choose your organization'}
           description={copy.hubChooseSubtitle || 'Sign in to an existing workspace via invitation.'}
           icon={<CorporateFareIcon />}
-          selected={selectedAction === 'choose'}
-          onClick={() => handleSelection('choose')}
+          selected={selectedAction === 'choose-organization'}
+          onClick={() => handleSelection('choose-organization')}
           ui={ui}
         />
       </main>

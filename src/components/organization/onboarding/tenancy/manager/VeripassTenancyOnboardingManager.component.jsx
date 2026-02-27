@@ -155,7 +155,7 @@ export const VeripassTenancyOnboardingManager = ({
 
   // State
   const [view, setView] = useState(getInitialView());
-  const [selectedAction, setSelectedAction] = useState(savedState?.selectedAction || ui.defaultAction || 'create');
+  const [selectedAction, setSelectedAction] = useState(savedState?.selectedAction || ui.defaultAction || 'create-organization');
 
   const [organizationForm, setOrganizationForm] = useState(
     savedState?.organizationForm || { name: '', slug: '', description: '', isSlugEdited: false },
@@ -284,7 +284,7 @@ export const VeripassTenancyOnboardingManager = ({
 
     switch (action) {
       case ACTIONS.HUB_CONTINUE:
-        setView(payload.selectedAction === 'choose' ? VIEWS.CHOOSE_ORGANIZATION : VIEWS.CREATE_ORGANIZATION);
+        setView(payload.selectedAction === 'choose-organization' ? VIEWS.CHOOSE_ORGANIZATION : VIEWS.CREATE_ORGANIZATION);
         break;
 
       case ACTIONS.ORGANIZATION_BACK:
