@@ -11,6 +11,7 @@ export default class AuthStandardService extends BaseApi {
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
       signUpStandard: '/security/signup/standard',
       signInStandard: '/security/signin/standard',
+      switchContext: '/security/auth/switch-context',
       emailRecoverPassword: '/security/password/reset/standard',
       update: '/security/password/new/standard',
       logout: '/security/logout',
@@ -28,6 +29,13 @@ export default class AuthStandardService extends BaseApi {
   async signInStandard(payload) {
     return super.post(payload, {
       endpoint: this.serviceEndpoints.signInStandard,
+      ...this.settings,
+    });
+  }
+
+  async switchContext(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.switchContext,
       ...this.settings,
     });
   }

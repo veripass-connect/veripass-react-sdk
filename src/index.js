@@ -43,6 +43,9 @@ export { VeripassOrganizationProfileEdit as VeripassOrganizationProfileEdit } fr
 export { VeripassOrganizationProfilePreview as VeripassOrganizationProfilePreview } from './components/organization/profile/preview/VeripassOrganizationProfilePreview.jsx';
 export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage } from './components/organization/profile/manage/VeripassOrganizationProfileManage.jsx';
 
+/* Organization Switcher */
+export { VeripassOrganizationSwitcher as VeripassOrganizationSwitcher } from './components/organization/OrganizationSwitcher/veripass-organization-switcher.component.jsx';
+
 /* Organization Onboarding (Tenancy) */
 export { VeripassTenancyOnboardingManager as VeripassTenancyOnboardingManager } from './components/organization/onboarding/tenancy/manager/VeripassTenancyOnboardingManager.component.jsx';
 export { VeripassTenancyOnboardingHub as VeripassTenancyOnboardingHub } from './components/organization/onboarding/tenancy/hub/VeripassTenancyOnboardingHub.component.jsx';
