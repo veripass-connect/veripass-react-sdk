@@ -33,13 +33,12 @@ const MOCK_ORGS = [
 const mockServicesSuccess = {
   organizationService: {
     getByParameters: async () => {
-      console.log('[Mock] fetching organizations...');
       return new Promise((resolve) => setTimeout(() => resolve({ success: true, result: MOCK_ORGS }), 800));
     },
   },
   provisioningService: {
-    create: async (payload) => {
-      console.log('[Mock] provisioning tenancy:', payload);
+    provisionWorkspace: async (payload) => {
+      console.log('[Mock] provisioning workspace:', payload);
       return new Promise((resolve) =>
         setTimeout(
           () =>
@@ -54,20 +53,61 @@ const mockServicesSuccess = {
         ),
       );
     },
+    joinHost: async (payload) => {
+      console.log('[Mock] joining host:', payload);
+      return new Promise((resolve) =>
+        setTimeout(
+          () =>
+            resolve({
+              success: true,
+              result: {
+                host: { organizationId: 'host_org_123' },
+                organizationMembership: { id: 'mem_1' },
+              },
+            }),
+          1500,
+        ),
+      );
+    },
+  },
+  userProfileService: {
+    update: async (payload) => {
+      console.log('[Mock] updating profile:', payload);
+      return new Promise((resolve) => setTimeout(() => resolve({ success: true }), 800));
+    },
+  },
+  OrganizationMembershipService: {
+    create: async () => ({ success: true }),
   },
 };
 
-const mockServicesError = {
-  organizationService: {
-    getByParameters: async () => {
-      console.log('[Mock] fetching organizations...');
-      return new Promise((resolve) => setTimeout(() => resolve({ success: true, result: MOCK_ORGS }), 800));
-    },
-  },
+const mockServicesTimeout = {
+  ...mockServicesSuccess,
   provisioningService: {
-    create: async () => {
+    provisionWorkspace: async () => {
       return new Promise((resolve) =>
-        setTimeout(() => resolve({ success: false, message: 'Server Error: Duplicate slug found.' }), 1000),
+        setTimeout(
+          () =>
+            resolve({
+              success: false,
+              isTimeout: true,
+              message: 'The request took too long to complete (timeout).',
+            }),
+          1000,
+        ),
+      );
+    },
+    joinHost: async () => {
+      return new Promise((resolve) =>
+        setTimeout(
+          () =>
+            resolve({
+              success: false,
+              isTimeout: true,
+              message: 'The request took too long to complete (timeout).',
+            }),
+          1000,
+        ),
       );
     },
   },
@@ -78,46 +118,67 @@ const Template = (args) => <VeripassTenancyOnboardingManager {...args} />;
 export const DefaultMockedFlow = Template.bind({});
 DefaultMockedFlow.args = {
   services: mockServicesSuccess,
-  countdownSeconds: 15,
-  ui: {
-    title: "Let's get started",
-    showTitle: true,
-    theme: {
-      brandPrimary: '#000000',
-      brandPrimaryForeground: '#ffffff',
-      linkColor: '#0d6efd',
+  user: {
+    id: 'user_1',
+    payload: {
+      profile: { first_name: 'John', last_name: 'Doe', display_name: 'John Doe' },
     },
-    defaultAction: 'create',
-    defaultCreateApp: true,
+  },
+  ui: {
+    theme: { brandPrimary: '#000000' },
+    defaultAction: 'create-organization',
   },
 };
 
-export const CustomThemeMockedFlow = Template.bind({});
-CustomThemeMockedFlow.args = {
+export const CompleteProfileInterception = Template.bind({});
+CompleteProfileInterception.args = {
   services: mockServicesSuccess,
-  countdownSeconds: 15,
-  ui: {
-    title: 'Tenant Setup',
-    showTitle: true,
-    theme: {
-      brandPrimary: '#6f42c1',
-      brandPrimaryForeground: '#ffffff',
-      linkColor: '#6f42c1',
+  user: {
+    id: 'user_2',
+    payload: {
+      profile: { first_name: '', last_name: '', display_name: '' },
     },
-    defaultAction: 'choose',
-    defaultCreateApp: false,
+  },
+  ui: {
+    theme: { brandPrimary: '#000000' },
   },
 };
 
-export const MockedFlowWithError = Template.bind({});
-MockedFlowWithError.args = {
-  services: mockServicesError,
-  countdownSeconds: 15,
+export const TimeoutErrorScenario = Template.bind({});
+TimeoutErrorScenario.args = {
+  services: mockServicesTimeout,
+  user: {
+    id: 'user_1',
+    payload: {
+      profile: { first_name: 'John', last_name: 'Doe', display_name: 'John Doe' },
+    },
+  },
+  ui: {
+    theme: { brandPrimary: '#000000' },
+    defaultAction: 'join-host',
+  },
+};
+
+export const CustomBrandingJoinHost = Template.bind({});
+CustomBrandingJoinHost.args = {
+  services: mockServicesSuccess,
+  organization: {
+    name: 'Blackwood Stone Holdings',
+    logoSrc: 'https://via.placeholder.com/150',
+    slogan: 'Building the future of finance.',
+  },
+  user: {
+    id: 'user_1',
+    payload: {
+      profile: { first_name: 'John', last_name: 'Doe', display_name: 'John Doe' },
+    },
+  },
   ui: {
     theme: {
-      brandPrimary: '#d32f2f',
+      brandPrimary: '#1e293b',
       brandPrimaryForeground: '#ffffff',
-      linkColor: '#d32f2f',
+      linkColor: '#3b82f6',
     },
+    defaultAction: 'join-host',
   },
 };
