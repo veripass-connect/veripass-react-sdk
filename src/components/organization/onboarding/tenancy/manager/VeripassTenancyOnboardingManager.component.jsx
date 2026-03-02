@@ -3,7 +3,12 @@ import { Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styled from 'styled-components';
 
-import { OrganizationManagementService, TenancyProvisioningService, OrganizationMembershipService } from '@services';
+import {
+  OrganizationManagementService,
+  TenancyProvisioningService,
+  OrganizationMembershipService,
+  UserProfileService,
+} from '@services';
 
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
 import { PoweredBy } from '@components/shared/PoweredBy/PoweredBy.component';
@@ -14,6 +19,7 @@ import { VeripassTenancyChooseOrganization } from '../choose-organization/Veripa
 import { VeripassTenancyJoinHost } from '../join-host/VeripassTenancyJoinHost.component';
 import { VeripassTenancyAllSet } from '../all-set/VeripassTenancyAllSet.component';
 import { VeripassTenancyError } from '../shared/VeripassTenancyError.component';
+import { VeripassTenancyCompleteProfile } from '../complete-profile/VeripassTenancyCompleteProfile.component';
 
 const OnboardingMain = styled('main')({});
 
@@ -51,6 +57,8 @@ const VIEWS = {
   CREATE_APPLICATION: 'create-application',
   CHOOSE_ORGANIZATION: 'choose-organization',
   ALL_SET: 'all-set',
+  COMPLETE_PROFILE: 'complete-profile',
+  ERROR: 'error',
 };
 
 const NAMESPACE = 'veripass-tenancy-onboarding';
@@ -74,6 +82,8 @@ const ACTIONS = {
   ALL_SET_GO_DASHBOARD: `${NAMESPACE}::all-set/go-dashboard`,
   JOIN_HOST_BACK: `${NAMESPACE}::join-host/back`,
   JOIN_HOST_ERROR_UPDATED: `${NAMESPACE}::join-host/error-updated`,
+  COMPLETE_PROFILE_SUBMIT: `${NAMESPACE}::complete-profile/submit`,
+  COMPLETE_PROFILE_BACK: `${NAMESPACE}::complete-profile/back`,
 };
 
 const STORAGE_KEY = 'veripass::tenancy-onboarding::state';
@@ -104,9 +114,10 @@ const clearState = () => {
   try {
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem('veripass::auth::user-data');
     }
   } catch (err) {
-    console.warn(`[${STORAGE_KEY}] Failed to clear state:`, err);
+    console.warn(`Failed to clear state:`, err);
   }
 };
 
@@ -145,6 +156,13 @@ export const VeripassTenancyOnboardingManager = ({
   // --- Restore saved state ---
   const savedState = useMemo(() => loadState(), []);
 
+  const checkNeedsProfile = (userData) => {
+    const p = userData?.payload?.profile;
+    return !!userData && (!p?.first_name || !p?.last_name || !p?.display_name);
+  };
+
+  const needsProfile = checkNeedsProfile(user);
+
   const getInitialView = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hashView = window.location.hash.replace('#view=', '');
@@ -160,6 +178,7 @@ export const VeripassTenancyOnboardingManager = ({
 
   // State
   const [view, setView] = useState(getInitialView());
+  const [intendedViewAfterProfile, setIntendedViewAfterProfile] = useState(savedState?.intendedViewAfterProfile || null);
   const [selectedAction, setSelectedAction] = useState(savedState?.selectedAction || ui.defaultAction || 'join-host');
 
   const [organizationForm, setOrganizationForm] = useState(
@@ -182,11 +201,13 @@ export const VeripassTenancyOnboardingManager = ({
     if (services) return services;
 
     const serviceSettings = { settings: { environment }, apiKey };
-    console.log('service Settings: ', serviceSettings);
+    const provisioningSettings = { settings: { environment, timeout: 120000 }, apiKey };
+
     return {
       organizationService: new OrganizationManagementService(serviceSettings),
-      provisioningService: new TenancyProvisioningService(serviceSettings),
+      provisioningService: new TenancyProvisioningService(provisioningSettings),
       OrganizationMembershipService: new OrganizationMembershipService(serviceSettings),
+      userProfileService: new UserProfileService(serviceSettings),
     };
   }, [services, environment, apiKey]);
 
@@ -198,8 +219,8 @@ export const VeripassTenancyOnboardingManager = ({
     setError(null);
     // Persist current view to localStorage
     const current = loadState() || {};
-    saveState({ ...current, view });
-  }, [view]);
+    saveState({ ...current, view, intendedViewAfterProfile });
+  }, [view, intendedViewAfterProfile]);
 
   // Handle Hash change for browser back/forward buttons
   useEffect(() => {
@@ -220,6 +241,16 @@ export const VeripassTenancyOnboardingManager = ({
     }
   }, [view]);
 
+  const handleError = (err, defaultMessage = 'An unexpected error occurred.') => {
+    if (err?.isTimeout || (err?.message && err.message.toLowerCase().includes('timeout'))) {
+      setError('The process took longer than expected. Please check your console in a few minutes or start again.');
+      clearState();
+      setView(VIEWS.ERROR);
+    } else {
+      setError(err?.message || defaultMessage);
+    }
+  };
+
   const loadOrganizations = async () => {
     setLoading(true);
     setError(null);
@@ -233,7 +264,7 @@ export const VeripassTenancyOnboardingManager = ({
         }
       }
     } catch (err) {
-      setError('Failed to load organizations.');
+      handleError(err, 'Failed to load organizations.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -265,7 +296,7 @@ export const VeripassTenancyOnboardingManager = ({
       const provisioningResponse = await activeServices.provisioningService.provisionWorkspace(provisionPayload);
 
       if (!provisioningResponse || !provisioningResponse.success) {
-        throw new Error(provisioningResponse?.message || 'Failed to provision tenancy');
+        throw provisioningResponse || new Error('Failed to provision tenancy');
       }
 
       // The result from provision likely contains the created entities
@@ -277,7 +308,7 @@ export const VeripassTenancyOnboardingManager = ({
       saveState({ view: VIEWS.ALL_SET, result: allSetResult, organizationForm, appForm });
       setView(VIEWS.ALL_SET);
     } catch (err) {
-      setError(err.message || 'An unexpected error occurred during setup.');
+      handleError(err, 'An unexpected error occurred during setup.');
     } finally {
       setLoading(false);
     }
@@ -296,7 +327,12 @@ export const VeripassTenancyOnboardingManager = ({
         }[payload.selectedAction];
 
         if (nextView) {
-          setView(nextView);
+          if (checkNeedsProfile(user)) {
+            setIntendedViewAfterProfile(nextView);
+            setView(VIEWS.COMPLETE_PROFILE);
+          } else {
+            setView(nextView);
+          }
         }
         break;
 
@@ -355,7 +391,7 @@ export const VeripassTenancyOnboardingManager = ({
               saveState({ view: VIEWS.ALL_SET, result: allSetResult, organizationForm });
               setView(VIEWS.ALL_SET);
             } catch (err) {
-              setError(err.message || 'An unexpected error occurred while joining.');
+              handleError(err, 'An unexpected error occurred while joining.');
             } finally {
               setLoading(false);
             }
@@ -378,6 +414,46 @@ export const VeripassTenancyOnboardingManager = ({
         }
         break;
       case ACTIONS.JOIN_HOST_BACK:
+        setView(VIEWS.HUB);
+        break;
+
+      case ACTIONS.COMPLETE_PROFILE_SUBMIT:
+        if (payload?.profile) {
+          setLoading(true);
+          setError(null);
+          const updateProfile = async () => {
+            try {
+              if (activeServices.userProfileService && user?.id) {
+                const res = await activeServices.userProfileService.update({
+                  id: user.id,
+                  first_name: payload.profile.first_name,
+                  last_name: payload.profile.last_name,
+                  display_name: payload.profile.display_name,
+                });
+
+                if (!res || !res.success) {
+                  throw new Error(res?.message || 'Failed to update user profile.');
+                }
+
+                // If they have a destination saved, go there, otherwise go to HUB
+                if (intendedViewAfterProfile) {
+                  setView(intendedViewAfterProfile);
+                  setIntendedViewAfterProfile(null);
+                } else {
+                  setView(VIEWS.HUB);
+                }
+              }
+            } catch (err) {
+              handleError(err, 'An unexpected error occurred while updating profile.');
+            } finally {
+              setLoading(false);
+            }
+          };
+          updateProfile();
+        }
+        break;
+
+      case ACTIONS.COMPLETE_PROFILE_BACK:
         setView(VIEWS.HUB);
         break;
 
@@ -452,7 +528,7 @@ export const VeripassTenancyOnboardingManager = ({
         break;
 
       case ACTIONS.JOIN_HOST_ERROR_UPDATED:
-        setError(payload.error);
+        handleError(payload, 'An unexpected error occurred while joining host.');
         break;
 
       default:
@@ -464,6 +540,8 @@ export const VeripassTenancyOnboardingManager = ({
 
   const renderView = () => {
     switch (view) {
+      case VIEWS.COMPLETE_PROFILE:
+        return <VeripassTenancyCompleteProfile ui={ui} itemOnAction={handleItemOnAction} isLoading={loading} error={error} />;
       case VIEWS.HUB:
         return (
           <VeripassTenancyOnboardingHub
@@ -503,6 +581,18 @@ export const VeripassTenancyOnboardingManager = ({
             error={error}
             environment={environment}
             apiKey={apiKey}
+          />
+        );
+      case VIEWS.ERROR:
+        return (
+          <VeripassTenancyError
+            ui={ui}
+            errorTitle="Setup Timeout"
+            errorBody={error || 'An unexpected error occurred.'}
+            onBack={() => {
+              setError(null);
+              setView(VIEWS.HUB);
+            }}
           />
         );
       case VIEWS.CREATE_ORGANIZATION:
@@ -563,8 +653,38 @@ export const VeripassTenancyOnboardingManager = ({
           />
         );
       default:
-        return null;
     }
+  };
+
+  const getStepIndicator = () => {
+    let currentStep = 0;
+    let totalSteps = 0;
+
+    // Determine base total steps based on chosen flow
+    if (selectedAction === 'create-organization') {
+      totalSteps = 2; // Create Org -> Create App
+    } else if (selectedAction === 'choose-organization' || selectedAction === 'join-host') {
+      totalSteps = 1; // Choose/Join
+    }
+
+    // If profile is missing, it adds an extra initial step to all flows
+    if (needsProfile && totalSteps > 0) {
+      totalSteps += 1;
+    }
+
+    // Determine current step index based on the view
+    if (view === VIEWS.COMPLETE_PROFILE) {
+      currentStep = 1;
+    } else if (view === VIEWS.JOIN_HOST || view === VIEWS.CHOOSE_ORGANIZATION || view === VIEWS.CREATE_ORGANIZATION) {
+      currentStep = needsProfile ? 2 : 1;
+    } else if (view === VIEWS.CREATE_APPLICATION) {
+      currentStep = needsProfile ? 3 : 2;
+    }
+
+    if (currentStep > 0 && totalSteps > 0 && currentStep <= totalSteps) {
+      return `STEP ${currentStep} OF ${totalSteps}`;
+    }
+    return null;
   };
 
   return (
@@ -573,6 +693,7 @@ export const VeripassTenancyOnboardingManager = ({
         {(view === VIEWS.CHOOSE_ORGANIZATION ||
           view === VIEWS.CREATE_ORGANIZATION ||
           view === VIEWS.CREATE_APPLICATION ||
+          view === VIEWS.COMPLETE_PROFILE ||
           (view === VIEWS.JOIN_HOST && Boolean(error))) && (
           <BackNav className="veripass-d-flex veripass-justify-content-between veripass-align-items-center">
             <Button
@@ -583,6 +704,7 @@ export const VeripassTenancyOnboardingManager = ({
                   [VIEWS.CREATE_ORGANIZATION]: ACTIONS.ORGANIZATION_BACK,
                   [VIEWS.CREATE_APPLICATION]: ACTIONS.CREATE_APP_BACK,
                   [VIEWS.JOIN_HOST]: ACTIONS.JOIN_HOST_BACK,
+                  [VIEWS.COMPLETE_PROFILE]: ACTIONS.COMPLETE_PROFILE_BACK,
                 };
                 const mappedAction = backActions[view];
                 if (mappedAction) {
@@ -600,10 +722,8 @@ export const VeripassTenancyOnboardingManager = ({
             >
               {view === VIEWS.CHOOSE_ORGANIZATION || view === VIEWS.JOIN_HOST ? 'Back to setup' : 'Back'}
             </Button>
-            {(view === VIEWS.CREATE_ORGANIZATION || view === VIEWS.CREATE_APPLICATION) && (
-              <StepIndicator className="veripass-text-uppercase veripass-fw-bold">
-                {view === VIEWS.CREATE_ORGANIZATION ? 'STEP 1 OF 2' : 'STEP 2 OF 2'}
-              </StepIndicator>
+            {getStepIndicator() && (
+              <StepIndicator className="veripass-text-uppercase veripass-fw-bold">{getStepIndicator()}</StepIndicator>
             )}
           </BackNav>
         )}

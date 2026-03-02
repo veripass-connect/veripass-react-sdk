@@ -9,11 +9,11 @@ export default class UserManagementService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/user/',
-      create: '/user',
-      update: '/user',
-      delete: '/user',
-      assignAccessProfile: '/user/assign-access-profile',
+      get: '/user/management/',
+      create: '/user/management',
+      update: '/user/management',
+      delete: '/user/management',
+      assignAccessProfile: '/user/management/assign-access-profile',
     };
     this.settings = args?.settings || {};
   }

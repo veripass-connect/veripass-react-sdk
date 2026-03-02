@@ -181,11 +181,17 @@ function VeripassTenancyJoinHostComponent({
     } catch (err) {
       clearInterval(uiInterval);
       setStatus('error');
+
+      const isTimeout = err.code === 'ECONNABORTED' || (err.message && err.message.toLowerCase().includes('timeout'));
+
       if (updateOnAction) {
         updateOnAction({
           action: ACTIONS.JOIN_HOST_ERROR_UPDATED,
           namespace: NAMESPACE,
-          payload: { error: err.message || 'An unexpected error occurred.' },
+          payload: {
+            error: err.message || 'An unexpected error occurred.',
+            isTimeout,
+          },
         });
       }
     }
