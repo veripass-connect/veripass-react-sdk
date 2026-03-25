@@ -46,30 +46,37 @@ const mockUser = {
       display_name: 'Sommatic AI',
     },
   },
-  linked_organizations: [
-    {
+  memberships: {
+    active: {
+      id: 'membership-1',
       organization_id: 'org-abc',
-      context: {
-        organization: {
-          profile: {
-            display_name: 'Isadora inc.',
-          },
-        },
-        role: { name: 'Admin' },
-      },
+      is_host_context: false,
     },
-    {
-      organization_id: 'org-xyz',
-      context: {
-        organization: {
-          profile: {
-            display_name: 'Acme Corp',
+    items: [
+      {
+        organization_id: 'org-abc',
+        context: {
+          organization: {
+            profile: {
+              display_name: 'Isadora inc.',
+            },
           },
+          role: { name: 'Admin' },
         },
-        role: { name: 'Member' },
       },
-    },
-  ],
+      {
+        organization_id: 'org-xyz',
+        context: {
+          organization: {
+            profile: {
+              display_name: 'Acme Corp',
+            },
+          },
+          role: { name: 'Member' },
+        },
+      },
+    ],
+  },
 };
 
 const MockAuthProvider = ({ children, mockUserValue }) => {
@@ -115,8 +122,16 @@ InsidePersonalAccount.args = {
     ...mockUser,
     payload: {
       ...mockUser.payload,
-      organization_id: 'org-host', // Active org is the host
-      roles: [], // Usually no roles defined strictly for personal account
+      organization_id: 'org-host',
+      roles: [],
+    },
+    memberships: {
+      ...mockUser.memberships,
+      active: {
+        id: 'membership-host',
+        organization_id: 'org-host',
+        is_host_context: true,
+      },
     },
   },
 };
