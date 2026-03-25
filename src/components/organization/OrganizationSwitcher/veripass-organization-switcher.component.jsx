@@ -152,14 +152,6 @@ export const VeripassOrganizationSwitcher = ({
     return linkedOrganizations.filter((organization) => organization.organization_id !== hostOrganization?.id);
   };
 
-  const getActiveOrganizationId = (roles = [], payloadOrganizationId, hostOrganization = null) => {
-    const defaultTenantRole = roles.find((role) => role.organization_id && role.organization_id !== hostOrganization?.id);
-
-    return payloadOrganizationId === hostOrganization?.id && defaultTenantRole
-      ? defaultTenantRole.organization_id
-      : payloadOrganizationId;
-  };
-
   const getDisplayDetails = (targetOrganizationId, switchableOrganizations, roles = []) => {
     const targetLink = switchableOrganizations.find((organization) => organization.organization_id === targetOrganizationId);
     const targetRole = roles.find((role) => role.organization_id === targetOrganizationId);
@@ -204,11 +196,11 @@ export const VeripassOrganizationSwitcher = ({
   useEffect(() => {
     if (!user) return;
 
-    const payloadOrganizationId = user.payload?.organizationId || user.payload?.organization_id;
     const rolesContext = user.payload?.roles || [];
+    const allMemberships = user.memberships?.items || [];
 
-    const switchableOrganizations = getSwitchableOrganizations(user.linked_organizations, user.host_organization);
-    const activeOrganizationId = getActiveOrganizationId(rolesContext, payloadOrganizationId, user.host_organization);
+    const switchableOrganizations = getSwitchableOrganizations(allMemberships, user.host_organization);
+    const activeOrganizationId = user.memberships?.active?.organization_id;
     const displayDetails = getDisplayDetails(activeOrganizationId, switchableOrganizations, rolesContext);
 
     setContextData({
@@ -231,7 +223,10 @@ export const VeripassOrganizationSwitcher = ({
         settings: { environment },
       });
 
-      const response = await authService.switchContext({ target_organization_id: targetOrganizationId });
+      const response = await authService.switchContext({
+        target_organization_id: targetOrganizationId,
+        host_organization_id: user.host_organization?.id,
+      });
 
       if (response && response.success) {
         await login({ user: response.result });

@@ -79,7 +79,7 @@ export const AuthProvider = ({ children, debug }) => {
     const profile = user.payload?.profile || {};
 
     return {
-      'x-veripass-organization-identity': user.payload?.organization_id || '',
+      'x-veripass-organization-identity': user.memberships?.active?.organization_id || user.payload?.organization_id || '',
       'x-veripass-app-id': user.payload?.app_id || '',
       'x-veripass-user-identity': user.identity,
       'x-veripass-user-display-name': profile.display_name || profile.primary_email_address || user.identity,
