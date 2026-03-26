@@ -18,10 +18,12 @@ export { default as AuthTotpEmailService } from './security/auth-totp-email/auth
 export { default as AuthTotpPhoneService } from './security/auth-totp-phone/auth-totp-phone.service';
 export { default as ApiKeyService } from './security/api-key/api-key.service';
 export { default as AuthChatbotService } from './security/auth-chatbot/auth-chatbot.service';
+export { default as AuthEntraService } from './security/auth-entra/auth-entra.service';
 export { default as RoleService } from './security/role/role.service';
 export { default as ClaimService } from './security/claim/claim.service';
 export { default as CapabilityService } from './security/capability/capability.service';
 export { default as AccessProfileService } from './security/access-profile/access-profile.service';
+export { default as OrganizationIdentityProviderService } from './security/organization-identity-provider/organization-identity-provider.service';
 export { default as SecurityProvisioningService } from './security/provisioning/security-provisioning.service';
 export { default as UploadService } from './storage/upload/upload.service';
 export { default as FileService } from './storage/file-system/file/file.service';

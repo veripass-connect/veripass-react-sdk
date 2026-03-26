@@ -9,6 +9,9 @@ export { VeripassStandardRecoverPassword as VeripassStandardRecoverPassword } fr
 export { VeripassNewPassword as VeripassNewPassword } from './components/auth/recover/new-password/VeripassNewPassword.jsx';
 export { VeripassStandardUnlock as VeripassStandardUnlock } from './components/auth/unlock/VeripassStandardUnlock.jsx';
 
+/* Security Federated */
+export { VeripassFederatedCallback as VeripassFederatedCallback } from './components/auth/signin/federated-callback/VeripassFederatedCallback.component.jsx';
+
 /* User Quick Actions */
 export { VeripassUserQuickStandardCreate as VeripassUserQuickStandardCreate } from './components/user/quick-actions/create/VeripassUserQuickStandardCreate.jsx';
 export { VeripassQuickUserKyc as VeripassQuickUserKyc } from './components/user/quick-actions/kyc/VeripassQuickUserKyc.jsx';
@@ -64,6 +67,7 @@ export { VeripassTeamManagementList as VeripassTeamManagementList } from './comp
 export { VeripassMyPrincipalTeamList as VeripassMyPrincipalTeamList } from './components/team/team-management/preview/VeripassMyPrincipalTeamList.jsx';
 
 export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth.hook.jsx';
+export { useFederatedAuth } from './hooks/useFederatedAuth.hook.jsx';
 export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';
 
 import './styles/fonts.css';

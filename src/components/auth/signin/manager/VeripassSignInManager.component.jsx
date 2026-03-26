@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { VeripassStandardSignin } from '../standard-signin/VeripassStandardSignin';
 import { VeripassAuthLayout } from '@components/auth/layouts/VeripassAuthLayout';
 import { KarlaTypography } from '@components/shared/styling/KarlaTypography';
-import { TextField, Typography, Button, Divider, Link } from '@mui/material';
+import { TextField, Typography, Button, Divider, Link, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useFederatedAuth } from '../../../../hooks/useFederatedAuth.hook';
 
 const BrandButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'customTheme',
@@ -25,9 +26,20 @@ const ProviderButton = styled(Button)({
   borderColor: '#e0e0e0',
 });
 
+const MicrosoftIcon = () => (
+  <svg width="21" height="21" viewBox="0 0 21 21">
+    <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+    <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+    <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+    <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+  </svg>
+);
+
 /**
  * Manager component that handles the authentication flow.
  * Can start with a "Discovery" step (Email/Phone) or directly show the Standard Signin.
+ * Supports federation-aware discovery: detects if the organization uses external IdPs
+ * (e.g., Microsoft Entra ID) and auto-redirects or shows provider buttons accordingly.
  *
  * @component
  */
@@ -54,9 +66,11 @@ export const VeripassSignInManager = ({
   },
   signinType, // 'standard' | undefined
   organization = { name: '', logoSrc: '', slogan: '' },
+  organizationSlug,
   registerUrl = '',
   onRegisterClick,
   redirectUrl,
+  onFederatedRedirect,
   ...props
 }) => {
   const heroImage = ui.heroImage || { src: '', alt: 'Cover' };
@@ -65,25 +79,132 @@ export const VeripassSignInManager = ({
 
   const [view, setView] = useState(signinType === 'standard' ? 'standard' : 'discovery');
   const [identifier, setIdentifier] = useState('');
+  const [isDiscovering, setIsDiscovering] = useState(false);
+  const [resolvedAuthOptions, setResolvedAuthOptions] = useState(null);
+
+  const { getAuthOptions, initiateProviderLogin, isLoading: isFederatedLoading } = useFederatedAuth({
+    apiKey: props.apiKey,
+    environment: props.environment,
+  });
 
   const finalRegisterUrl = ui.registerUrl || registerUrl || '#';
   const finalOnRegisterClick = ui.onRegisterClick || onRegisterClick;
 
-  const handleContinue = (e) => {
-    e.preventDefault();
-    if (identifier) {
-      setView('standard');
+  useEffect(() => {
+    if (!organizationSlug) {
+      return;
     }
+
+    const loadAuthOptions = async () => {
+      const options = await getAuthOptions({ queryselector: 'slug', search: organizationSlug });
+
+      if (!options) {
+        return;
+      }
+
+      setResolvedAuthOptions(options);
+    };
+
+    loadAuthOptions();
+  }, [organizationSlug]);
+
+  const extractEmailDomain = useCallback((email) => {
+    if (!email || !email.includes('@')) {
+      return null;
+    }
+
+    return email.split('@')[1]?.toLowerCase() || null;
+  }, []);
+
+  const handleFederatedLogin = useCallback(
+    async (options, loginHint) => {
+      if (onFederatedRedirect) {
+        onFederatedRedirect(options);
+      }
+
+      await initiateProviderLogin({
+        organizationId: options.organization_id,
+        organizationSlug: options.organization_slug,
+        providerType: 'entra_oidc',
+        loginHint,
+        redirectAfterLogin: redirectUrl,
+      });
+    },
+    [initiateProviderLogin, redirectUrl, onFederatedRedirect],
+  );
+
+  const handleContinue = async (e) => {
+    e.preventDefault();
+
+    if (!identifier) {
+      return;
+    }
+
+    if (resolvedAuthOptions) {
+      if (resolvedAuthOptions.auth_mode?.name === 'entra_only') {
+        await handleFederatedLogin(resolvedAuthOptions, identifier);
+        return;
+      }
+
+      setView('standard');
+      return;
+    }
+
+    const domain = extractEmailDomain(identifier);
+
+    if (!domain) {
+      setView('standard');
+      return;
+    }
+
+    setIsDiscovering(true);
+    const options = await getAuthOptions({ queryselector: 'email-domain', search: domain });
+    setIsDiscovering(false);
+
+    if (!options || !options.entra_enabled) {
+      setView('standard');
+      return;
+    }
+
+    setResolvedAuthOptions(options);
+
+    if (options.auth_mode?.name === 'entra_only') {
+      await handleFederatedLogin(options, identifier);
+      return;
+    }
+
+    setView('standard');
   };
+
+  const buildFederatedProviders = useCallback(() => {
+    const allProviders = [...providers];
+
+    if (!resolvedAuthOptions?.entra_enabled) {
+      return allProviders;
+    }
+
+    const hasMicrosoftProvider = allProviders.some((p) => p.id === 'microsoft');
+    if (hasMicrosoftProvider) {
+      return allProviders;
+    }
+
+    allProviders.push({
+      id: 'microsoft',
+      icon: <MicrosoftIcon />,
+      onClick: () => handleFederatedLogin(resolvedAuthOptions, identifier),
+    });
+
+    return allProviders;
+  }, [providers, resolvedAuthOptions, handleFederatedLogin, identifier]);
 
   if (view === 'standard') {
     return (
       <VeripassStandardSignin
         heroImage={heroImage}
         organization={organization}
-        providers={providers}
         ui={{
           ...ui,
+          providers: buildFederatedProviders(),
         }}
         initialEmail={identifier}
         registerUrl={registerUrl}
@@ -94,6 +215,10 @@ export const VeripassSignInManager = ({
     );
   }
 
+  const isEntraOnly = resolvedAuthOptions?.auth_mode?.name === 'entra_only';
+  const showDiscoveryForm = !isEntraOnly;
+  const federatedProviders = buildFederatedProviders();
+
   return (
     <VeripassAuthLayout heroImage={heroImage} logo={organization?.logoSrc || ui?.logo?.src} {...props}>
       <header className="veripass-my-4">
@@ -101,76 +226,102 @@ export const VeripassSignInManager = ({
           {ui?.showTitle !== false ? ui?.title || 'Sign in' : ''}
         </h2>
         <Typography variant="body1" className="veripass-text-secondary">
-          Enter your email or phone to continue
+          {isEntraOnly ? 'Sign in with your corporate account' : 'Enter your email or phone to continue'}
         </Typography>
       </header>
 
-      <form onSubmit={handleContinue}>
-        <section className="veripass-mb-4">
-          <TextField
+      {isEntraOnly && (
+        <section>
+          <BrandButton
+            variant="contained"
             fullWidth
-            label="Your email or phone"
-            placeholder="Type your email or phone"
-            value={identifier}
-            required
-            onChange={(e) => setIdentifier(e.target.value)}
-            variant="outlined"
-            size="small"
-            autoFocus
-          />
+            size="large"
+            className="veripass-mb-3 veripass-py-3 veripass-fw-bold veripass-fs-6"
+            customTheme={theme}
+            disabled={isFederatedLoading}
+            onClick={() => handleFederatedLogin(resolvedAuthOptions)}
+          >
+            {isFederatedLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <>
+                <MicrosoftIcon />
+                <span style={{ marginLeft: '8px' }}>Continue with Microsoft</span>
+              </>
+            )}
+          </BrandButton>
         </section>
+      )}
 
-        <BrandButton
-          type="submit"
-          variant="contained"
-          fullWidth
-          size="large"
-          className="veripass-mb-3 veripass-py-3 veripass-fw-bold veripass-fs-6"
-          customTheme={theme}
-        >
-          Continue
-        </BrandButton>
-
-        {providers && providers.length > 0 && (
-          <section>
-            <article className="veripass-d-flex veripass-align-items-center veripass-mb-4">
-              <Divider className="veripass-flex-grow-1" />
-              <Typography variant="caption" className="veripass-mx-3 veripass-text-muted">
-                or continue with
-              </Typography>
-              <Divider className="veripass-flex-grow-1" />
-            </article>
-
-            <article className="veripass-d-flex veripass-justify-content-center veripass-gap-3">
-              {providers.map((provider) => (
-                <ProviderButton key={provider.id} variant="outlined" color="inherit" onClick={provider.onClick}>
-                  {provider.icon}
-                </ProviderButton>
-              ))}
-            </article>
+      {showDiscoveryForm && (
+        <form onSubmit={handleContinue}>
+          <section className="veripass-mb-4">
+            <TextField
+              fullWidth
+              label="Your email or phone"
+              placeholder="Type your email or phone"
+              value={identifier}
+              required
+              onChange={(e) => setIdentifier(e.target.value)}
+              variant="outlined"
+              size="small"
+              autoFocus
+            />
           </section>
-        )}
 
-        <div className="veripass-mt-2 veripass-text-center">
-          <Typography variant="caption" className="veripass-text-secondary">
-            Don't have an account?{' '}
-            <Link
-              href={finalRegisterUrl}
-              onClick={(e) => {
-                if (finalOnRegisterClick) {
-                  e.preventDefault();
-                  finalOnRegisterClick(e);
-                }
-              }}
-              underline="hover"
-              style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
-              className="veripass-fw-bold"
-            >
-              Register
-            </Link>
-          </Typography>
-        </div>
-      </form>
+          <BrandButton
+            type="submit"
+            variant="contained"
+            fullWidth
+            size="large"
+            className="veripass-mb-3 veripass-py-3 veripass-fw-bold veripass-fs-6"
+            customTheme={theme}
+            disabled={isDiscovering || isFederatedLoading}
+          >
+            {isDiscovering || isFederatedLoading ? <CircularProgress size={24} color="inherit" /> : 'Continue'}
+          </BrandButton>
+
+          {federatedProviders && federatedProviders.length > 0 && (
+            <section>
+              <article className="veripass-d-flex veripass-align-items-center veripass-mb-4">
+                <Divider className="veripass-flex-grow-1" />
+                <Typography variant="caption" className="veripass-mx-3 veripass-text-muted">
+                  or continue with
+                </Typography>
+                <Divider className="veripass-flex-grow-1" />
+              </article>
+
+              <article className="veripass-d-flex veripass-justify-content-center veripass-gap-3">
+                {federatedProviders.map((provider) => (
+                  <ProviderButton key={provider.id} variant="outlined" color="inherit" onClick={provider.onClick}>
+                    {provider.icon}
+                  </ProviderButton>
+                ))}
+              </article>
+            </section>
+          )}
+
+          <div className="veripass-mt-2 veripass-text-center">
+            <Typography variant="caption" className="veripass-text-secondary">
+              Don't have an account?{' '}
+              <Link
+                href={finalRegisterUrl}
+                onClick={(e) => {
+                  if (finalOnRegisterClick) {
+                    e.preventDefault();
+                    finalOnRegisterClick(e);
+                  }
+                }}
+                underline="hover"
+                style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
+                className="veripass-fw-bold"
+              >
+                Register
+              </Link>
+            </Typography>
+          </div>
+        </form>
+      )}
     </VeripassAuthLayout>
   );
 };
