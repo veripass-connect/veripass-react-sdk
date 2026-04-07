@@ -59,8 +59,30 @@ export { VeripassTenancyAllSet as VeripassTenancyAllSet } from './components/org
 export { VeripassSlugInput as VeripassSlugInput } from './components/organization/onboarding/tenancy/shared/VeripassSlugInput.component.jsx';
 export { VeripassSelectableCard as VeripassSelectableCard } from './components/organization/onboarding/tenancy/shared/VeripassSelectableCard.component.jsx';
 
+/* Organization Corporate Identity */
+export { VeripassOrganizationIdentityHero } from './components/organization/corporate-identity/hero/VeripassOrganizationIdentityHero.component.jsx';
+export { VeripassOrganizationVerificationStatus } from './components/organization/corporate-identity/verification-status/VeripassOrganizationVerificationStatus.component.jsx';
+export { VeripassOrganizationOfficialIdentity } from './components/organization/corporate-identity/official-identity/VeripassOrganizationOfficialIdentity.component.jsx';
+export { VeripassOrganizationPublicPresence } from './components/organization/corporate-identity/public-presence/VeripassOrganizationPublicPresence.component.jsx';
+export { VeripassOrganizationBranding } from './components/organization/corporate-identity/branding/VeripassOrganizationBranding.component.jsx';
+export { VeripassOrganizationPublicProfilePreview } from './components/organization/corporate-identity/public-profile-preview/VeripassOrganizationPublicProfilePreview.component.jsx';
+export { VeripassOrganizationMonogram } from './components/organization/corporate-identity/primitives/VeripassOrganizationMonogram.component.jsx';
+export { VeripassOrganizationStatusBadge } from './components/organization/corporate-identity/primitives/VeripassOrganizationStatusBadge.component.jsx';
+export { VeripassOrganizationMetadataItem } from './components/organization/corporate-identity/primitives/VeripassOrganizationMetadataItem.component.jsx';
+export { VeripassOrganizationSectionHeader } from './components/organization/corporate-identity/primitives/VeripassOrganizationSectionHeader.component.jsx';
+export { VeripassOrganizationEmptyState } from './components/organization/corporate-identity/primitives/VeripassOrganizationEmptyState.component.jsx';
+export { VeripassOrganizationSecurityAudit } from './components/organization/corporate-identity/security-audit/VeripassOrganizationSecurityAudit.component.jsx';
+export { NAMESPACE as CORPORATE_IDENTITY_NAMESPACE, ACTIONS as CORPORATE_IDENTITY_ACTIONS } from './components/organization/corporate-identity/VeripassOrganizationCorporateIdentity.styles.js';
+
+/* Service Utilities */
+export { fetchEntityCollection, fetchMultipleEntities, updateEntityRecord, createEntityRecord } from './services/utils/entityServiceAdapter';
+
+/* Organization Contracts */
+export { VeripassOrganizationContractsList } from './components/organization/contracts/VeripassOrganizationContractsList.component.jsx';
+export { VeripassContractAcceptance } from './components/organization/contracts/VeripassContractAcceptance.component.jsx';
+export { VeripassContractViewer, CONTRACT_VIEWER_NAMESPACE, CONTRACT_VIEWER_ACTIONS } from './components/organization/contracts/VeripassContractViewer.component.jsx';
+
 /* Identity */
-export { VeripassIdentityContractList as VeripassIdentityContractList } from './components/identity/identity-contract/list/VeripassIdentityContractList.jsx';
 
 /* Team */
 export { VeripassTeamManagementList as VeripassTeamManagementList } from './components/team/team-management/list/VeripassTeamManagementList.jsx';
