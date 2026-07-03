@@ -1,4 +1,81 @@
 import axios from 'axios';
+import { getVeripassConfig } from '../../config/veripass-config';
+
+/**
+ * Base-URL transport hygiene for the SDK's outbound requests.
+ *
+ * The SDK is MULTITENANT and deployment-agnostic: the consuming app supplies
+ * its own backend base URL (per instance via `settings.baseUrl`, or app-wide
+ * via `configureVeripass(...)`), typically from its own build-time env. The
+ * SDK bakes NO tenant/client domain and knows nothing about nginx, proxies or
+ * any particular deployment.
+ *
+ * This is HYGIENE, not a security boundary (the SDK is open source and cannot
+ * gate destinations — that is the deployment's CSP `connect-src` + HTTPS job).
+ * A supplied base URL is accepted when it is transport-safe:
+ *   - an ABSOLUTE https URL (any host — multitenant), or http only for
+ *     localhost / 127.0.0.1 in dev; with no embedded credentials
+ *     (`user:pass@host` is rejected); OR
+ *   - a SAME-ORIGIN relative prefix (starts with a single `/`, not `//` or
+ *     `/\`) — safe by construction, since the browser resolves it against the
+ *     current origin and it can never leave it. This is what enables a
+ *     deployment to front the backend with a same-origin proxy without the
+ *     SDK having to know about it.
+ *
+ * Absolute-URL validation uses the URL parser (never string matching), so
+ * confusion attacks such as `https://api.tenant.com@evil.com` resolve to host
+ * `evil.com` and are handled correctly.
+ *
+ * Returns a normalized, trailing-slash-free base URL, or null if the value is
+ * not transport-safe (caller then falls back to the next precedence level).
+ *
+ * @param {string} candidate The requested base URL.
+ * @returns {string|null}
+ */
+function sanitizeBaseUrl(candidate) {
+  if (!candidate || typeof candidate !== 'string') {
+    return null;
+  }
+
+  const trimmed = candidate.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  // Same-origin relative prefix: single leading slash, not protocol-relative
+  // (`//host`) and not a backslash trick (`/\host`). Safe by construction.
+  if (trimmed.startsWith('/')) {
+    if (trimmed[1] === '/' || trimmed[1] === '\\') {
+      return null;
+    }
+    return trimmed.replace(/\/+$/, '');
+  }
+
+  // Otherwise require a well-formed ABSOLUTE URL.
+  let parsed;
+  try {
+    parsed = new URL(trimmed);
+  } catch (error) {
+    return null;
+  }
+
+  // Reject smuggled credentials (`https://user:pass@host`).
+  if (parsed.username || parsed.password) {
+    return null;
+  }
+
+  const host = parsed.hostname.toLowerCase();
+  const isLoopback = host === 'localhost' || host === '127.0.0.1';
+
+  // Enforce HTTPS to prevent downgrade/MITM; permit http only on loopback.
+  if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && isLoopback)) {
+    return null;
+  }
+
+  // Normalize to origin + path (drops query/hash) and strip trailing slashes
+  // so `${base}${endpoint}` never doubles the separator.
+  return `${parsed.origin}${parsed.pathname}`.replace(/\/+$/, '');
+}
 
 export default class BaseApi {
   constructor() {
@@ -44,24 +121,63 @@ export default class BaseApi {
     return this.client;
   }
 
-  urlBuilder({ endpoint }) {
+  /**
+   * Resolves the baked base URL for the current environment. This is the
+   * FROZEN value selected at SDK build time and is always safe.
+   */
+  resolveEnvironmentBaseUrl() {
     const environment = this.settings?.environment || 'production';
-    let baseUrl = '';
 
     switch (environment) {
       case 'local':
-        baseUrl = this.serviceEndpoints.baseUrlLocal;
-        break;
+        return this.serviceEndpoints.baseUrlLocal;
       case 'development':
-        baseUrl = this.serviceEndpoints.baseUrlDevelopment;
-        break;
+        return this.serviceEndpoints.baseUrlDevelopment;
       case 'production':
       default:
-        baseUrl = this.serviceEndpoints.baseUrlProduction;
-        break;
+        return this.serviceEndpoints.baseUrlProduction;
+    }
+  }
+
+  /**
+   * Resolves the effective base URL with a single precedence order:
+   *   1. per-instance `settings.baseUrl` (same place as `settings.environment`),
+   *   2. app-wide default set via `configureVeripass({ baseUrl })`,
+   *   3. the environment-baked URL (backward-compatible fallback).
+   * Each candidate must pass transport hygiene; an unsafe value is skipped
+   * (with a warning) and the next level is tried. This runs for EVERY service
+   * — including the ones instantiated internally by auth components and every
+   * `new XxxService()` created without explicit config (which resolve via the
+   * app-wide default).
+   */
+  resolveBaseUrl() {
+    const candidates = [
+      { source: 'settings.baseUrl', value: this.settings?.baseUrl },
+      { source: 'configureVeripass', value: getVeripassConfig().baseUrl },
+    ];
+
+    for (const candidate of candidates) {
+      if (candidate.value === undefined || candidate.value === null || candidate.value === '') {
+        continue;
+      }
+
+      const safeBaseUrl = sanitizeBaseUrl(candidate.value);
+      if (safeBaseUrl !== null) {
+        return safeBaseUrl;
+      }
+
+      console.error(
+        `[veripass-sdk] Ignored unsafe baseUrl from ${candidate.source} ("${candidate.value}"). ` +
+          `Expected an absolute https URL (no embedded credentials) or a same-origin relative prefix. ` +
+          `Trying the next configured source.`,
+      );
     }
 
-    return `${baseUrl}${endpoint}`;
+    return this.resolveEnvironmentBaseUrl();
+  }
+
+  urlBuilder({ endpoint }) {
+    return `${this.resolveBaseUrl()}${endpoint}`;
   }
 
   /**

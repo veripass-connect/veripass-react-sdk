@@ -92,6 +92,10 @@ export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth.hook.jsx';
 export { useFederatedAuth } from './hooks/useFederatedAuth.hook.jsx';
 export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';
 
+/* SDK Configuration (deployment-agnostic base URL) */
+export { configureVeripass, getVeripassConfig } from './config/veripass-config';
+export { VeripassSDKProvider, useVeripassSDK } from './features/sdk/context/VeripassSDK.context.jsx';
+
 import './styles/fonts.css';
 import './styles/styles.css';
 import './styles/bootstrap-namespaced.css';
