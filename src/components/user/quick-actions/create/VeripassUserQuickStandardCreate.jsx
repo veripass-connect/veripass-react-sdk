@@ -228,9 +228,14 @@ export const VeripassUserQuickStandardCreate = ({
         )}
 
         <section>
-          <form onSubmit={(event) => event.preventDefault()}>
-            <article className="row">
-              <section className="mb-2">
+          <form
+            onSubmit={(event) => event.preventDefault()}
+            autoComplete="off"
+            // Random one-time name so password managers stop auto-filling unrelated profile data
+            name={`veripass-user-create-${Math.random().toString(36).slice(2, 10)}`}
+          >
+            <article className="row g-3">
+              <section className="col-12">
                 <NationalIdentificationSelector
                   label="National identification number"
                   defaultDocumentType="Passport"
@@ -252,12 +257,13 @@ export const VeripassUserQuickStandardCreate = ({
               </section>
             </article>
 
-            <article className="row">
-              <section className="mb-2 col-12 col-md-6">
+            <article className="row g-3 mt-1">
+              <section className="col-12 col-md-6">
                 <TextField
                   className="w-100"
                   type="text"
                   id="first-name-input"
+                  name="vp-fname"
                   label="First name"
                   value={userProfileData.first_name}
                   placeholder="Jhon"
@@ -269,13 +275,15 @@ export const VeripassUserQuickStandardCreate = ({
                     handleDataChange('first_name', event.target.value);
                   }}
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
               </section>
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
                   className="w-100"
                   type="text"
                   id="last-name-input"
+                  name="vp-lname"
                   label="Last name"
                   value={userProfileData.last_name}
                   placeholder="Doe"
@@ -287,15 +295,15 @@ export const VeripassUserQuickStandardCreate = ({
                     handleDataChange('last_name', event.target.value);
                   }}
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
               </section>
-            </article>
 
-            <article className="row">
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
                   className="w-100"
                   id="fullname-input"
+                  name="vp-dname"
                   label="Display name"
                   value={userProfileData.display_name}
                   placeholder="Jhon Doe"
@@ -308,10 +316,11 @@ export const VeripassUserQuickStandardCreate = ({
                     handleDataChange('display_name', event.target.value);
                   }}
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
               </section>
 
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <PhoneCountrySelector
                   label="Phone number"
                   onPhoneChange={(event) => {
@@ -322,14 +331,13 @@ export const VeripassUserQuickStandardCreate = ({
                 />
                 <FormHelperText>Principal phone number and or used with WhatsApp</FormHelperText>
               </section>
-            </article>
 
-            <article className="row">
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
                   className="w-100"
                   type="email"
                   id="email-input"
+                  name="vp-email"
                   label="Primary email address"
                   value={userProfileData.primary_email_address}
                   placeholder="jhondoe@domain.com"
@@ -340,15 +348,17 @@ export const VeripassUserQuickStandardCreate = ({
                   onChange={(event) => {
                     handleDataChange('primary_email_address', event.target.value);
                   }}
-                  autoComplete="veripass-email"
+                  autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
               </section>
 
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
                   className="w-100"
-                  type="text"
+                  type="password"
                   id="password-input"
+                  name="vp-temp-pwd"
                   label="Password"
                   value={userProfileData.password}
                   placeholder=""
@@ -359,25 +369,36 @@ export const VeripassUserQuickStandardCreate = ({
                   onChange={(event) => {
                     handleDataChange('password', event.target.value);
                   }}
-                  autoComplete="veripass-password"
+                  autoComplete="new-password"
+                  inputProps={{ autoComplete: 'new-password' }}
                 />
               </section>
             </article>
 
-            <footer className="row">
-              <section className="mb-0 h-25 d-flex justify-content-end align-items-end">
+            <footer className="row mt-3">
+              <section className="col-12 d-flex justify-content-end align-items-center">
                 <Button
                   type="button"
                   variant="contained"
-                  className="my-2"
+                  size="large"
                   onClick={handleSubmit}
-                  disabled={!userProfileData?.primary_national_id?.identification}
+                  disabled={!userProfileData?.primary_national_id?.identification || isLoading}
                   sx={{
-                    backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
-                    borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#323a46',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    fontSize: '0.9375rem',
+                    py: 1.1,
+                    px: 3,
+                    borderRadius: '0.75rem',
+                    boxShadow: 'none',
+                    backgroundColor: !userProfileData?.primary_national_id?.identification ? '#cbd5e1' : '#344898',
                     '&:hover': {
-                      backgroundColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
-                      borderColor: !userProfileData?.primary_national_id?.identification ? '#a0a0a0' : '#404651',
+                      backgroundColor: !userProfileData?.primary_national_id?.identification ? '#cbd5e1' : '#2a3a7d',
+                      boxShadow: '0 8px 24px rgba(52, 72, 152, 0.18)',
+                    },
+                    '&.Mui-disabled': {
+                      color: '#ffffff',
+                      backgroundColor: '#cbd5e1',
                     },
                   }}
                 >

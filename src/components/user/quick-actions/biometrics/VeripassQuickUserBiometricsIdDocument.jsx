@@ -182,50 +182,46 @@ export const VeripassQuickUserBiometricsIdDocument = ({
     }
   }, [entity]);
 
+  const primaryBtnSx = {
+    textTransform: 'none',
+    fontWeight: 600,
+    fontSize: '0.9375rem',
+    py: 1.25,
+    borderRadius: '0.75rem',
+    boxShadow: 'none',
+    backgroundColor: '#344898',
+    '&:hover': { backgroundColor: '#2a3a7d', boxShadow: '0 8px 24px rgba(52, 72, 152, 0.18)' },
+  };
+
   return (
     <>
       <VeripassLayout isPopupContext={isPopupContext}>
         <section className="mb-0">
           {!identificationType && (
             <section className="passport-input">
-              <h4 className="text-center">Choose an option</h4>
-              <article className="mt-2 w-50 mx-auto">
-                <section className="my-1 text-center d-flex flex-column">
+              <h4 className="text-center mb-1" style={{ fontWeight: 700, color: '#1f2937' }}>
+                Choose your document type
+              </h4>
+              <p className="text-center text-muted mb-3" style={{ fontSize: '0.9375rem' }}>
+                Select which official document you'll upload to verify your identity.
+              </p>
+              <article className="col-12 col-md-8 col-lg-6 mx-auto">
+                <section className="d-flex flex-column gap-2">
                   <Button
-                    size="small"
-                    color="info"
+                    size="large"
                     variant="contained"
-                    className="my-2"
-                    onClick={() => {
-                      setIdentificationType('passport');
-                    }}
-                    sx={{
-                      backgroundColor: '#323a46',
-                      borderColor: '#323a46',
-                      '&:hover': {
-                        backgroundColor: '#404651',
-                        borderColor: '#404651',
-                      },
-                    }}
+                    fullWidth
+                    onClick={() => setIdentificationType('passport')}
+                    sx={primaryBtnSx}
                   >
                     Passport
                   </Button>
                   <Button
-                    size="small"
-                    color="info"
+                    size="large"
                     variant="contained"
-                    className="my-2"
-                    onClick={() => {
-                      setIdentificationType('national-id');
-                    }}
-                    sx={{
-                      backgroundColor: '#323a46',
-                      borderColor: '#323a46',
-                      '&:hover': {
-                        backgroundColor: '#404651',
-                        borderColor: '#404651',
-                      },
-                    }}
+                    fullWidth
+                    onClick={() => setIdentificationType('national-id')}
+                    sx={primaryBtnSx}
                   >
                     National Identification
                   </Button>
@@ -235,24 +231,28 @@ export const VeripassQuickUserBiometricsIdDocument = ({
           )}
           {identificationType === 'national-id' && (
             <section className="national-id-input d-flex flex-column">
-              <header className="d-flex justify-content-center">
-                <h4 className="text-center me-2">National identification</h4>
-                <section className="d-flex">
-                  <Button
-                    className="my-auto"
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      setIdentificationType(null);
-                    }}
-                    sx={{ textTransform: 'none' }}
-                  >
-                    Change
-                  </Button>
-                </section>
+              <header className="d-flex justify-content-center align-items-center mb-2">
+                <h4 className="mb-0 me-2" style={{ fontWeight: 700, color: '#1f2937' }}>
+                  National identification
+                </h4>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => setIdentificationType(null)}
+                  sx={{
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    borderRadius: '0.625rem',
+                    color: '#344898',
+                    borderColor: '#cbd5e1',
+                    '&:hover': { borderColor: '#344898', backgroundColor: '#eef1f7' },
+                  }}
+                >
+                  Change
+                </Button>
               </header>
 
-              <article className="mt-2 w-50 mx-auto">
+              <article className="col-12 col-md-10 col-lg-8 mx-auto">
                 <label htmlFor="image" className="form-label">
                   Front side
                 </label>
@@ -302,7 +302,7 @@ export const VeripassQuickUserBiometricsIdDocument = ({
                   />
                 </section>
               </article>
-              <article className="mt-2 w-50 mx-auto">
+              <article className="col-12 col-md-10 col-lg-8 mx-auto mt-2">
                 <label htmlFor="image" className="form-label">
                   Back side
                 </label>
@@ -356,23 +356,27 @@ export const VeripassQuickUserBiometricsIdDocument = ({
           )}
           {identificationType === 'passport' && (
             <section className="passport-input d-flex flex-column">
-              <header className="d-flex justify-content-center">
-                <h4 className="text-center me-2">Passport</h4>
-                <section className="d-flex">
-                  <Button
-                    className="my-auto"
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      setIdentificationType(null);
-                    }}
-                    sx={{ textTransform: 'none' }}
-                  >
-                    Change
-                  </Button>
-                </section>
+              <header className="d-flex justify-content-center align-items-center mb-2">
+                <h4 className="mb-0 me-2" style={{ fontWeight: 700, color: '#1f2937' }}>
+                  Passport
+                </h4>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => setIdentificationType(null)}
+                  sx={{
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    borderRadius: '0.625rem',
+                    color: '#344898',
+                    borderColor: '#cbd5e1',
+                    '&:hover': { borderColor: '#344898', backgroundColor: '#eef1f7' },
+                  }}
+                >
+                  Change
+                </Button>
               </header>
-              <article className="mt-2 w-50 mx-auto">
+              <article className="col-12 col-md-10 col-lg-8 mx-auto">
                 <label htmlFor="image" className="form-label">
                   Front side
                 </label>
@@ -426,33 +430,34 @@ export const VeripassQuickUserBiometricsIdDocument = ({
           )}
 
           {/* Submit button */}
-          <footer className="d-flex justify-content-end">
-            {isLoading && (
-              <button type="button" disabled className="btn btn-primary">
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Saving...
-              </button>
-            )}
-
-            {!isLoading && (
-              <Button
-                type="button"
-                variant="contained"
-                className="my-2"
-                onClick={handleSubmit}
-                disabled={!canSubmit()}
-                sx={{
-                  backgroundColor: !canSubmit() ? '#a0a0a0' : '#323a46',
-                  borderColor: !canSubmit() ? '#a0a0a0' : '#323a46',
-                  '&:hover': {
-                    backgroundColor: !canSubmit() ? '#a0a0a0' : '#404651',
-                    borderColor: !canSubmit() ? '#a0a0a0' : '#404651',
-                  },
-                }}
-              >
-                Next
-              </Button>
-            )}
+          <footer className="d-flex justify-content-end mt-3">
+            <Button
+              type="button"
+              variant="contained"
+              size="large"
+              onClick={handleSubmit}
+              disabled={!canSubmit() || isLoading}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '0.9375rem',
+                py: 1.1,
+                px: 3,
+                borderRadius: '0.75rem',
+                boxShadow: 'none',
+                backgroundColor: !canSubmit() ? '#cbd5e1' : '#344898',
+                '&:hover': {
+                  backgroundColor: !canSubmit() ? '#cbd5e1' : '#2a3a7d',
+                  boxShadow: '0 8px 24px rgba(52, 72, 152, 0.18)',
+                },
+                '&.Mui-disabled': {
+                  color: '#ffffff',
+                  backgroundColor: '#cbd5e1',
+                },
+              }}
+            >
+              {isLoading ? 'Saving...' : 'Next'}
+            </Button>
           </footer>
         </section>
       </VeripassLayout>

@@ -146,10 +146,14 @@ export const VeripassQuickUserKyc = ({
         )}
 
         <section>
-          <form onSubmit={(event) => event.preventDefault()}>
-            <article className="row">
+          <form
+            onSubmit={(event) => event.preventDefault()}
+            autoComplete="off"
+            name={`veripass-user-kyc-${Math.random().toString(36).slice(2, 10)}`}
+          >
+            <article className="row g-3">
               {/* Nationality */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <CountrySelector
                   label="Nationality"
                   value={userData?.information?.principal_nationality}
@@ -158,99 +162,92 @@ export const VeripassQuickUserKyc = ({
                 <FormHelperText>Country associated with the user's nationality.</FormHelperText>
               </section>
               {/* Birthdate */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
                   label="Date of Birth"
-                  className="mt-0"
                   type="date"
+                  name="vp-dob"
                   value={userData?.information?.birthdate}
                   onChange={(event) => handleDataChange('birthdate', event.target.value)}
                   fullWidth
                   required
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>Date used to verify the user's age.</FormHelperText>
               </section>
-            </article>
-            <article className="row">
               {/* Address field principal */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
-                  className="mt-0"
                   label="Residence Address"
+                  name="vp-addr1"
                   value={userData?.information?.residence?.address_line_1}
                   onChange={(event) => handleAddressChange('address_line_1', event.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>Primary address where the user lives.</FormHelperText>
               </section>
               {/* Address field 2 */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
-                  className="mt-0"
                   label="Residence Address 2"
+                  name="vp-addr2"
                   value={userData?.information?.residence?.address_line_2}
                   onChange={(event) => handleAddressChange('address_line_2', event.target.value)}
                   fullWidth
-                  required
-                  margin="normal"
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>Additional address details (e.g., apartment or suite).</FormHelperText>
               </section>
-            </article>
-            <article className="row">
               {/* City */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
-                  className="mt-0"
                   label="Residence city"
+                  name="vp-city"
                   value={userData?.information?.residence?.city}
                   onChange={(event) => handleAddressChange('city', event.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>City where the user currently resides.</FormHelperText>
               </section>
               {/* State/Province */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
-                  className="mt-0"
                   label="Residence State/Province"
-                  value={userData?.information?.residence?.state}
+                  name="vp-region"
+                  value={userData?.information?.residence?.region}
                   onChange={(event) => handleAddressChange('region', event.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>State or province of the user's residence.</FormHelperText>
               </section>
-            </article>
-            <article className="row">
               {/* Postal Code */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <TextField
-                  className="mt-0"
                   label="Residence postal code"
+                  name="vp-postal"
                   value={userData?.information?.residence?.postal_code}
                   onChange={(event) => handleAddressChange('postal_code', event.target.value)}
                   fullWidth
                   required
-                  margin="normal"
                   autoComplete="off"
+                  inputProps={{ autoComplete: 'off' }}
                 />
                 <FormHelperText>Postal code for the residence address.</FormHelperText>
               </section>
               {/* Country of Residence */}
-              <section className="mb-2 col-12 col-md-6">
+              <section className="col-12 col-md-6">
                 <CountrySelector
                   label="Country of Residence"
                   value={userData?.information?.residence?.country}
@@ -261,33 +258,34 @@ export const VeripassQuickUserKyc = ({
             </article>
 
             {/* Submit button */}
-            <footer className="d-flex justify-content-end">
-              {isLoading && (
-                <button type="button" disabled className="btn btn-primary">
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Saving...
-                </button>
-              )}
-
-              {!isLoading && (
-                <Button
-                  type="button"
-                  variant="contained"
-                  className="my-2"
-                  onClick={handleSubmit}
-                  disabled={!entity}
-                  sx={{
-                    backgroundColor: !entity ? '#a0a0a0' : '#323a46',
-                    borderColor: !entity ? '#a0a0a0' : '#323a46',
-                    '&:hover': {
-                      backgroundColor: !entity ? '#a0a0a0' : '#404651',
-                      borderColor: !entity ? '#a0a0a0' : '#404651',
-                    },
-                  }}
-                >
-                  Next
-                </Button>
-              )}
+            <footer className="d-flex justify-content-end mt-3">
+              <Button
+                type="button"
+                variant="contained"
+                size="large"
+                onClick={handleSubmit}
+                disabled={!entity || isLoading}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.9375rem',
+                  py: 1.1,
+                  px: 3,
+                  borderRadius: '0.75rem',
+                  boxShadow: 'none',
+                  backgroundColor: !entity ? '#cbd5e1' : '#344898',
+                  '&:hover': {
+                    backgroundColor: !entity ? '#cbd5e1' : '#2a3a7d',
+                    boxShadow: '0 8px 24px rgba(52, 72, 152, 0.18)',
+                  },
+                  '&.Mui-disabled': {
+                    color: '#ffffff',
+                    backgroundColor: '#cbd5e1',
+                  },
+                }}
+              >
+                {isLoading ? 'Saving...' : 'Next'}
+              </Button>
             </footer>
           </form>
         </section>
