@@ -256,8 +256,13 @@ export const VeripassTenancyOnboardingManager = ({
     setError(null);
     try {
       if (activeServices.organizationService) {
-        const res = await activeServices.organizationService.getByParameters({});
-        if (res && res.success && Array.isArray(res.result)) {
+        const res = await activeServices.organizationService.getByParameters({
+          queryselector: 'all',
+          exclude_status: 'deleted',
+        });
+        if (res && res.success && Array.isArray(res.result?.items)) {
+          setOrganizations(res.result.items);
+        } else if (res && res.success && Array.isArray(res.result)) {
           setOrganizations(res.result);
         } else if (res && Array.isArray(res)) {
           setOrganizations(res); // Handle direct array return

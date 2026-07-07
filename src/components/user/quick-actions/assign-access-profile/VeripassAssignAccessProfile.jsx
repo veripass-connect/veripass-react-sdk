@@ -98,6 +98,7 @@ export const VeripassAssignAccessProfile = ({
               const service = new SecurityAccessProfileService({ apiKey, settings: { environment } });
               const response = await service.getByParameters({
                 queryselector: 'all',
+                exclude_status: 'deleted',
                 search: query,
               });
               return response?.result?.items || [];
