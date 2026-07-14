@@ -38,6 +38,9 @@ export { VeripassActionButton } from './components/shared/buttons/VeripassAction
 /* User Profile */
 export { VeripassUserProfileView as VeripassUserProfileView } from './components/user/profile/VeripassUserProfileView.jsx';
 
+/* User Management (full account/user detail with tabs) */
+export { default as VeripassUserManager } from './components/user/user-management/manager/VeripassUserManager.component.jsx';
+
 /* Organization Quick Actions */
 export { VeripassOrganizationQuickStandardCreate as VeripassOrganizationQuickStandardCreate } from './components/organization/quick-actions/create/VeripassOrganizationQuickStandardCreate.jsx';
 
@@ -75,7 +78,7 @@ export { VeripassOrganizationSecurityAudit } from './components/organization/cor
 export { NAMESPACE as CORPORATE_IDENTITY_NAMESPACE, ACTIONS as CORPORATE_IDENTITY_ACTIONS } from './components/organization/corporate-identity/VeripassOrganizationCorporateIdentity.styles.js';
 
 /* Service Utilities */
-export { fetchEntityCollection, fetchMultipleEntities, updateEntityRecord, createEntityRecord } from './services/utils/entityServiceAdapter';
+export { fetchEntityCollection, fetchMultipleEntities, updateEntityRecord, createEntityRecord, deleteEntityRecord } from './services/utils/entityServiceAdapter';
 
 /* Organization Contracts */
 export { VeripassOrganizationContractsList } from './components/organization/contracts/VeripassOrganizationContractsList.component.jsx';
