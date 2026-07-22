@@ -94,6 +94,11 @@ export { VeripassMyPrincipalTeamList as VeripassMyPrincipalTeamList } from './co
 export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth.hook.jsx';
 export { useFederatedAuth } from './hooks/useFederatedAuth.hook.jsx';
 export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';
+export {
+  AUTH_DECISIONS,
+  SECURITY_STATUS_CODE_MESSAGES,
+  SECURITY_REASON_CODES,
+} from './constants/security-status-code-messages.js';
 
 /* SDK Configuration (deployment-agnostic base URL) */
 export { configureVeripass, getVeripassConfig } from './config/veripass-config';

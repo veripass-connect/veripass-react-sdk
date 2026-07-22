@@ -8,6 +8,7 @@ import {
   TenancyProvisioningService,
   OrganizationMembershipService,
   UserProfileService,
+  AuthStandardService,
 } from '@services';
 
 import { VeripassLayout } from '@components/shared/layouts/VeripassLayout';
@@ -163,6 +164,11 @@ export const VeripassTenancyOnboardingManager = ({
 
   const needsProfile = checkNeedsProfile(user);
 
+  // A needs_* federated session carries the canonical user id under `identity`; a fully
+  // authenticated session carries it under `id`. Downstream profile/provisioning/membership calls
+  // expect a plain id, so resolve one from either shape.
+  const resolvedUserId = user?.id || user?.identity;
+
   const getInitialView = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hashView = window.location.hash.replace('#view=', '');
@@ -208,6 +214,7 @@ export const VeripassTenancyOnboardingManager = ({
       provisioningService: new TenancyProvisioningService(provisioningSettings),
       OrganizationMembershipService: new OrganizationMembershipService(serviceSettings),
       userProfileService: new UserProfileService(serviceSettings),
+      authService: new AuthStandardService(serviceSettings),
     };
   }, [services, environment, apiKey]);
 
@@ -260,13 +267,23 @@ export const VeripassTenancyOnboardingManager = ({
           queryselector: 'all',
           exclude_status: 'deleted',
         });
-        if (res && res.success && Array.isArray(res.result?.items)) {
-          setOrganizations(res.result.items);
-        } else if (res && res.success && Array.isArray(res.result)) {
-          setOrganizations(res.result);
-        } else if (res && Array.isArray(res)) {
-          setOrganizations(res); // Handle direct array return
-        }
+        const items = Array.isArray(res?.result?.items)
+          ? res.result.items
+          : Array.isArray(res?.result)
+            ? res.result
+            : Array.isArray(res)
+              ? res
+              : [];
+        // Organization documents carry their label under profile.display_name / profile.slug, but the
+        // row component reads name/slug at the top level. Normalize so the list actually renders
+        // (an undefined name otherwise crashes the avatar color/initials helpers).
+        setOrganizations(
+          items.map((item) => ({
+            ...item,
+            name: item.profile?.display_name || item.name || item.profile?.legal_name || item.slug || 'Unnamed organization',
+            slug: item.profile?.slug || item.slug || '',
+          })),
+        );
       }
     } catch (err) {
       handleError(err, 'Failed to load organizations.');
@@ -294,7 +311,7 @@ export const VeripassTenancyOnboardingManager = ({
         },
         application: payload.createApp ? payload.application : undefined,
         admin: {
-          id: user?.id,
+          id: resolvedUserId,
         },
       };
 
@@ -378,10 +395,13 @@ export const VeripassTenancyOnboardingManager = ({
 
           const doJoin = async () => {
             try {
-              if (activeServices.OrganizationMembershipService && user?.id) {
-                const res = await activeServices.OrganizationMembershipService.create({
+              // Self-service join: grant the chosen org's membership + the minimum-privilege role for
+              // the api-key's app scoped to THAT org, then re-login admits the person as its member.
+              // (Raw membership alone leaves them without an app role, so the gate would still deny.)
+              if (activeServices.authService && resolvedUserId) {
+                const res = await activeServices.authService.joinOrganization({
+                  identity: resolvedUserId,
                   organization_id: payload.organizationId,
-                  user_id: user.id,
                 });
                 if (!res || !res.success) {
                   throw new Error(res?.message || 'Failed to join the organization.');
@@ -428,9 +448,9 @@ export const VeripassTenancyOnboardingManager = ({
           setError(null);
           const updateProfile = async () => {
             try {
-              if (activeServices.userProfileService && user?.id) {
+              if (activeServices.userProfileService && resolvedUserId) {
                 const res = await activeServices.userProfileService.update({
-                  id: user.id,
+                  id: resolvedUserId,
                   first_name: payload.profile.first_name,
                   last_name: payload.profile.last_name,
                   display_name: payload.profile.display_name,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../../hooks/useAuth.hook';
 
-export const VeripassFederatedCallback = ({ onSuccess, onError, redirectUrl, loadingComponent }) => {
+export const VeripassFederatedCallback = ({ onSuccess, onError, onDecision, redirectUrl, loadingComponent }) => {
   const authProvider = useAuth();
   const [status, setStatus] = useState('processing');
   const [errorMessage, setErrorMessage] = useState('');
@@ -13,6 +13,9 @@ export const VeripassFederatedCallback = ({ onSuccess, onError, redirectUrl, loa
         const token = urlParams.get('token');
         const sessionData = urlParams.get('session');
         const errorParam = urlParams.get('error');
+        // Authorization decision emitted by the backend: 'allow' | 'needs_organization_join' |
+        // 'needs_app_registration' | 'deny'. Absent on legacy backends (inferred from token).
+        const decisionParam = urlParams.get('decision');
 
         if (errorParam) {
           setStatus('error');
@@ -62,10 +65,15 @@ export const VeripassFederatedCallback = ({ onSuccess, onError, redirectUrl, loa
           return;
         }
 
-        const finalRedirectUrl = urlParams.get('redirect') || redirectUrl;
+        const decision = userData.authorization?.decision || decisionParam || (userData.token ? 'allow' : 'unknown');
+
+        // When the host wires onDecision it owns the routing (enter / join / register); otherwise
+        // fall back to the redirect param so legacy hosts keep working.
+        const finalRedirectUrl = onDecision ? '' : urlParams.get('redirect') || redirectUrl;
         authProvider.login({ user: userData, redirectUrl: finalRedirectUrl });
 
         setStatus('success');
+        if (onDecision) onDecision(decision, userData);
         if (onSuccess) onSuccess(userData);
       } catch (err) {
         setStatus('error');

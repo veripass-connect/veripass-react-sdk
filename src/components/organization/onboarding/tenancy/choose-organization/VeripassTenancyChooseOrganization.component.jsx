@@ -206,6 +206,7 @@ function VeripassTenancyChooseOrganizationComponent({
 
   const getColorForString = (str) => {
     const colors = ['#1e293b', '#6366f1', '#10b981', '#f97316', '#ef4444', '#8b5cf6'];
+    if (!str) return colors[0];
     let hash = 0;
     for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
     return colors[Math.abs(hash) % colors.length];

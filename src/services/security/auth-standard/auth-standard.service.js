@@ -12,11 +12,31 @@ export default class AuthStandardService extends BaseApi {
       signUpStandard: '/security/signup/standard',
       signInStandard: '/security/signin/standard',
       switchContext: '/security/auth/switch-context',
+      registerApp: '/security/auth/register-app',
+      joinOrganization: '/security/auth/join-organization',
       emailRecoverPassword: '/security/password/reset/standard',
       update: '/security/password/new/standard',
       logout: '/security/logout',
     };
     this.settings = args?.settings || {};
+  }
+
+  // Self-service: grant the minimum-privilege member role for the api-key's app to an already
+  // established identity (the needs_app_registration path). Body: { identity: <user_id> }.
+  async registerApp(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.registerApp,
+      ...this.settings,
+    });
+  }
+
+  // Self-service: grant baseline membership in the api-key's organization for an established identity
+  // (the needs_organization_join path). Body: { identity: <user_id>, organization_id? }.
+  async joinOrganization(payload) {
+    return super.post(payload, {
+      endpoint: this.serviceEndpoints.joinOrganization,
+      ...this.settings,
+    });
   }
 
   async signUpStandard(payload) {

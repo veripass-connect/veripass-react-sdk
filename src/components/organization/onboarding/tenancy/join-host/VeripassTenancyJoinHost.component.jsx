@@ -139,20 +139,15 @@ function VeripassTenancyJoinHostComponent({
     const startTime = Date.now();
 
     try {
-      if (!services?.provisioningService) {
-        throw new Error('Provisioning service is unavailable.');
-      }
-      if (typeof services.provisioningService.joinHost !== 'function') {
-        throw new Error('services.provisioningService.joinHost is not a function');
+      if (!services?.authService || typeof services.authService.registerApp !== 'function') {
+        throw new Error('Auth service is unavailable.');
       }
 
-      const payload = {
-        admin: {
-          id: user?.id,
-        },
-      };
-
-      const res = await services.provisioningService.joinHost(payload);
+      // Self-service registration: grant the minimum-privilege member role for the host app to the
+      // already-established identity. A needs_app_registration session carries the user id under
+      // `identity` (there is no hydrated profile / `.id` yet), so send that.
+      const identity = user?.identity || user?.id;
+      const res = await services.authService.registerApp({ identity });
 
       const elapsedTime = Date.now() - startTime;
       const minWaitTime = PROVISIONING_STEPS.length * stepDuration;

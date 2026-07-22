@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useMemo, useEffect, useState } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
 
-const defaultPublicUrlList = ['https://portal.veripass.com.co/auth/login', '/auth/login', '/auth/signup'];
+const defaultPublicUrlList = [
+  'https://portal.veripass.com.co/auth/login',
+  '/auth/login',
+  '/auth/signup',
+  '/setup/workspace',
+  // The federated (OIDC) callback lands here with user===null while PostLoginRedirect parses the
+  // decision and routes (enter / join / register). Without whitelisting, the AuthProvider guard
+  // races and replaces to /auth/login before the decision is read.
+  '/auth/callback',
+];
 
 /**
  * Authentication context used to provide user authentication data and functions.
@@ -73,6 +82,19 @@ export const AuthProvider = ({ children, debug }) => {
     return JSON.parse(value);
   };
 
+  /**
+   * Returns the backend authorization decision for the persisted session, so the host app can
+   * route the user three ways without re-deriving the logic:
+   *   'allow' -> enter, 'needs_organization_join' -> onboarding manager, 'needs_app_registration' -> register,
+   *   'deny' -> re-authenticate. Falls back to inferring from the token for legacy sessions.
+   *
+   * @returns {string} One of AUTH_DECISIONS values, or 'unknown'.
+   */
+  const getAuthDecision = () => {
+    if (!user) return 'unknown';
+    return user.authorization?.decision ?? (user.token ? 'allow' : 'unknown');
+  };
+
   const getContextAsHeaders = () => {
     if (!user) return {};
 
@@ -119,6 +141,7 @@ export const AuthProvider = ({ children, debug }) => {
       login,
       logout,
       getToken,
+      getAuthDecision,
       getContextAsHeaders,
     }),
     [user],
