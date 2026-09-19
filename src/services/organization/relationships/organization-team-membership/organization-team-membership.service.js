@@ -9,10 +9,10 @@ export default class OrganizationTeamMembershipService extends BaseApi {
       baseUrlProduction: process.env.VERIPASS_PRODUCTION_SERVICE_URL,
       baseUrlDevelopment: process.env.VERIPASS_DEVELOPMENT_SERVICE_URL,
       baseUrlLocal: process.env.VERIPASS_LOCAL_SERVICE_URL,
-      get: '/organization/team-membership/',
-      create: '/organization/team-membership',
-      update: '/organization/team-membership',
-      delete: '/organization/team-membership',
+      get: '/organization/team/',
+      create: '/organization/team',
+      update: '/organization/team',
+      delete: '/organization/team',
     };
     this.settings = args?.settings || {};
   }

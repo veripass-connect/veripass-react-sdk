@@ -31,6 +31,7 @@ export { default as FolderService } from './storage/file-system/folder/folder.se
 export { default as HealthService } from './system/health/health.service';
 export { default as ApiManagerService } from './system/api-manager/api-manager.service';
 export { default as TeamManagementService } from './team/team-management/team-management.service';
+export { default as TeamUserMembershipService } from './team/relationships/team-user-membership/team-user-membership.service';
 export { default as TenancyProvisioningService } from './tenancy/provisioning/tenancy-provisioning.service';
 export { default as UserManagementService } from './user/user-management/user-management.service';
 export { default as UserProfileService } from './user/sub-entities/user-profile/user-profile.service';
