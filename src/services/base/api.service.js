@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getVeripassConfig } from '../../config/veripass-config';
+import { readVeripassConnection, readVeripassSessionToken } from '../../config/veripass-connection';
 
 /**
  * Base-URL transport hygiene for the SDK's outbound requests.
@@ -98,6 +99,9 @@ export default class BaseApi {
   /**
    * Initializes and returns an Axios client instance with the necessary headers and configurations.
    *
+   * With `settings.session` the call acts on behalf of the signed-in person: it carries their Bearer token
+   * and the host api-key (the service's own, else the app-wide one, else the one remembered at sign-in).
+   *
    * @param {Object} settings Optional settings to override instance defaults during the request.
    * @returns {Object} Axios client instance.
    */
@@ -106,11 +110,24 @@ export default class BaseApi {
       Accept: 'application/json',
     };
 
+    const mergedSettings = { ...this.settings, ...settings };
+
     if (this.api_key) {
       headers['api-key'] = this.api_key;
     }
 
-    const mergedSettings = { ...this.settings, ...settings };
+    if (mergedSettings.session) {
+      const sessionToken = readVeripassSessionToken();
+      const sessionApiKey = this.api_key || getVeripassConfig().apiKey || readVeripassConnection().apiKey;
+
+      if (sessionToken) {
+        headers.Authorization = `Bearer ${sessionToken}`;
+      }
+
+      if (sessionApiKey) {
+        headers['api-key'] = sessionApiKey;
+      }
+    }
 
     this.client = axios.create({
       baseURL: this.api_url,
@@ -126,7 +143,7 @@ export default class BaseApi {
    * FROZEN value selected at SDK build time and is always safe.
    */
   resolveEnvironmentBaseUrl() {
-    const environment = this.settings?.environment || 'production';
+    const environment = this.settings?.environment || readVeripassConnection().environment || 'production';
 
     switch (environment) {
       case 'local':
@@ -143,7 +160,8 @@ export default class BaseApi {
    * Resolves the effective base URL with a single precedence order:
    *   1. per-instance `settings.baseUrl` (same place as `settings.environment`),
    *   2. app-wide default set via `configureVeripass({ baseUrl })`,
-   *   3. the environment-baked URL (backward-compatible fallback).
+   *   3. the URL the last successful sign-in used (remembered by the sign-in service),
+   *   4. the environment-baked URL (backward-compatible fallback).
    * Each candidate must pass transport hygiene; an unsafe value is skipped
    * (with a warning) and the next level is tried. This runs for EVERY service
    * — including the ones instantiated internally by auth components and every
@@ -154,6 +172,7 @@ export default class BaseApi {
     const candidates = [
       { source: 'settings.baseUrl', value: this.settings?.baseUrl },
       { source: 'configureVeripass', value: getVeripassConfig().baseUrl },
+      { source: 'sign-in connection', value: readVeripassConnection().baseUrl },
     ];
 
     for (const candidate of candidates) {

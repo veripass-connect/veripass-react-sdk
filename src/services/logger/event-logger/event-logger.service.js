@@ -31,10 +31,11 @@ export default class EventLoggerService extends BaseApi {
     });
   }
 
-  async create(payload) {
+  async create(payload, { session = false } = {}) {
     return super.create(payload, {
       endpoint: this.serviceEndpoints.create,
       ...this.settings,
+      session,
     });
   }
 

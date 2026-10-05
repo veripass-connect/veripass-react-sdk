@@ -1,4 +1,5 @@
 import BaseApi from '../../base/api.service';
+import { saveVeripassConnection } from '../../../config/veripass-connection';
 
 export default class AuthStandardService extends BaseApi {
   constructor(args) {
@@ -47,16 +48,28 @@ export default class AuthStandardService extends BaseApi {
   }
 
   async signInStandard(payload) {
-    return super.post(payload, {
+    const response = await super.post(payload, {
       endpoint: this.serviceEndpoints.signInStandard,
       ...this.settings,
     });
+
+    if (response?.result?.token) {
+      saveVeripassConnection({
+        baseUrl: this.resolveBaseUrl(),
+        apiKey: this.api_key,
+        environment: this.settings?.environment,
+      });
+    }
+
+    return response;
   }
 
+  // Acts on behalf of the signed-in person (Bearer token + the host api-key remembered at sign-in).
   async switchContext(payload) {
     return super.post(payload, {
       endpoint: this.serviceEndpoints.switchContext,
       ...this.settings,
+      session: true,
     });
   }
 

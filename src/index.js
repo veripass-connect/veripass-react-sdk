@@ -51,6 +51,9 @@ export { VeripassOrganizationProfileManage as VeripassOrganizationProfileManage 
 
 /* Organization Switcher */
 export { VeripassOrganizationSwitcher as VeripassOrganizationSwitcher } from './components/organization/OrganizationSwitcher/veripass-organization-switcher.component.jsx';
+export { VeripassOrganizationCreate as VeripassOrganizationCreate } from './components/organization/OrganizationCreate/VeripassOrganizationCreate.component.jsx';
+export { VeripassOrganizationCreateDialog as VeripassOrganizationCreateDialog } from './components/organization/OrganizationCreate/VeripassOrganizationCreateDialog.component.jsx';
+export { ORGANIZATION_EVENTS as VERIPASS_ORGANIZATION_EVENTS } from './components/organization/shared/organization-context.events.js';
 
 /* Organization Onboarding (Tenancy) */
 export { VeripassTenancyOnboardingManager as VeripassTenancyOnboardingManager } from './components/organization/onboarding/tenancy/manager/VeripassTenancyOnboardingManager.component.jsx';
@@ -91,7 +94,7 @@ export { VeripassContractViewer, CONTRACT_VIEWER_NAMESPACE, CONTRACT_VIEWER_ACTI
 export { VeripassTeamManagementList as VeripassTeamManagementList } from './components/team/team-management/list/VeripassTeamManagementList.jsx';
 export { VeripassMyPrincipalTeamList as VeripassMyPrincipalTeamList } from './components/team/team-management/preview/VeripassMyPrincipalTeamList.jsx';
 
-export { AuthContext, AuthProvider, useAuth } from './hooks/useAuth.hook.jsx';
+export { AuthContext, AuthProvider, useAuth, useAdminContext } from './hooks/useAuth.hook.jsx';
 export { useFederatedAuth } from './hooks/useFederatedAuth.hook.jsx';
 export { useLocalStorage as useLocalStorage } from './hooks/useLocalStorage.hook.js';
 export {

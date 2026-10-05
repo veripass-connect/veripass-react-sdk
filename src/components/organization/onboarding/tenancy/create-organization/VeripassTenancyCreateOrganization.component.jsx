@@ -1,22 +1,29 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { TextField, CircularProgress } from '@mui/material';
+import { TextField, CircularProgress, Button } from '@mui/material';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import styled from 'styled-components';
 import { VeripassSlugInput } from '../shared/VeripassSlugInput.component';
 
 import { VeripassActionButton } from '@components/shared/buttons/VeripassActionButton.component';
 
-const ViewTitle = styled('h4')({
-  fontSize: '2rem',
+import '@styles/fonts.css';
+import '@styles/styles.css';
+
+const ViewTitle = styled('h4')(({ $compact }) => ({
+  margin: '0 0 8px',
+  fontSize: $compact ? '1.5rem' : '2rem',
+  lineHeight: 1.2,
   color: '#0f172a',
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-});
+}));
 
-const ViewSubtitle = styled('p')({
-  fontSize: '1.05rem',
+const ViewSubtitle = styled('p')(({ $compact }) => ({
+  margin: 0,
+  fontSize: $compact ? '0.95rem' : '1.05rem',
   color: '#64748b',
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-});
+}));
 
 const FormError = styled('aside')({
   fontSize: '0.875rem',
@@ -58,6 +65,48 @@ const SecurityLabel = styled('span')({
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 });
 
+const Field = styled('fieldset')({
+  border: 0,
+  padding: 0,
+  margin: 0,
+  minWidth: 0,
+});
+
+const SlugBadgeRow = styled('aside')({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  marginBottom: '8px',
+});
+
+const FooterNote = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  margin: '16px 0 0',
+  fontSize: '0.8rem',
+  color: '#64748b',
+  fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+});
+
+const ActionsRow = styled('div')(({ $compact }) => ({
+  display: 'flex',
+  justifyContent: $compact ? 'flex-end' : 'stretch',
+  alignItems: 'center',
+  gap: '8px',
+  marginTop: $compact ? '20px' : '24px',
+}));
+
+const COMPACT_BUTTON_STYLE = {
+  height: 36,
+  minHeight: 36,
+  padding: '0 16px',
+  fontSize: '0.875rem',
+  lineHeight: 1,
+  textTransform: 'none',
+  boxShadow: 'none',
+};
+
 const NAMESPACE = 'veripass-tenancy-onboarding';
 const ACTIONS = {
   ORGANIZATION_BACK: `${NAMESPACE}::organization/back`,
@@ -73,6 +122,9 @@ function VeripassTenancyCreateOrganizationComponent({
   updateOnAction,
   isLoading = false,
   error = null,
+  slugError = '',
+  isSlugChecking = false,
+  onCancel,
   environment = 'production',
   apiKey = '',
 }) {
@@ -136,7 +188,9 @@ function VeripassTenancyCreateOrganizationComponent({
 
   // Validations
   const isSlugValid = /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(form.slug || '');
-  const isValid = form.name?.trim()?.length > 0 && isSlugValid && !isLoading;
+  const isSlugInvalid = form.slug?.length > 0 && !isSlugValid;
+  const slugHelperText = isSlugInvalid ? 'Only lowercase letters, numbers, and hyphens allowed.' : slugError;
+  const isValid = form.name?.trim()?.length > 0 && isSlugValid && !slugError && !isSlugChecking && !isLoading;
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && isValid) {
@@ -147,16 +201,18 @@ function VeripassTenancyCreateOrganizationComponent({
 
   return (
     <section className="veripass-container-fluid veripass-w-100 veripass-p-0">
-      <header className="veripass-mb-4 veripass-text-left">
-        {ui.showTitle !== false && (
-          <ViewTitle className="veripass-fw-bold veripass-text-dark veripass-mb-2">
-            {copy.createTitle || 'Create your organization'}
-          </ViewTitle>
-        )}
-        <ViewSubtitle className="veripass-m-0">
-          {copy.createSubtitle || 'Enter details to configure your environment.'}
-        </ViewSubtitle>
-      </header>
+      {ui.showHeader !== false && (
+        <header style={{ marginBottom: ui.compact ? 20 : 24, textAlign: 'left' }}>
+          {ui.showTitle !== false && (
+            <ViewTitle $compact={ui.compact} className="veripass-fw-bold">
+              {copy.createTitle || 'Create your organization'}
+            </ViewTitle>
+          )}
+          <ViewSubtitle $compact={ui.compact}>
+            {copy.createSubtitle || 'Enter details to configure your environment.'}
+          </ViewSubtitle>
+        </header>
+      )}
 
       {error && typeof error === 'string' && (
         <FormError
@@ -168,12 +224,13 @@ function VeripassTenancyCreateOrganizationComponent({
       )}
 
       <form onSubmit={handleContinue} onKeyDown={handleKeyDown} autoComplete="off">
-        <fieldset className="veripass-mb-4 veripass-mt-3 veripass-border-0 veripass-p-0">
+        <Field style={{ margin: ui.compact ? '0 0 16px' : '16px 0 24px' }}>
           <StyledTextField
             fullWidth
+            size={ui.compact ? 'small' : 'medium'}
             label="Organization Name"
             variant="outlined"
-            placeholder="e.g. Blackwood Stone Holdings, inc."
+            placeholder={copy.namePlaceholder || 'e.g. Blackwood Stone Holdings, inc.'}
             autoFocus
             autoComplete="off"
             value={form.name || ''}
@@ -181,47 +238,79 @@ function VeripassTenancyCreateOrganizationComponent({
             required
             disabled={isLoading}
           />
-        </fieldset>
+        </Field>
 
-        <fieldset className="veripass-mb-1 veripass-border-0 veripass-p-0">
-          <aside className="veripass-d-flex veripass-justify-content-end veripass-align-items-center veripass-mb-2">
-            {!form.isSlugEdited && <SlugAutoBadge>Auto-generated</SlugAutoBadge>}
-          </aside>
+        <Field style={{ marginBottom: '4px' }}>
+          {!ui.compact && <SlugBadgeRow>{!form.isSlugEdited && <SlugAutoBadge>Auto-generated</SlugAutoBadge>}</SlugBadgeRow>}
           <VeripassSlugInput
+            size={ui.compact ? 'small' : 'medium'}
             label={copy.slugLabel || 'Slug'}
-            prefix="veripass.com/"
-            placeholder="blackwood-stone-holdings"
+            prefix={copy.slugPrefix ?? 'veripass.com/'}
+            placeholder={copy.slugPlaceholder || 'blackwood-stone-holdings'}
             value={form.slug || ''}
             onChange={handleSlugChange}
             required
             disabled={isLoading}
-            error={form.slug?.length > 0 && !isSlugValid}
-            helperText={form.slug?.length > 0 && !isSlugValid ? 'Only lowercase letters, numbers, and hyphens allowed.' : ''}
-            infoText={copy.slugInfoText || 'This will be your unique URL identifier.'}
+            error={isSlugInvalid || Boolean(slugError)}
+            helperText={slugHelperText}
+            infoText={
+              isSlugChecking
+                ? 'Checking availability...'
+                : ui.compact && !form.isSlugEdited
+                  ? copy.slugAutoText || 'Suggested from the name. You can edit it.'
+                  : copy.slugInfoText || 'This will be your unique URL identifier.'
+            }
           />
-        </fieldset>
+        </Field>
 
-        <VeripassActionButton
-          customTheme={ui?.theme}
-          variant="contained"
-          fullWidth
-          size="large"
-          type="submit"
-          disabled={!isValid || isLoading}
-          className="veripass-py-3 veripass-fw-bold veripass-fs-6 veripass-position-relative veripass-mt-4"
-        >
-          {isLoading && <CircularProgress size={20} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
-          Continue
-        </VeripassActionButton>
+        {copy.footerNote && (
+          <FooterNote>
+            <AdminPanelSettingsOutlinedIcon sx={{ fontSize: '1rem' }} />
+            <span>{copy.footerNote}</span>
+          </FooterNote>
+        )}
+
+        <ActionsRow $compact={ui.compact}>
+          {ui.compact && onCancel && (
+            <Button
+              type="button"
+              color="inherit"
+              onClick={onCancel}
+              disabled={isLoading}
+              sx={{ textTransform: 'none', color: '#475569', height: 36, fontSize: '0.875rem' }}
+            >
+              {copy.cancelLabel || 'Cancel'}
+            </Button>
+          )}
+          <VeripassActionButton
+            customTheme={ui?.theme}
+            variant="contained"
+            fullWidth={!ui.compact}
+            size={ui.compact ? 'medium' : 'large'}
+            type="submit"
+            disabled={!isValid || isLoading}
+            className={
+              ui.compact ? 'veripass-fw-bold' : 'veripass-py-3 veripass-fw-bold veripass-fs-6 veripass-position-relative'
+            }
+            style={ui.compact ? COMPACT_BUTTON_STYLE : undefined}
+          >
+            {isLoading && <CircularProgress size={18} className="veripass-me-2" sx={{ color: ui?.theme?.brandPrimary }} />}
+            {copy.submitLabel || 'Continue'}
+          </VeripassActionButton>
+        </ActionsRow>
       </form>
 
-      <FooterDivider />
-      <footer className="veripass-d-flex veripass-justify-content-center">
-        <SecurityBadge className="veripass-d-inline-flex veripass-align-items-center veripass-gap-2">
-          <LockIcon sx={{ fontSize: '0.9rem' }} />
-          <SecurityLabel>Encrypted end-to-end</SecurityLabel>
-        </SecurityBadge>
-      </footer>
+      {ui.showSecurityFooter !== false && (
+        <React.Fragment>
+          <FooterDivider />
+          <footer className="veripass-d-flex veripass-justify-content-center">
+            <SecurityBadge className="veripass-d-inline-flex veripass-align-items-center veripass-gap-2">
+              <LockIcon sx={{ fontSize: '0.9rem' }} />
+              <SecurityLabel>Encrypted end-to-end</SecurityLabel>
+            </SecurityBadge>
+          </footer>
+        </React.Fragment>
+      )}
     </section>
   );
 }

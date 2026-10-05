@@ -17,10 +17,11 @@ export default class OrganizationManagementService extends BaseApi {
     this.settings = args?.settings || {};
   }
 
-  async getByParameters(payload) {
+  async getByParameters(payload, { session = false } = {}) {
     return super.getByParameters(payload, {
       endpoint: this.serviceEndpoints.get,
       ...this.settings,
+      session,
     });
   }
 
@@ -31,10 +32,12 @@ export default class OrganizationManagementService extends BaseApi {
     });
   }
 
-  async create(payload) {
+  // With `session` the signed-in person creates the organization and becomes its administrator.
+  async create(payload, { session = false } = {}) {
     return super.create(payload, {
       endpoint: this.serviceEndpoints.create,
       ...this.settings,
+      session,
     });
   }
 

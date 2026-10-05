@@ -17,10 +17,12 @@ export default class OrganizationApplicationService extends BaseApi {
     this.settings = args?.settings || {};
   }
 
-  async getByParameters(payload) {
+  // With `session` and the `app-id` selector, a host administrator lists every organization linked to the host app.
+  async getByParameters(payload, { session = false } = {}) {
     return super.getByParameters(payload, {
       endpoint: this.serviceEndpoints.get,
       ...this.settings,
+      session,
     });
   }
 

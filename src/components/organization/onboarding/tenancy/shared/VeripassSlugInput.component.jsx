@@ -38,12 +38,14 @@ function VeripassSlugInputComponent({
   label = 'Organization Slug',
   placeholder = 'blackwood-stone-holdings',
   required = false,
+  size = 'medium',
   className = '',
 }) {
   return (
     <div className={`veripass-w-100 veripass-mb-3 ${className}`}>
       <StyledTextField
         fullWidth
+        size={size}
         label={label}
         variant="outlined"
         placeholder={placeholder}

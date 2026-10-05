@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useMemo, useEffect, useState } from 'react';
+import React, { createContext, useContext, useMemo, useEffect, useState, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
+import EventLoggerService from '../services/logger/event-logger/event-logger.service';
+import { clearVeripassConnection } from '../config/veripass-connection';
+
+const ADMIN_CONTEXT_HEADER = 'x-veripass-admin-context-organization';
+const ADMIN_CONTEXT_AUDIT_NAMESPACE = 'veripass-admin-context';
+const ADMIN_CONTEXT_ACTIVITIES = { enter: 'admin-context.enter', leave: 'admin-context.leave' };
 
 const defaultPublicUrlList = [
   'https://portal.veripass.com.co/auth/login',
@@ -31,6 +37,64 @@ export const AuthProvider = ({ children, debug }) => {
 
   // State to manage user data, persisted in local storage
   const [user, setUser] = useLocalStorage('veripass::auth::user-data', null);
+
+  // Administrator context lives in memory only: never in the token and never in storage, so a reload returns to Global.
+  const [adminContext, setAdminContextState] = useState(null);
+  const isAdmin = Boolean(user?.memberships?.is_host_admin);
+
+  const auditAdminContext = useCallback(
+    ({ activity, organization }) => {
+      const hostOrganizationId = user?.host_organization?.id || user?.memberships?.active?.organization_id;
+
+      new EventLoggerService()
+        .create(
+          {
+            title: activity,
+            namespace: ADMIN_CONTEXT_AUDIT_NAMESPACE,
+            activity,
+            user_id: user?.identity,
+            organization_id: hostOrganizationId,
+            app_id: user?.payload?.app_id,
+            message: `${activity}: ${organization.display_name || organization.slug || organization.organization_id}`,
+            context: { administrator: user?.identity, host_organization_id: hostOrganizationId, organization },
+          },
+          { session: true },
+        )
+        .catch((error) => console.warn('[veripass-sdk] Could not audit the administrator context change.', error));
+    },
+    [user],
+  );
+
+  const setAdminContext = useCallback(
+    (organization) => {
+      if (!isAdmin || !organization?.organization_id) {
+        return;
+      }
+
+      if (adminContext) {
+        auditAdminContext({ activity: ADMIN_CONTEXT_ACTIVITIES.leave, organization: adminContext });
+      }
+
+      setAdminContextState(organization);
+      auditAdminContext({ activity: ADMIN_CONTEXT_ACTIVITIES.enter, organization });
+    },
+    [isAdmin, adminContext, auditAdminContext],
+  );
+
+  const clearAdminContext = useCallback(() => {
+    if (!adminContext) {
+      return;
+    }
+
+    auditAdminContext({ activity: ADMIN_CONTEXT_ACTIVITIES.leave, organization: adminContext });
+    setAdminContextState(null);
+  }, [adminContext, auditAdminContext]);
+
+  useEffect(() => {
+    if (!isAdmin) {
+      setAdminContextState(null);
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
     const extractPublicPaths = (child, parentPath = '') => {
@@ -69,6 +133,8 @@ export const AuthProvider = ({ children, debug }) => {
    * Logs out the current user by clearing their data from local storage.
    */
   const logout = () => {
+    setAdminContextState(null);
+    clearVeripassConnection();
     setUser(null);
   };
 
@@ -106,6 +172,7 @@ export const AuthProvider = ({ children, debug }) => {
       'x-veripass-user-identity': user.identity,
       'x-veripass-user-display-name': profile.display_name || profile.primary_email_address || user.identity,
       'x-veripass-username': profile.username || '',
+      ...(adminContext ? { [ADMIN_CONTEXT_HEADER]: adminContext.organization_id } : {}),
     };
   };
 
@@ -143,8 +210,12 @@ export const AuthProvider = ({ children, debug }) => {
       getToken,
       getAuthDecision,
       getContextAsHeaders,
+      isAdmin,
+      adminContext,
+      setAdminContext,
+      clearAdminContext,
     }),
-    [user],
+    [user, adminContext, setAdminContext, clearAdminContext],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -157,4 +228,16 @@ export const AuthProvider = ({ children, debug }) => {
  */
 export const useAuth = () => {
   return useContext(AuthContext);
+};
+
+/**
+ * Administrator context of a host administrator: `Global` (no context) or fixed inside one organization.
+ * Lives in memory only. `adminContext` is `{ organization_id, identity, slug, display_name }` or `null`.
+ *
+ * @returns {{ isAdmin: boolean, adminContext: object|null, setAdminContext: function(object): void, clearAdminContext: function(): void }}
+ */
+export const useAdminContext = () => {
+  const { isAdmin = false, adminContext = null, setAdminContext, clearAdminContext } = useContext(AuthContext) || {};
+
+  return { isAdmin, adminContext, setAdminContext, clearAdminContext };
 };
