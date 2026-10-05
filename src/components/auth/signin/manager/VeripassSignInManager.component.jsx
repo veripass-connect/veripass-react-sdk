@@ -51,6 +51,7 @@ export const VeripassSignInManager = ({
     },
     title: 'Sign in',
     showTitle: true,
+    showRegister: true,
     heroImage: {
       src: '',
       alt: 'Cover',
@@ -75,6 +76,7 @@ export const VeripassSignInManager = ({
 }) => {
   const heroImage = ui.heroImage || { src: '', alt: 'Cover' };
   const providers = ui.providers || [];
+  const showRegister = ui.showRegister !== undefined ? ui.showRegister : true;
   const theme = ui?.theme || {};
 
   const [view, setView] = useState(signinType === 'standard' ? 'standard' : 'discovery');
@@ -301,25 +303,27 @@ export const VeripassSignInManager = ({
             </section>
           )}
 
-          <div className="veripass-mt-2 veripass-text-center">
-            <Typography variant="caption" className="veripass-text-secondary">
-              Don't have an account?{' '}
-              <Link
-                href={finalRegisterUrl}
-                onClick={(e) => {
-                  if (finalOnRegisterClick) {
-                    e.preventDefault();
-                    finalOnRegisterClick(e);
-                  }
-                }}
-                underline="hover"
-                style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
-                className="veripass-fw-bold"
-              >
-                Register
-              </Link>
-            </Typography>
-          </div>
+          {showRegister && (
+            <div className="veripass-mt-2 veripass-text-center">
+              <Typography variant="caption" className="veripass-text-secondary">
+                Don't have an account?{' '}
+                <Link
+                  href={finalRegisterUrl}
+                  onClick={(e) => {
+                    if (finalOnRegisterClick) {
+                      e.preventDefault();
+                      finalOnRegisterClick(e);
+                    }
+                  }}
+                  underline="hover"
+                  style={{ color: theme?.linkColor || '#0d6efd', fontWeight: 'bold' }}
+                  className="veripass-fw-bold"
+                >
+                  Register
+                </Link>
+              </Typography>
+            </div>
+          )}
         </form>
       )}
     </VeripassAuthLayout>
