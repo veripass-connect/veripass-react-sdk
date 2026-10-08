@@ -14,7 +14,7 @@ const FONT_FAMILY = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Ne
 const Root = styled('section')({
   width: '100%',
   fontFamily: FONT_FAMILY,
-  color: '#0f172a',
+  color: 'var(--ll-text-primary, #0f172a)',
   '& *, & *::before, & *::after': { boxSizing: 'border-box' },
 });
 
@@ -64,7 +64,7 @@ const OrganizationName = styled('strong')({
   fontSize: '14px',
   fontWeight: 600,
   lineHeight: 1.3,
-  color: '#0f172a',
+  color: 'var(--ll-text-primary, #0f172a)',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
@@ -74,7 +74,7 @@ const OrganizationRole = styled('small')({
   display: 'block',
   fontSize: '13px',
   lineHeight: 1.3,
-  color: '#64748b',
+  color: 'var(--ll-text-tertiary, #64748b)',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
@@ -105,22 +105,22 @@ const ManageButton = styled('button')({
   display: 'flex',
   alignItems: 'center',
   background: 'transparent',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--ll-border, #e2e8f0)',
   borderRadius: '6px',
   padding: '4px 8px',
   fontFamily: 'inherit',
   fontSize: '12px',
   fontWeight: 600,
-  color: '#475569',
+  color: 'var(--ll-text-secondary, #475569)',
   cursor: 'pointer',
   transition: 'all 0.15s ease',
-  '&:hover': { backgroundColor: '#f8fafc', borderColor: '#cbd5e1' },
+  '&:hover': { backgroundColor: 'var(--ll-bg-hover, #f8fafc)', borderColor: 'var(--ll-border-strong, #cbd5e1)' },
 });
 
 const FooterSection = styled('footer')({
   display: 'flex',
   justifyContent: 'center',
-  backgroundColor: '#f8fafc',
+  backgroundColor: 'var(--ll-bg-hover, #f8fafc)',
   padding: '12px 16px',
   borderTop: '1px solid #f1f5f9',
 });
@@ -149,7 +149,7 @@ const DashedCircle = styled('span')({
   width: '32px',
   borderRadius: '50%',
   border: '1px dashed #cbd5e1',
-  color: '#64748b',
+  color: 'var(--ll-text-tertiary, #64748b)',
 });
 
 const DEFAULT_COPY = {
@@ -394,7 +394,7 @@ export const VeripassOrganizationSwitcher = ({
 
         {!isActive && !isLoading && <SwapIcon sx={{ fontSize: 16, color: '#94a3b8' }} />}
         {!isActive && isLoading && <CircularProgress size={16} />}
-        {isActive && <CheckIcon sx={{ fontSize: 16, color: '#475569' }} />}
+        {isActive && <CheckIcon sx={{ fontSize: 16, color: 'var(--ll-text-secondary, #475569)' }} />}
         {trailing}
       </Row>
     );
@@ -550,7 +550,7 @@ export const VeripassOrganizationSwitcher = ({
             <DashedCircle>
               <AddIcon sx={{ fontSize: 18 }} />
             </DashedCircle>
-            <OrganizationName style={{ color: '#475569', fontWeight: 500 }}>{copy.createOrganization}</OrganizationName>
+            <OrganizationName style={{ color: 'var(--ll-text-secondary, #475569)', fontWeight: 500 }}>{copy.createOrganization}</OrganizationName>
           </CreateOrganizationItem>
 
           <FooterSection>
