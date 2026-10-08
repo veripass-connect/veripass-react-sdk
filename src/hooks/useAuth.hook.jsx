@@ -1,22 +1,12 @@
-import React, { createContext, useContext, useMemo, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useMemo, useEffect, useState, useCallback, useRef } from 'react';
 import { useLocalStorage } from './useLocalStorage.hook';
 import EventLoggerService from '../services/logger/event-logger/event-logger.service';
 import { clearVeripassConnection } from '../config/veripass-connection';
+import { isPublicPath, resolveLoginUrl, resolvePublicPaths, withBasename } from './auth-paths';
 
 const ADMIN_CONTEXT_HEADER = 'x-veripass-admin-context-organization';
 const ADMIN_CONTEXT_AUDIT_NAMESPACE = 'veripass-admin-context';
 const ADMIN_CONTEXT_ACTIVITIES = { enter: 'admin-context.enter', leave: 'admin-context.leave' };
-
-const defaultPublicUrlList = [
-  'https://portal.veripass.com.co/auth/login',
-  '/auth/login',
-  '/auth/signup',
-  '/setup/workspace',
-  // The federated (OIDC) callback lands here with user===null while PostLoginRedirect parses the
-  // decision and routes (enter / join / register). Without whitelisting, the AuthProvider guard
-  // races and replaces to /auth/login before the decision is read.
-  '/auth/callback',
-];
 
 /**
  * Authentication context used to provide user authentication data and functions.
@@ -29,10 +19,14 @@ export const AuthContext = createContext();
  *
  * @param {object} props - The component props.
  * @param {React.ReactNode} props.children - The children components that require access to the authentication context.
+ * @param {Array<string|RegExp>} [props.publicPaths] - Extra paths reachable without a session, relative to `basename`.
+ *   A string is an exact path, or a prefix when it ends in `/*`; a RegExp is tested against the full pathname.
+ * @param {string} [props.loginPath='/auth/login'] - Where the guard sends a visitor without a session, relative to `basename`.
+ * @param {string} [props.basename=''] - The router basename the app is mounted under.
  * @returns {JSX.Element} The provider component for AuthContext.
  */
-export const AuthProvider = ({ children, debug }) => {
-  const publicUrlsList = defaultPublicUrlList;
+export const AuthProvider = ({ children, debug, publicPaths, loginPath, basename = '' }) => {
+  const publicUrlsList = useRef(resolvePublicPaths({ publicPaths, basename })).current;
   const [isInitialized, setIsInitialized] = useState(false);
 
   // State to manage user data, persisted in local storage
@@ -100,9 +94,10 @@ export const AuthProvider = ({ children, debug }) => {
     const extractPublicPaths = (child, parentPath = '') => {
       if (React.isValidElement(child)) {
         const currentPath = `${parentPath}${child.props.path ? `/${child.props.path}` : ''}`.replace(/\/+/g, '/');
+        const publicPath = withBasename(basename, currentPath);
 
-        if (child.props.isPublic && !publicUrlsList.includes(currentPath)) {
-          publicUrlsList.push(currentPath);
+        if (child.props.isPublic && !publicUrlsList.includes(publicPath)) {
+          publicUrlsList.push(publicPath);
         }
 
         if (child.props.children) {
@@ -180,11 +175,11 @@ export const AuthProvider = ({ children, debug }) => {
   useEffect(() => {
     if (isInitialized) {
       const currentPath = window.location.pathname;
-      const isWhitelisted = publicUrlsList.includes(currentPath);
+      const isWhitelisted = isPublicPath(currentPath, publicUrlsList);
 
       if (user === null && !isWhitelisted) {
         if (!debug) {
-          window.location.replace('/auth/login');
+          window.location.replace(resolveLoginUrl({ loginPath, basename }));
         }
       }
     }
