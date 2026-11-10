@@ -87,6 +87,7 @@ export { fetchEntityCollection, fetchMultipleEntities, updateEntityRecord, creat
 export { VeripassOrganizationContractsList } from './components/organization/contracts/VeripassOrganizationContractsList.component.jsx';
 export { VeripassContractAcceptance } from './components/organization/contracts/VeripassContractAcceptance.component.jsx';
 export { VeripassContractViewer, CONTRACT_VIEWER_NAMESPACE, CONTRACT_VIEWER_ACTIONS } from './components/organization/contracts/VeripassContractViewer.component.jsx';
+export { VeripassContractSigning } from './components/user/contracts/VeripassContractSigning.component.jsx';
 
 /* Identity */
 

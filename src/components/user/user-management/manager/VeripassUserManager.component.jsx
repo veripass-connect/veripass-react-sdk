@@ -193,7 +193,7 @@ const OverviewTile = ({ card, onClick }) => (
   </button>
 );
 
-const VeripassUserManager = ({ userId, apiKey = '', environment = 'production', onNavigate }) => {
+const VeripassUserManager = ({ userId, apiKey = '', environment = 'production', onNavigate, contractSignPath }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -515,6 +515,7 @@ const VeripassUserManager = ({ userId, apiKey = '', environment = 'production', 
         autoSwitchToPreview={true}
         showCloseButton={false}
         onUpdatedEntity={handleUpdatedEntity}
+        signPath={contractSignPath}
       />
     );
   };

@@ -13,6 +13,8 @@ export default class IdentityContractService extends BaseApi {
       create: '/identity/contract/',
       update: '/identity/contract/',
       delete: '/identity/contract/',
+      sign: '/identity/contract/sign',
+      decline: '/identity/contract/decline',
     };
     this.settings = args?.settings || {};
   }
@@ -22,6 +24,18 @@ export default class IdentityContractService extends BaseApi {
       endpoint: this.serviceEndpoints.get,
       ...this.settings,
     });
+  }
+
+  async getMine(payload = {}) {
+    return this.getByParameters({ ...payload, queryselector: 'mine' });
+  }
+
+  async sign({ id, otp }) {
+    return super.post({ id, otp }, { endpoint: this.serviceEndpoints.sign, ...this.settings });
+  }
+
+  async decline({ id }) {
+    return super.post({ id }, { endpoint: this.serviceEndpoints.decline, ...this.settings });
   }
 
   async update(payload) {
